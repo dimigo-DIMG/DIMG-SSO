@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% include "header.html" %}
+  <title>로그인</title>
+  <body>
+    <div class="container-fluid">
+      <div class="row vh-100">
+        {% include "jumbotron.html" %}
+        <div
+          class="col-md-9"
+          style="display: grid; grid-template-rows: min-content"
+        >
+          {% include "navbar.html" %}
+          <div
+            class="col-xl-5 pb-5"
+            style="justify-self: center; align-self: center"
+          >
+            <h1>Login</h1>
+            <form class="mt-5 pb-5">
+              <!-- Email input -->
+              <div data-mdb-input-init class="form-outline mb-4">
+                <input
+                  type="email"
+                  id="form1Example1"
+                  class="form-control form-control-lg"
+                />
+                <label class="form-label" for="form1Example1"
+                  >이메일</label
+                >
+              </div>
+
+              <!-- Password input -->
+              <div data-mdb-input-init class="form-outline mb-4">
+                <input
+                  type="password"
+                  id="form1Example2"
+                  class="form-control form-control-lg"
+                />
+                <label class="form-label" for="form1Example2">비밀번호</label>
+              </div>
+
+              <!-- 2 column grid layout for inline styling -->
+              <div class="row mb-4">
+                <div class="col">
+                  <!-- Simple link -->
+                  <a href="/auth/reset">비밀번호를 잊으셨나요?</a>
+                </div>
+              </div>
+
+              <!-- Submit button -->
+              <button
+                data-mdb-ripple-init
+                type="submit"
+                class="btn btn-primary btn-block"
+                style="padding: 0.6rem 1.5rem; font-size: 12pt"
+              >
+                로그인
+              </button>
+              <!-- Login with Google -->
+              <button
+                data-mdb-ripple-init
+                id = "google-login"
+                type="button"
+                class="btn btn-danger btn-block"
+                style="padding: 0.6rem 1.5rem; font-size: 12pt"
+              >
+                <i class="fab fa-google me-2"></i>구글로 로그인
+              </button>
+              <!-- Login with Microsoft -->
+              <button
+                data-mdb-ripple-init
+                id = "microsoft-login"
+                type="button"
+                class="btn btn-secondary btn-block"
+                style="padding: 0.6rem 1.5rem; font-size: 12pt"
+              >
+                <i class="fab fa-microsoft me-2"></i>마이크로소프트로 로그인
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include "footer.html" %}
+  </body>
+  <script>
+    document.getElementById("google-login").addEventListener("click", function() {
+      window.location.href = "/account/oauth/r/google";
+    });
+    document.getElementById("microsoft-login").addEventListener("click", function() {
+      window.location.href = "/account/oauth/r/microsoft";
+    });
+  </script>
+</html>

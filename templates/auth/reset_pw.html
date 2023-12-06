@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% include "header.html" %}
+  <title>Reset Password</title>
+  <body>
+    <div class="container-fluid">
+      <div class="row vh-100">
+        {% include "jumbotron.html" %}
+        <div
+          class="col-md-9"
+          style="display: grid; grid-template-rows: min-content"
+        >
+          {% include "navbar.html" %}
+          <div
+            class="col-xl-5 pb-5"
+            style="justify-self: center; align-self: center"
+          >
+            <h1>Reset Password</h1>
+            <form class="mt-5 pb-5">
+              <!-- Email input -->
+              <div data-mdb-input-init class="form-outline mb-4">
+                <input
+                  type="email"
+                  id="form1Example1"
+                  class="form-control form-control-lg"
+                />
+                <label class="form-label" for="form1Example1"
+                  >Email address</label
+                >
+              </div>
+
+              <!-- Submit button -->
+              <div class="row m-0">
+                <a
+                  class="btn btn-primary col-md"
+                  type="button"
+                  data-mdb-ripple-init
+                  style="padding: 0.6rem 1.5rem; font-size: 12pt"
+                  href="#!"
+                >
+                  Send Email
+                </a>
+                <div class="col-md-1"></div>
+                <a
+                  class="btn btn-secondary col-md"
+                  type="button"
+                  data-mdb-ripple-init
+                  style="padding: 0.6rem 1.5rem; font-size: 12pt"
+                  href="/auth/login"
+                >
+                  <i class="fas fa-angles-left"></i> Login
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include "footer.html" %}
+  </body>
+</html>
