@@ -16,12 +16,17 @@
             style="justify-self: center; align-self: center"
           >
             <h1>Login</h1>
-            <form class="mt-5 pb-5">
+            <form class="mt-5 pb-5" action="/account/login" 
+            method="post">
               <!-- Email input -->
+              {% if csrf_token %}
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              {% endif %}
               <div data-mdb-input-init class="form-outline mb-4">
                 <input
                   type="email"
                   id="form1Example1"
+                  name="username"
                   class="form-control form-control-lg"
                 />
                 <label class="form-label" for="form1Example1"
@@ -34,6 +39,7 @@
                 <input
                   type="password"
                   id="form1Example2"
+                  name="password"
                   class="form-control form-control-lg"
                 />
                 <label class="form-label" for="form1Example2">비밀번호</label>
