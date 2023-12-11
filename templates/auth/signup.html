@@ -16,12 +16,28 @@
             style="justify-self: center; align-self: center"
           >
             <h1>Register</h1>
-            <form class="mt-5 pb-5">
-              
+            <form class="mt-5 pb-5" method="post">
+              {% if failed == 1 %}
+              <div class="alert alert-danger" role="alert">
+                유저가 이미 존재합니다.
+              </div>
+              {% elif failed == 2 %}
+              <div class="alert alert-danger" role="alert">
+                CSRF 토큰이 일치하지 않습니다.
+              </div>
+              {% elif failed == 3 %}
+              <div class="alert alert-danger" role="alert">
+                비밀번호가 올바르지 않습니다.
+              </div>
+              {% endif %}
+              {% if csrf_token %}
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              {% endif %}
               <div data-mdb-input-init class="form-outline mb-4">
                 <input
                   type="email"
                   id="formEmail"
+                  name="email"
                   class="form-control form-control-lg"
                 />
                 <label class="form-label" for="formEmail">이메일 주소</label>
@@ -30,6 +46,7 @@
                 <input
                   type="password"
                   id="form1Example2"
+                  name="password"
                   class="form-control form-control-lg"
                 />
                 <label class="form-label" for="form1Example2">패스워드</label>

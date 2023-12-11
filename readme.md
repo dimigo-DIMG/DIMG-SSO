@@ -17,7 +17,7 @@
   - [x] `/account/login` - 로그인
   - [x] `/account/logout` - 로그아웃
   - [ ] `/account/verify` - 이메일 인증
-  - [ ] `/account/password` - 비밀번호 변경
+  - [x] `/account/password` - 비밀번호 변경
 - [ ] `/api` - API 루트
   - [ ] `/api/sso`` - SSO API 루트
     - [ ] `/api/sso/token` - 토큰 발급

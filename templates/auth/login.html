@@ -15,6 +15,16 @@
             class="col-xl-5 pb-5"
             style="justify-self: center; align-self: center"
           >
+            <!-- error messages -->
+            {% if failed == 1 %}
+            <div class="alert alert-danger" role="alert">
+              이메일이나 비밀번호가 일치하지 않습니다.
+            </div>
+            {% elif failed == 2 %}
+            <div class="alert alert-danger" role="alert">
+              CSRF 토큰이 일치하지 않습니다.
+            </div>
+            {% endif %}
             <h1>Login</h1>
             <form class="mt-5 pb-5" action="/account/login" 
             method="post">
@@ -49,7 +59,7 @@
               <div class="row mb-4">
                 <div class="col">
                   <!-- Simple link -->
-                  <a href="/auth/reset">비밀번호를 잊으셨나요?</a>
+                  <a href="/account/reset-pw">비밀번호를 잊으셨나요?</a>
                 </div>
               </div>
 

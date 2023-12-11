@@ -45,13 +45,8 @@
           role="button"
           aria-expanded="false"
         >
-          <img
-            src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-            class="rounded-circle"
-            height="25"
-            alt="Black and White Portrait of a Man"
-            loading="lazy"
-          />
+          <!-- user email -->
+          <span class="me-2">{{ user.email }}</span>
         </a>
         <ul
           class="dropdown-menu dropdown-menu-end"
@@ -64,7 +59,7 @@
             <a class="dropdown-item" href="#">설정</a>
           </li>
           <li>
-            <a class="dropdown-item" href="#">로그아웃</a>
+            <a class="dropdown-item" href="/account/logout">로그아웃</a>
           </li>
         </ul>
       </div> 
