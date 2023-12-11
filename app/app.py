@@ -70,7 +70,6 @@ async def login(request: Request, user: User = Depends(current_user_optional)):
     if user:
         return RedirectResponse(redirect_uri or "/")
     
-    print(request.session.get("next"))
     return templates.TemplateResponse("auth/login.html", {"request": request, "csrf_token": csrf_token , "failed": failed, "reg_success": reg_success})
 
 @app.post("/account/login")
@@ -91,13 +90,15 @@ async def login(request: Request, user_manager: UserManager = Depends(get_user_m
         return RedirectResponse("/account/login", status_code=303)
     
     try:
-        credentials = OAuth2PasswordRequestForm(username=form.get("email"), password=form.get("password"))
+        credentials = OAuth2PasswordRequestForm(username=form.get("email"), password=form.get("password"), scope="")
+        print(await user_manager.get_by_email(credentials.username))
         user = await user_manager.authenticate(credentials)
-    except:
+    except Exception as e:
         request.session["failed"] = 1
         return RedirectResponse("/account/login", status_code=303)
 
     if user is None or not user.is_active:
+        print("user is none")
         request.session["failed"] = 1
         return RedirectResponse("/account/login", status_code=303)
     
@@ -127,7 +128,6 @@ async def register(request: Request, user: User = Depends(current_user_optional)
     failed = request.session.get("failed")
     if failed:
         request.session.pop("failed")
-    print(failed)
 
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
     request.session["csrf_token"] = csrf_token
