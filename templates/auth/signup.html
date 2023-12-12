@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-  {% include "header.html" %}
+<html lang="ko">
+  <head>
+    {% include "header.html" %}
+  </head>
   <title>Sign up</title>
   <body>
     <div class="container-fluid">
@@ -29,9 +31,8 @@
               <div class="alert alert-danger" role="alert">
                 비밀번호가 올바르지 않습니다.
               </div>
-              {% endif %}
-              {% if csrf_token %}
-              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              {% endif %} {% if csrf_token %}
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
               {% endif %}
               <div data-mdb-input-init class="form-outline mb-4">
                 <input
@@ -58,10 +59,9 @@
                   id="formReEnterPW"
                   class="form-control form-control-lg"
                 />
-                <label class="form-label" for="formReEnterPW"
-                  > 패스워드 재입력
-                  </label
-                >
+                <label class="form-label" for="formReEnterPW">
+                  패스워드 재입력
+                </label>
               </div>
               <div class="row mb-4">
                 <div class="col d-flex">
@@ -74,8 +74,8 @@
                       required
                     />
                     <label class="form-check-label" for="formTermsChk">
-                      
-                      <a href="/terms" target="_blank">이용약관</a>에 동의합니다.
+                      <a href="/terms" target="_blank">이용약관</a>에
+                      동의합니다.
                     </label>
                   </div>
                 </div>
