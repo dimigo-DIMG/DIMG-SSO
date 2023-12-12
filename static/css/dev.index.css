@@ -1,0 +1,59 @@
+#container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#service-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#service-name {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#service-type {
+  font-size: 1rem;
+  font-weight: lighter;
+}
+
+#main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.big-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid #ced4da;
+  font-size: 40px;
+}
+
+.big-circle:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.big-circle > i {
+  position: relative;
+  bottom: 2px;
+}
+
+.label {
+  text-align: center;
+  margin-top: 10px;
+}
