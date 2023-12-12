@@ -22,27 +22,6 @@
   font-weight: lighter;
 }
 
-#main-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.big-circle {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: #ffffff;
-  margin: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  border: 1px solid #ced4da;
-  font-size: 40px;
-}
-
 .big-circle:focus {
   outline: none;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -55,5 +34,61 @@
 
 .label {
   text-align: center;
-  margin-top: 10px;
+  margin: 10px 0;
+}
+
+@media (max-width: 767.98px) {
+  /* Mobile Styles */
+  #main-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .section-btn {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .section-btn:nth-child(odd) {
+    background-color: #fff;
+  }
+
+  .section-btn:nth-child(even) {
+    background-color: #eee;
+  }
+  .big-circle {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+  }
+}
+
+@media (min-width: 768px) {
+  /* Desktop and Tablet Styles */
+  #main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .big-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid #ced4da;
+    font-size: 40px;
+  }
 }

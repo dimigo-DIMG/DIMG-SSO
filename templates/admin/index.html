@@ -37,7 +37,7 @@
       <div id="main-container">
         <!-- 대시보드 버튼 -->
         <div class="section-btn">
-          <div class="big-circle rounded-circle border">
+          <div class="big-circle">
             <i class="bi bi-command"></i>
           </div>
           <div class="label">대시보드</div>
@@ -45,7 +45,7 @@
 
         <!-- 서비스 추가 버튼 -->
         <div class="section-btn">
-          <div class="big-circle rounded-circle border">
+          <div class="big-circle">
             <i class="bi bi-bag-dash"></i>
           </div>
           <div class="label">서비스 관리</div>
@@ -53,31 +53,31 @@
 
         <!-- 유저 버튼 -->
         <div class="section-btn">
-          <div class="big-circle rounded-circle border">
+          <div class="big-circle">
             <i class="bi bi-people"></i>
           </div>
           <div class="label">유저</div>
         </div>
 
         <!-- 공지사항 버튼-->
-        <div class="section-btn">
-          <div class="big-circle rounded-circle border disabled">
+        <div class="section-btn disabled">
+          <div class="big-circle">
             <i class="bi bi-bell"></i>
           </div>
           <div class="label">공지사항</div>
         </div>
 
         <!-- 광고 버튼 -->
-        <div class="section-btn">
-          <div class="big-circle rounded-circle border disabled">
+        <div class="section-btn disabled">
+          <div class="big-circle">
             <i class="bi bi-badge-ad"></i>
           </div>
           <div class="label">광고</div>
         </div>
 
         <!-- 질의응답 버튼 -->
-        <div class="section-btn">
-          <div class="big-circle rounded-circle border disabled">
+        <div class="section-btn disabled">
+          <div class="big-circle">
             <i class="bi bi-question-circle"></i>
           </div>
           <div class="label">질의응답</div>
@@ -90,7 +90,7 @@
     ></script>
     <script type="text/javascript">
       let disabled_circles = document.getElementsByClassName(
-        "big-circle disabled"
+        "section-btn disabled"
       );
       // console.log(disabled_circles);
       for (let i = 0; i < disabled_circles.length; i++) {
