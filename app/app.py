@@ -254,6 +254,12 @@ async def authenticated_route(user: User = Depends(current_active_user)):
     return {"message": f"Hello {user.email}!"}
 
 
+# developer page(admin page)
+@app.get("/dev")
+async def admin_root(request: Request):
+    return templates.TemplateResponse("admin/index.html", {"request": request})
+
+
 @app.on_event("startup")
 async def on_startup():
     # Not needed if you setup a migration system like Alembic
