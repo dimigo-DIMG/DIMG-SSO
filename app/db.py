@@ -20,6 +20,7 @@ class Base(DeclarativeBase):
 class OAuthAccount(SQLAlchemyBaseOAuthAccountTableUUID, Base):
     pass
 
+
 class User(SQLAlchemyBaseUserTableUUID, Base):
     oauth_accounts: Mapped[List[OAuthAccount]] = relationship(
         "OAuthAccount", lazy="joined"
@@ -31,14 +32,14 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 
     is_dimigo = Column(Boolean, nullable=True)
     is_dimigo_updated = Column(Date, nullable=True)
-    #dimigo_id = Column(String, nullable=True)
+    # dimigo_id = Column(String, nullable=True)
 
     expire = Column(Date, nullable=True)
 
     service_connections: Mapped[List["ServiceConnection"]] = relationship(
-        "ServiceConnection")
-    access_tokens: Mapped[List["AccessToken"]] = relationship(
-        "AccessToken")
+        "ServiceConnection"
+    )
+    access_tokens: Mapped[List["AccessToken"]] = relationship("AccessToken")
 
 
 class Service(Base):
@@ -77,13 +78,13 @@ class Service(Base):
             return self.icon
         else:
             return f"/static/test.png"
-    
+
     service_connections: Mapped[List["ServiceConnection"]] = relationship(
-        "ServiceConnection")
-    
-    access_tokens: Mapped[List["AccessToken"]] = relationship(
-       "AccessToken")
-        
+        "ServiceConnection"
+    )
+
+    access_tokens: Mapped[List["AccessToken"]] = relationship("AccessToken")
+
 
 class ServiceConnection(Base):
     __tablename__ = "service_connections"
@@ -99,9 +100,20 @@ class ServiceConnection(Base):
     unregistered = Column(Date, nullable=True)
     user_id = Column(String, ForeignKey("user.id"))
     service_id = Column(String, ForeignKey("services.client_id"))
-    user = relationship("User", back_populates="service_connections", cascade="all, delete-orphan", single_parent=True)
-    service = relationship("Service", back_populates="service_connections", cascade="all, delete-orphan", single_parent=True)
-    
+    user = relationship(
+        "User",
+        back_populates="service_connections",
+        cascade="all, delete-orphan",
+        single_parent=True,
+    )
+    service = relationship(
+        "Service",
+        back_populates="service_connections",
+        cascade="all, delete-orphan",
+        single_parent=True,
+    )
+
+
 class AccessToken(Base):
     __tablename__ = "access_tokens"
 
@@ -117,9 +129,20 @@ class AccessToken(Base):
     expire = Column(Date)
     user_id = Column(String, ForeignKey("user.id"))
     service_id = Column(String, ForeignKey("services.client_id"))
-    user = relationship("User", back_populates="access_tokens", cascade="all, delete-orphan", single_parent=True)
-    service = relationship("Service", back_populates="access_tokens", cascade="all, delete-orphan", single_parent=True)
-    
+    user = relationship(
+        "User",
+        back_populates="access_tokens",
+        cascade="all, delete-orphan",
+        single_parent=True,
+    )
+    service = relationship(
+        "Service",
+        back_populates="access_tokens",
+        cascade="all, delete-orphan",
+        single_parent=True,
+    )
+
+
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
@@ -132,6 +155,7 @@ async def create_db_and_tables():
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_maker() as session:
         yield session
+
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(session, User, OAuthAccount)

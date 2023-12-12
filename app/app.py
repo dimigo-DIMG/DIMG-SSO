@@ -16,7 +16,8 @@ from app.users import (
     fastapi_users,
     google_oauth_client,
     microsoft_oauth_client,
-    get_user_manager, UserManager
+    get_user_manager,
+    UserManager,
 )
 
 from fastapi.staticfiles import StaticFiles
@@ -26,7 +27,7 @@ import random
 
 app = FastAPI()
 
-#session middleware
+# session middleware
 app.add_middleware(SessionMiddleware, secret_key=SECRET)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -34,12 +35,17 @@ templates = Jinja2Templates(directory="templates")
 
 current_user_optional = fastapi_users.current_user(optional=True)
 
+
 @app.get("/")
 async def root(request: Request, user: User = Depends(current_user_optional)):
     return templates.TemplateResponse("home.html", {"request": request, "user": user})
+
+
 @app.get("/contact")
 async def contact(request: Request):
     return templates.TemplateResponse("contact.html", {"request": request})
+
+
 @app.get("/terms")
 async def terms(request: Request):
     return templates.TemplateResponse("terms.html", {"request": request})
@@ -56,7 +62,7 @@ async def login(request: Request, user: User = Depends(current_user_optional)):
     if reg_success:
         request.session.pop("reg_success")
 
-    #random string
+    # random string
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
     request.session["csrf_token"] = csrf_token
 
@@ -69,28 +75,43 @@ async def login(request: Request, user: User = Depends(current_user_optional)):
             request.session.pop("next")
     if user:
         return RedirectResponse(redirect_uri or "/")
-    
-    return templates.TemplateResponse("auth/login.html", {"request": request, "csrf_token": csrf_token , "failed": failed, "reg_success": reg_success})
+
+    return templates.TemplateResponse(
+        "auth/login.html",
+        {
+            "request": request,
+            "csrf_token": csrf_token,
+            "failed": failed,
+            "reg_success": reg_success,
+        },
+    )
+
 
 @app.post("/account/login")
-async def login(request: Request, user_manager: UserManager = Depends(get_user_manager), strategy: JWTStrategy = Depends(auth_backend.get_strategy) ):
+async def login(
+    request: Request,
+    user_manager: UserManager = Depends(get_user_manager),
+    strategy: JWTStrategy = Depends(auth_backend.get_strategy),
+):
     # request form
     form = await request.form()
     # check csrf token
     if form.get("csrf_token") != request.session.get("csrf_token"):
         request.session["failed"] = 2
-        #redirect tp get
+        # redirect tp get
 
         return RedirectResponse("/account/login", status_code=303)
-    
+
     next_url = request.session.get("next")
 
     if not form.get("email") or not form.get("password"):
         request.session["failed"] = 1
         return RedirectResponse("/account/login", status_code=303)
-    
+
     try:
-        credentials = OAuth2PasswordRequestForm(username=form.get("email"), password=form.get("password"), scope="")
+        credentials = OAuth2PasswordRequestForm(
+            username=form.get("email"), password=form.get("password"), scope=""
+        )
         print(await user_manager.get_by_email(credentials.username))
         user = await user_manager.authenticate(credentials)
     except Exception as e:
@@ -101,7 +122,7 @@ async def login(request: Request, user_manager: UserManager = Depends(get_user_m
         print("user is none")
         request.session["failed"] = 1
         return RedirectResponse("/account/login", status_code=303)
-    
+
     response = await auth_backend.login(strategy, user)
     if next_url:
         request.session.pop("next")
@@ -113,13 +134,20 @@ async def login(request: Request, user_manager: UserManager = Depends(get_user_m
     await user_manager.on_after_login(user, request, response)
     return response
 
+
 @app.get("/account/logout")
-async def logout(user_token: Tuple[User, str] = Depends(fastapi_users.authenticator.current_user_token()), strategy: JWTStrategy = Depends(auth_backend.get_strategy)):
+async def logout(
+    user_token: Tuple[User, str] = Depends(
+        fastapi_users.authenticator.current_user_token()
+    ),
+    strategy: JWTStrategy = Depends(auth_backend.get_strategy),
+):
     user, token = user_token
     response = await auth_backend.logout(strategy, user, token)
     response.headers["location"] = "/"
     response.status_code = 303
     return response
+
 
 @app.get("/account/register")
 async def register(request: Request, user: User = Depends(current_user_optional)):
@@ -131,17 +159,23 @@ async def register(request: Request, user: User = Depends(current_user_optional)
 
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
     request.session["csrf_token"] = csrf_token
-    return templates.TemplateResponse("auth/signup.html", {"request": request, "failed": failed, "csrf_token": csrf_token})
+    return templates.TemplateResponse(
+        "auth/signup.html",
+        {"request": request, "failed": failed, "csrf_token": csrf_token},
+    )
+
 
 @app.post("/account/register")
-async def register(request: Request,  # type: ignore
-                    user_manager: UserManager = Depends(get_user_manager)):
-    print ("registering...")
+async def register(
+    request: Request,  # type: ignore
+    user_manager: UserManager = Depends(get_user_manager),
+):
+    print("registering...")
     form = await request.form()
-    
+
     if form.get("csrf_token") != request.session.get("csrf_token"):
         request.session["failed"] = 2
-        #redirect tp get
+        # redirect tp get
         return RedirectResponse("/account/register", status_code=303)
     request.session.pop("csrf_token")
     try:
@@ -154,19 +188,20 @@ async def register(request: Request,  # type: ignore
     except exceptions.InvalidPasswordException:
         request.session["failed"] = 3
         return RedirectResponse("/account/register", status_code=303)
-    
+
     request.session["reg_success"] = 1
-    #return RedirectResponse("/account/login", status_code=303)
+    # return RedirectResponse("/account/login", status_code=303)
     res = schemas.model_validate(UserRead, user)
     response = RedirectResponse("/account/login", status_code=303)
     return response
-    
+
 
 @app.get("/account/reset-pw")
 async def password(request: Request, user: User = Depends(current_user_optional)):
     if user:
-      return RedirectResponse("/")
-    return templates.TemplateResponse("auth/reset_pw.html", {"request": request})  
+        return RedirectResponse("/")
+    return templates.TemplateResponse("auth/reset_pw.html", {"request": request})
+
 
 @app.get("/account/oauth/r/{provider}")
 async def oauth_login(request: Request, provider: str):
@@ -185,6 +220,7 @@ async def oauth_login(request: Request, provider: str):
 
     # redirect to oauth provider
     return RedirectResponse(url)
+
 
 app.include_router(
     fastapi_users.get_reset_password_router(),
