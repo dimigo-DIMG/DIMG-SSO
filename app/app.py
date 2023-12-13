@@ -34,6 +34,7 @@ templates = Jinja2Templates(directory="templates")
 
 current_user_optional = fastapi_users.current_user(optional=True)
 
+
 @app.get("/")
 async def root(request: Request, user: User = Depends(current_user_optional)):
     return templates.TemplateResponse("home.html", {"request": request, "user": user})
