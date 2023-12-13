@@ -25,6 +25,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     oauth_accounts: Mapped[List[OAuthAccount]] = relationship(
         "OAuthAccount", lazy="joined"
     )
+
     nickname = Column(String, nullable=True)
 
     gender = Column(String, nullable=True)
@@ -32,8 +33,10 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 
     is_dimigo = Column(Boolean, nullable=True)
     is_dimigo_updated = Column(Date, nullable=True)
-    # dimigo_id = Column(String, nullable=True)
-
+    #dimigo_id = Column(String, nullable=True)
+    #last_token_sent = Column(Date, nullable=True)
+    #count_token_sent = Column(Integer, nullable=True)
+    
     expire = Column(Date, nullable=True)
 
     service_connections: Mapped[List["ServiceConnection"]] = relationship(

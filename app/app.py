@@ -98,8 +98,7 @@ async def login(
     # check csrf token
     if form.get("csrf_token") != request.session.get("csrf_token"):
         request.session["failed"] = 2
-        # redirect tp get
-
+        #redirect tp get
         return RedirectResponse("/account/login", status_code=303)
 
     next_url = request.session.get("next")
@@ -194,13 +193,14 @@ async def register(
     res = schemas.model_validate(UserRead, user)
     response = RedirectResponse("/account/login", status_code=303)
     return response
-
-
-@app.get("/account/reset-pw")
+    
+@app.get("/account/password")
 async def password(request: Request, user: User = Depends(current_user_optional)):
     if user:
         return RedirectResponse("/")
     return templates.TemplateResponse("auth/reset_pw.html", {"request": request})
+
+
 
 
 @app.get("/account/oauth/r/{provider}")
