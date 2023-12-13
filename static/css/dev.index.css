@@ -6,20 +6,26 @@
   align-items: center;
 }
 
-#service-info {
+#page-info {
   text-align: center;
   margin-bottom: 20px;
 }
 
-#service-name {
+#page-name {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-#service-type {
+#page-type {
   font-size: 1rem;
   font-weight: lighter;
+}
+
+.section-btn {
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
 }
 
 .big-circle:focus {
@@ -29,7 +35,7 @@
 
 .big-circle > i {
   position: relative;
-  bottom: 2px;
+  bottom: 3px;
 }
 
 .label {
@@ -37,35 +43,28 @@
   margin: 10px 0;
 }
 
+.big-circle {
+  margin: 10px;
+  border: 1px solid #ced4da;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+}
+
 @media (max-width: 767.98px) {
   /* Mobile Styles */
   #main-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .section-btn {
-    width: 100%;
-    cursor: pointer;
-  }
-
-  .section-btn:nth-child(odd) {
-    background-color: #fff;
-  }
-
-  .section-btn:nth-child(even) {
-    background-color: #eee;
-  }
-  .big-circle {
-    margin: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 100px;
+    grid-auto-rows: 60px;
+    grid-gap: 45px 15px;
   }
 }
 
@@ -75,20 +74,5 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-
-  .big-circle {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background-color: #ffffff;
-    margin: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    border: 1px solid #ced4da;
-    font-size: 40px;
   }
 }
