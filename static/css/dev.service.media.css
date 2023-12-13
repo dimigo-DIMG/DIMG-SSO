@@ -1,0 +1,135 @@
+@media (max-width: 767.98px) {
+  /* Mobile Styles */
+  #container {
+    margin: 0 20px;
+    padding-top: 40px;
+  }
+
+  #page-info,
+  .section-item {
+    width: 100%;
+  }
+
+  #page-info {
+    text-align: center;
+  }
+
+  i.mobile-center-yes {
+    position: absolute;
+    top: calc(50% - 3px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  i.mobile-center-no {
+    position: absolute;
+    top: -3px;
+    right: 3px;
+    transform: translate(0, 0);
+  }
+
+  .service-label {
+    margin-left: 15px;
+  }
+
+  .section-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .service-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  #sidebar {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  /* Desktop and Tablet Styles */
+  i.ico-center {
+    position: absolute;
+    top: calc(50% - 3px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  #container {
+    padding-top: 100px;
+  }
+
+  #page-info {
+    width: 480px;
+  }
+
+  .section-item {
+    width: 480px;
+    display: grid;
+    grid-template-columns: 80px auto;
+  }
+
+  .service-icon {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+  }
+
+  .service-settings {
+    font-size: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+  }
+
+  .service-icon:hover .service-settings {
+    opacity: 1;
+  }
+
+  .service-label {
+    margin-left: 20px;
+  }
+
+  #sidebar {
+    position: fixed;
+    top: 180px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sidebar > a {
+    margin-bottom: 20px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: #000;
+    background-color: #fff;
+    text-decoration: none;
+    font-size: 24px;
+  }
+
+  #sidebar > a.active {
+    border: 2px solid #0d6efd;
+    color: #0d6efd;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1210px) {
+  /* Desktop(small) and Tablet Styles */
+  #sidebar {
+    left: 5vw;
+  }
+}
+
+@media (min-width: 1210px) {
+  /* Desktop(big) Styles */
+  #sidebar {
+    left: 20vw;
+  }
+}

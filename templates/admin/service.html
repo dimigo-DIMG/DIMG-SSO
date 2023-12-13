@@ -22,170 +22,35 @@
       rel="stylesheet"
       href="{{url_for('static', path='/fonts/Pretendard/pretendard.css')}}"
     />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/dev.service.general.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/dev.service.media.css')}}"
+    />
     <title>DIMG-SSO 관리 - 서비스</title>
   </head>
-  <style>
-    #container {
-      padding-top: 100px;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    #page-info {
-      margin-bottom: 10px;
-      width: 480px;
-    }
-
-    #page-name {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    #page-info {
-      font-size: 1rem;
-    }
-
-    .section-item {
-      margin-top: 20px;
-      width: 480px;
-      display: grid;
-      grid-template-columns: 80px auto;
-    }
-
-    .service-icon {
-      border: 1px solid #888;
-      border-radius: 5px;
-      width: 80px;
-      height: 80px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    .service-label {
-      margin-left: 20px;
-    }
-
-    .service-label-title {
-      display: flex;
-      gap: 5px;
-    }
-
-    .badge {
-      margin: auto 0;
-    }
-
-    .semi-title-text {
-      font-size: 1.5em;
-      font-weight: 500;
-    }
-
-    .service-settings {
-      border-radius: 4px;
-      width: 100%;
-      height: 100%;
-      font-size: 40px;
-      position: relative;
-      background-color: rgba(0, 0, 0, 0.5);
-      color: #fff;
-      opacity: 0;
-      transition: opacity 0.2s ease-out;
-    }
-
-    .service-icon:hover .service-settings {
-      opacity: 1;
-      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    }
-
-    #add-service {
-      align-items: center;
-    }
-
-    #add-service-btn {
-      border: 1px dashed #888;
-      background-color: #fff;
-      position: relative;
-      font-size: 40px;
-      color: #888;
-    }
-
-    #add-service-btn:hover {
-      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
-    }
-
-    #add-service-label {
-      color: #888;
-      font-size: 20px;
-    }
-
-    #sidebar {
-      position: fixed;
-      top: 180px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    #sidebar > a {
-      margin-bottom: 20px;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      color: #000;
-      background-color: #fff;
-      text-decoration: none;
-      font-size: 24px;
-    }
-
-    #sidebar > a.active {
-      border: 2px solid #0d6efd;
-      color: #0d6efd;
-    }
-
-    @media (max-width: 767.98px) {
-      /* Mobile Styles */
-    }
-
-    @media (min-width: 768px) and (max-width: 1210px) {
-      /* Desktop(small) and Tablet Styles */
-      #sidebar {
-        left: 5vw;
-      }
-    }
-
-    @media (min-width: 1210px) {
-      /* Desktop(big) Styles */
-      #sidebar {
-        left: 20vw;
-      }
-    }
-  </style>
   <body>
     <!-- Sidebar -->
     <div id="sidebar">
-      <a href="#">
+      <a class="hover-shadow" href="#">
         <i class="bi bi-command ico-center"></i>
       </a>
-      <a href="#" class="active">
+      <a class="hover-shadow active" href="#">
         <i class="bi bi-bag-dash ico-center"></i>
       </a>
-      <a href="#">
+      <a class="hover-shadow" href="#">
         <i class="bi bi-people ico-center"></i>
       </a>
-      <a href="#">
+      <a class="hover-shadow" href="#">
         <i class="bi bi-bell ico-center"></i>
       </a>
-      <a href="#">
+      <a class="hover-shadow" href="#">
         <i class="bi bi-badge-ad ico-center"></i>
       </a>
-      <a href="#">
+      <a class="hover-shadow" href="#">
         <i class="bi bi-question-circle ico-center"></i>
       </a>
     </div>
@@ -199,17 +64,17 @@
       <div id="main-container">
         <!-- 서비스 추가 list item -->
         <div id="add-service" class="section-item">
-          <div id="add-service-btn" class="service-icon">
-            <i class="bi bi-plus ico-center"></i>
+          <div id="add-service-btn" class="service-icon hover-shadow">
+            <i class="bi bi-plus ico-center mobile-center-yes"></i>
           </div>
           <div id="add-service-label" class="service-label">서비스 추가</div>
         </div>
 
         <!-- 유저 서비스 list items-->
         <div class="section-item">
-          <div class="service-icon">
+          <div class="service-icon hover-shadow">
             <div class="service-settings">
-              <i class="bi bi-gear ico-center"></i>
+              <i class="bi bi-gear ico-center mobile-center-no"></i>
             </div>
           </div>
           <div class="service-label">
@@ -226,9 +91,9 @@
           </div>
         </div>
         <div class="section-item">
-          <div class="service-icon">
+          <div class="service-icon hover-shadow">
             <div class="service-settings">
-              <i class="bi bi-gear"></i>
+              <i class="bi bi-gear ico-center mobile-center-no"></i>
             </div>
           </div>
           <div class="service-label">
