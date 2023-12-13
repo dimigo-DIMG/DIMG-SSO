@@ -260,6 +260,11 @@ async def admin_root(request: Request):
     return templates.TemplateResponse("admin/index.html", {"request": request})
 
 
+@app.get("/dev/service")
+async def admin_service_root(request: Request):
+    return templates.TemplateResponse("admin/service.html", {"request": request})
+
+
 @app.on_event("startup")
 async def on_startup():
     # Not needed if you setup a migration system like Alembic
