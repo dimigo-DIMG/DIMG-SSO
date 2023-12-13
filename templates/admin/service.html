@@ -35,22 +35,22 @@
   <body>
     <!-- Sidebar -->
     <div id="sidebar">
-      <a class="hover-shadow" href="#">
+      <a class="hover-shadow" href="/dev/dashboard">
         <i class="bi bi-command ico-center"></i>
       </a>
-      <a class="hover-shadow active" href="#">
+      <a class="hover-shadow active" href="/dev/service">
         <i class="bi bi-bag-dash ico-center"></i>
       </a>
-      <a class="hover-shadow" href="#">
+      <a class="hover-shadow" href="/dev/users">
         <i class="bi bi-people ico-center"></i>
       </a>
-      <a class="hover-shadow" href="#">
+      <a class="hover-shadow disabled" href="#">
         <i class="bi bi-bell ico-center"></i>
       </a>
-      <a class="hover-shadow" href="#">
+      <a class="hover-shadow disabled" href="#">
         <i class="bi bi-badge-ad ico-center"></i>
       </a>
-      <a class="hover-shadow" href="#">
+      <a class="hover-shadow disabled" href="#">
         <i class="bi bi-question-circle ico-center"></i>
       </a>
     </div>
@@ -115,6 +115,20 @@
       type="text/javascript"
       src="{{ url_for('static', path='/js/bootstrap.bundle.min.js') }}"
     ></script>
-    <script type="text/javascript"></script>
+    <script type="text/javascript">
+      let disabled_circles = document.getElementsByClassName("disabled");
+      // console.log(disabled_circles);
+      for (let i = 0; i < disabled_circles.length; i++) {
+        let circle = disabled_circles[i];
+        circle.addEventListener("click", () => alert("준비 중인 기능입니다."));
+      }
+
+      let add_service = document.getElementById("add-service-btn");
+      // console.log(add_service);
+      add_service.addEventListener(
+        "click",
+        () => (location.href = "/dev/service/add")
+      );
+    </script>
   </body>
 </html>
