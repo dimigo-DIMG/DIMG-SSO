@@ -1,0 +1,165 @@
+i#ico-href-previous {
+  cursor: pointer;
+}
+
+.massive-text {
+  font-size: 18px;
+}
+
+#page-info {
+  width: 480px;
+}
+
+#page-name > i {
+  position: relative;
+  bottom: 3px;
+}
+
+.form-item {
+  margin-top: 20px;
+  width: 480px;
+  display: grid;
+  grid-template-columns: 100px auto;
+  align-items: center;
+  gap: 15px;
+}
+
+.form-item > label {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.inner-form > input[type="number"] {
+  width: 54px;
+}
+
+.inner-form > span {
+  margin-left: 5px;
+}
+
+.divide-section {
+  margin: 30px 0;
+}
+
+.divide-line {
+  border-bottom: 1px solid #888;
+}
+
+.divide-section > span {
+  padding: 0 15px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #888;
+  z-index: 1;
+}
+
+#main-container > .divide-section > span {
+  background-color: #f5f5f5;
+}
+
+@media only screen and (min-width: 768px) {
+  /* Desktop and Tablet View */
+  .form-item > label {
+    text-align: right;
+  }
+
+  .cover-item {
+    max-height: 80vh;
+  }
+}
+
+@media only screen and (max-width: 767.98px) {
+  /* Mobile View */
+  #page-info {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 100px;
+    width: 100%;
+  }
+
+  .form-item,
+  #form-fundamental,
+  #form-location,
+  #form-additional {
+    width: 100%;
+  }
+
+  .form-item {
+    grid-template-columns: auto;
+  }
+
+  .form-item > label {
+    text-align: left;
+  }
+
+  .inner-form > input[type="number"] {
+    width: 100%;
+  }
+
+  .cover-item {
+    max-height: 100vh;
+  }
+}
+
+/* cover */
+
+#cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.cover-item {
+  padding: 30px 20px;
+  border-radius: 10px;
+  width: 540px;
+  background-color: #fff;
+  overflow-y: auto;
+}
+
+.cover-item-name {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.cover-item-desc {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.cover-item-container {
+  position: relative;
+}
+
+.cover-item-container button {
+  font-size: 20px;
+}
+
+.cover-item-container > .divide-section > span {
+  background-color: #fff;
+}
+
+.show-item {
+  display: flex;
+  gap: 10px;
+}
+
+.show-item > label {
+  font-size: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.show-item > span {
+  align-self: center;
+}
+
+#cover,
+.cover-item {
+  display: none;
+}
