@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/general/bootstrap.min.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/general/styles.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/fonts/Pretendard/pretendard.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/dev.service.general.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/dev.service.media.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/dev.service.add.css')}}"
+    />
+    <title>DIMG-SSO 관리 - 서비스 추가</title>
+  </head>
+  <body>
+    <!-- Cover -->
+    <div id="cover">
+      <!-- 서비스 생성 정보 확인 div -->
+      <div id="service-add-confirm" class="cover-item">
+        <div class="cover-item-info mb-4">
+          <div class="cover-item-name">서비스 추가 정보 확인</div>
+          <div class="cover-item-desc">
+            아래 입력하신 정보로 서비스가 추가됩니다. 알맞게 입력되었는지 확인
+            후 “추가” 버튼을 눌러주세요. 이후에 설정을 변경할 수 있습니다.
+          </div>
+        </div>
+        <div class="cover-item-container">
+          <div id="show-fundamental">
+            <!-- 서비스 이름 div -->
+            <div id="show-service-name" class="show-item">
+              <label>서비스 이름</label>
+              <span>DIMG-PaaS</span>
+            </div>
+
+            <!-- 서비스 공식/비공식 여부 div -->
+            <div id="show-service-isOfficial" class="show-item">
+              <label>공식/비공식 여부</label>
+              <span>여(공식)</span>
+            </div>
+
+            <!-- 서비스 설명 div -->
+            <div id="show-service-desc" class="show-item">
+              <label>서비스 소개</label>
+              <span>천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루</span>
+            </div>
+
+            <!-- 서비스 로고 div -->
+            <div id="show-service-logo" class="show-item">
+              <label>로고</label>
+              <span>dimg-paas-logo.svg</span>
+            </div>
+          </div>
+
+          <div class="divide-section">
+            <div class="divide-line"></div>
+            <span>서비스 경로 설정</span>
+          </div>
+
+          <div id="show-location">
+            <!-- 로그인 콜백 div -->
+            <div id="show-login-callback" class="show-item">
+              <label>로그인 콜백</label>
+              <span>dimg.io</span>
+            </div>
+
+            <!-- 서비스 탈퇴 페이지 div -->
+            <div id="show-service-out" class="show-item">
+              <label>서비스 탈퇴 페이지</label>
+              <span>dimg.io</span>
+            </div>
+
+            <!-- 메인 페이지 div -->
+            <div id="show-main-page" class="show-item">
+              <label>메인 페이지</label>
+              <span>dimg.io</span>
+            </div>
+          </div>
+
+          <div class="divide-section">
+            <div class="divide-line"></div>
+            <span>추가 설정</span>
+          </div>
+
+          <div id="show-additional">
+            <!-- 스코프 div -->
+            <div id="show-service-scope" class="show-item">
+              <label>스코프</label>
+              <span>user:read;email:read</span>
+            </div>
+
+            <!-- 재회원가입까지 날짜 수 div -->
+            <div id="show-reRegister-days" class="show-item">
+              <label>탈퇴 후 재가입까지</label>
+              <span>7일</span>
+            </div>
+          </div>
+
+          <!-- submit 버튼 -->
+          <div class="row mt-4 mx-1 gap-2">
+            <button class="col btn btn-secondary" type="button">취소</button>
+            <button class="col btn btn-primary" type="button">확인</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 서비스 추가됨 공지 -->
+      <div id="service-add-notification" class="cover-item">
+        <div class="cover-item-info mb-4">
+          <div class="cover-item-name">서비스가 추가되었습니다!</div>
+          <div class="cover-item-desc">서비스 이름: DIMG-PaaS</div>
+        </div>
+        <div class="cover-item-container">
+          <!-- submit 버튼 -->
+          <div class="row mt-4 mx-1 gap-2">
+            <input class="col invisible" type="button" />
+            <button class="col btn btn-secondary" type="button">취소</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 뒤로가기 입력 정보 사라짐 공지 -->
+      <div id="service-purge-notification" class="cover-item">
+        <div class="cover-item-info mb-4">
+          <div class="cover-item-name">서비스 추가를 취소하겠습니까?</div>
+          <div class="cover-item-desc">작성하신 내용이 모두 사라집니다.</div>
+        </div>
+        <div class="cover-item-container">
+          <!-- submit 버튼 -->
+          <div class="row mt-4 mx-1 gap-2">
+            <button class="col btn btn-danger" type="button">닫기</button>
+            <button class="col btn btn-secondary" type="button">
+              돌아가기
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <a class="hover-shadow" href="/dev/dashboard">
+        <i class="bi bi-command ico-center"></i>
+      </a>
+      <a class="hover-shadow active" href="/dev/service">
+        <i class="bi bi-bag-dash ico-center"></i>
+      </a>
+      <a class="hover-shadow" href="/dev/users">
+        <i class="bi bi-people ico-center"></i>
+      </a>
+      <a class="hover-shadow disabled" href="#">
+        <i class="bi bi-bell ico-center"></i>
+      </a>
+      <a class="hover-shadow disabled" href="#">
+        <i class="bi bi-badge-ad ico-center"></i>
+      </a>
+      <a class="hover-shadow disabled" href="#">
+        <i class="bi bi-question-circle ico-center"></i>
+      </a>
+    </div>
+
+    <!-- Content -->
+    <div id="container">
+      <div id="page-info">
+        <div id="page-name">
+          <i id="ico-href-previous" class="bi bi-caret-left"></i>서비스 추가
+        </div>
+        <div id="page-desc">
+          DIMG-SSO를 이용하는 서비스를 목록에 추가합니다.
+        </div>
+      </div>
+      <div id="main-container">
+        <div id="form-fundamental">
+          <!-- 서비스 이름 div -->
+          <div id="form-service-name" class="form-item">
+            <label for="inputServiceName">서비스 이름</label>
+            <input
+              id="inputServiceName"
+              class="form-control"
+              type="text"
+              placeholder="서비스 이름"
+            />
+          </div>
+
+          <!-- 서비스 공식/비공식 여부 div -->
+          <div id="form-service-isOfficial" class="form-item">
+            <label for="inputIsOfficial" class="massive-text"
+              >공식/비공식 여부</label
+            >
+            <div class="d-flex align-items-center inner-form">
+              <input
+                id="inputIsOfficial"
+                class="form-check-input"
+                type="checkbox"
+              />
+              <span>공식 서비스로 등록한다면 선택</span>
+            </div>
+          </div>
+
+          <!-- 서비스 설명 div -->
+          <div id="form-service-desc" class="form-item">
+            <label for="inputServiceDesc">서비스 설명</label>
+            <textarea id="inputServiceDesc" class="form-control"></textarea>
+          </div>
+
+          <!-- 서비스 로고 div -->
+          <div id="form-service-logo" class="form-item">
+            <label for="inputServiceLogo">로고</label>
+            <input id="inputServiceLogo" type="file" class="form-control" />
+          </div>
+        </div>
+
+        <div class="divide-section">
+          <div class="divide-line"></div>
+          <span>서비스 경로 설정</span>
+        </div>
+
+        <div id="form-location">
+          <!-- 로그인 콜백 div -->
+          <div id="form-login-callback" class="form-item">
+            <label for="inputLoginCallback">로그인 콜백</label>
+            <input
+              id="inputLoginCallback"
+              class="form-control"
+              type="text"
+              placeholder="로그인 콜백"
+            />
+          </div>
+
+          <!-- 서비스 탈퇴 페이지 div -->
+          <div id="form-service-out" class="form-item">
+            <label for="inputServiceOut" class="massive-text"
+              >서비스 탈퇴 페이지</label
+            >
+            <input
+              id="inputServiceOut"
+              class="form-control"
+              type="text"
+              placeholder="서비스 탈퇴 페이지"
+            />
+          </div>
+
+          <!-- 메인 페이지 div -->
+          <div id="form-main-page" class="form-item">
+            <label for="inputMainPage">메인 페이지</label>
+            <input
+              id="inputMainPage"
+              class="form-control"
+              type="text"
+              placeholder="메인 페이지"
+            />
+          </div>
+        </div>
+
+        <div class="divide-section">
+          <div class="divide-line"></div>
+          <span>추가 설정</span>
+        </div>
+
+        <div id="form-additional">
+          <!-- 스코프 div -->
+          <div id="form-service-scope" class="form-item">
+            <label for="inputServiceScope">스코프</label>
+            <input
+              id="inputServiceScope"
+              class="form-control"
+              type="text"
+              placeholder="스코프"
+            />
+          </div>
+
+          <!-- 재회원가입까지 날짜 수 div -->
+          <div id="form-reRegister-days" class="form-item">
+            <label for="inputReRegisterDays" class="massive-text"
+              >탈퇴 후 재가입까지
+            </label>
+            <div class="d-flex align-items-center inner-form">
+              <input
+                id="inputServiceScope"
+                class="form-control"
+                type="number"
+                value="3"
+              />
+              <span>일</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- submit 버튼 -->
+        <div class="d-grid gap-2 my-5">
+          <button class="btn btn-primary" type="button">추가</button>
+        </div>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='/js/bootstrap.bundle.min.js') }}"
+    ></script>
+    <script type="text/javascript">
+      let disabled_circles = document.getElementsByClassName("disabled");
+      // console.log(disabled_circles);
+      for (let i = 0; i < disabled_circles.length; i++) {
+        let circle = disabled_circles[i];
+        circle.addEventListener("click", () => alert("준비 중인 기능입니다."));
+      }
+
+      let ico_previous = document.getElementById("ico-href-previous");
+      ico_previous.addEventListener("click", () => history.back());
+    </script>
+  </body>
+</html>

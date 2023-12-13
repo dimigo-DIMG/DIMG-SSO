@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-  {% include "header.html" %}
+<html lang="ko">
+  <head>
+    {% include "header.html" %}
+  </head>
   <title>로그인</title>
   <body>
     <div class="container-fluid">
@@ -26,11 +28,10 @@
             </div>
             {% endif %}
             <h1>Login</h1>
-            <form class="mt-5 pb-5" action="/account/login" 
-            method="post">
+            <form class="mt-5 pb-5" action="/account/login" method="post">
               <!-- Email input -->
               {% if csrf_token %}
-              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
               {% endif %}
               <div data-mdb-input-init class="form-outline mb-4">
                 <input
@@ -39,9 +40,7 @@
                   name="email"
                   class="form-control form-control-lg"
                 />
-                <label class="form-label" for="form1Example1"
-                  >이메일</label
-                >
+                <label class="form-label" for="form1Example1">이메일</label>
               </div>
 
               <!-- Password input -->
@@ -75,7 +74,7 @@
               <!-- Login with Google -->
               <button
                 data-mdb-ripple-init
-                id = "google-login"
+                id="google-login"
                 type="button"
                 class="btn btn-danger btn-block"
                 style="padding: 0.6rem 1.5rem; font-size: 12pt"
@@ -85,7 +84,7 @@
               <!-- Login with Microsoft -->
               <button
                 data-mdb-ripple-init
-                id = "microsoft-login"
+                id="microsoft-login"
                 type="button"
                 class="btn btn-secondary btn-block"
                 style="padding: 0.6rem 1.5rem; font-size: 12pt"
@@ -100,11 +99,15 @@
     {% include "footer.html" %}
   </body>
   <script>
-    document.getElementById("google-login").addEventListener("click", function() {
-      window.location.href = "/account/oauth/r/google";
-    });
-    document.getElementById("microsoft-login").addEventListener("click", function() {
-      window.location.href = "/account/oauth/r/microsoft";
-    });
+    document
+      .getElementById("google-login")
+      .addEventListener("click", function () {
+        window.location.href = "/account/oauth/r/google";
+      });
+    document
+      .getElementById("microsoft-login")
+      .addEventListener("click", function () {
+        window.location.href = "/account/oauth/r/microsoft";
+      });
   </script>
 </html>

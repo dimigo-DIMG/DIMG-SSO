@@ -1,0 +1,10 @@
+body {
+  background-color: #f5f5f5;
+  font-family: Pretendard;
+  margin: 0;
+  height: 100vh;
+}
+
+.hover-shadow:hover {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/general/bootstrap.min.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/general/styles.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/fonts/Pretendard/pretendard.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/dev.service.general.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/dev.service.media.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/dev.service.index.css')}}"
+    />
+    <title>DIMG-SSO 관리 - 서비스</title>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <a class="hover-shadow" href="/dev/dashboard">
+        <i class="bi bi-command ico-center"></i>
+      </a>
+      <a class="hover-shadow active" href="/dev/service">
+        <i class="bi bi-bag-dash ico-center"></i>
+      </a>
+      <a class="hover-shadow" href="/dev/users">
+        <i class="bi bi-people ico-center"></i>
+      </a>
+      <a class="hover-shadow disabled" href="#">
+        <i class="bi bi-bell ico-center"></i>
+      </a>
+      <a class="hover-shadow disabled" href="#">
+        <i class="bi bi-badge-ad ico-center"></i>
+      </a>
+      <a class="hover-shadow disabled" href="#">
+        <i class="bi bi-question-circle ico-center"></i>
+      </a>
+    </div>
+
+    <!-- Content -->
+    <div id="container">
+      <div id="page-info">
+        <div id="page-name">서비스 관리</div>
+        <div id="page-desc">DIMG-SSO를 이용하는 서비스 목록을 확인합니다.</div>
+      </div>
+      <div id="main-container">
+        <!-- 서비스 추가 list item -->
+        <div id="add-service" class="section-item">
+          <div id="add-service-btn" class="service-icon hover-shadow">
+            <i class="bi bi-plus ico-center mobile-center-yes"></i>
+          </div>
+          <div id="add-service-label" class="service-label">서비스 추가</div>
+        </div>
+
+        <!-- 유저 서비스 list items-->
+        <div class="section-item">
+          <div class="service-icon hover-shadow">
+            <div class="service-settings">
+              <i class="bi bi-gear ico-center mobile-center-no"></i>
+            </div>
+          </div>
+          <div class="service-label">
+            <div class="service-label-title">
+              <span class="semi-title-text">DIMG-PaaS</span>
+              <span class="badge rounded-pill bg-success">Formal</span>
+            </div>
+            <div class="service-label-link">
+              <a href="#!">dimg.io<i class="bi bi-box-arrow-up-right"></i></a>
+            </div>
+            <div class="service-label-desc pt-1">
+              천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루
+            </div>
+          </div>
+        </div>
+        <div class="section-item">
+          <div class="service-icon hover-shadow">
+            <div class="service-settings">
+              <i class="bi bi-gear ico-center mobile-center-no"></i>
+            </div>
+          </div>
+          <div class="service-label">
+            <div class="service-label-title">
+              <span class="semi-title-text">DIMG-PaaS</span>
+              <span class="badge rounded-pill bg-secondary">Informal</span>
+            </div>
+            <div class="service-label-link">
+              <a href="#!">dimg.io<i class="bi bi-box-arrow-up-right"></i></a>
+            </div>
+            <div class="service-label-desc pt-1">
+              천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='/js/bootstrap.bundle.min.js') }}"
+    ></script>
+    <script type="text/javascript">
+      let disabled_circles = document.getElementsByClassName("disabled");
+      // console.log(disabled_circles);
+      for (let i = 0; i < disabled_circles.length; i++) {
+        let circle = disabled_circles[i];
+        circle.addEventListener("click", () => alert("준비 중인 기능입니다."));
+      }
+
+      let add_service = document.getElementById("add-service-btn");
+      // console.log(add_service);
+      add_service.addEventListener(
+        "click",
+        () => (location.href = "/dev/service/add")
+      );
+    </script>
+  </body>
+</html>
