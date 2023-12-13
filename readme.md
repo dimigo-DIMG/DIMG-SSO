@@ -16,8 +16,9 @@
   - [x] `/account/register` - 회원가입
   - [x] `/account/login` - 로그인
   - [x] `/account/logout` - 로그아웃
-  - [ ] `/account/email` - 이메일 변경
-  - [ ] `/account/password` - 비밀번호 찾기
+  - [ ] `/account/email` - 이메일 변경 (프로필 메뉴)
+  - [ ] `/account/password` - 비밀번호 변경 (프로필 메뉴)
+  - [ ] `/account/password/forgot` - 비밀번호 찾기
   - [ ] `/account/verify` - 이메일 인증
   - [ ] `/account/delete` - 계정 삭제
   

@@ -81,7 +81,6 @@ async def login(request: Request, user_manager: UserManager = Depends(get_user_m
     if form.get("csrf_token") != request.session.get("csrf_token"):
         request.session["failed"] = 2
         #redirect tp get
-
         return RedirectResponse("/account/login", status_code=303)
     
     next_url = request.session.get("next")
@@ -162,12 +161,13 @@ async def register(request: Request,  # type: ignore
     response = RedirectResponse("/account/login", status_code=303)
     return response
     
-
-@app.get("/account/reset-pw")
+@app.get("/account/password")
 async def password(request: Request, user: User = Depends(current_user_optional)):
     if user:
       return RedirectResponse("/")
     return templates.TemplateResponse("auth/reset_pw.html", {"request": request})  
+
+
 
 @app.get("/account/oauth/r/{provider}")
 async def oauth_login(request: Request, provider: str):
