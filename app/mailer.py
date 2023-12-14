@@ -23,9 +23,7 @@ else:
 smtp.connect(smtp_host, smtp_port)
 smtp.login(smtp_user, smtp_pass)
 
-
 async def send_email(to: str, subject: str, body: str):  
-    
     msg = MIMEMultipart()
     msg['From'] = smtp_addr
     msg['To'] = to
