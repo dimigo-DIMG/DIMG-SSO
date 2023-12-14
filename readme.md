@@ -18,21 +18,21 @@
   - [x] `/account/logout` - 로그아웃
   - [ ] `/account/email` - 이메일 변경 (프로필 메뉴)
   - [ ] `/account/password` - 비밀번호 변경 (프로필 메뉴)
-  - [ ] `/account/password/forgot` - 비밀번호 찾기
-  - [ ] `/account/verify` - 이메일 인증
+  - [x] `/account/password/forgot` - 비밀번호 찾기
+  - [x] `/account/verify` - 이메일 인증
   - [ ] `/account/delete` - 계정 삭제
   
-- [ ] `/manage` - 관리자 루트
+- [x] `/manage` - 관리자 루트
   - [ ] `/manage/dashboard` - 대시보드
   - [ ] `/manage/users` - 사용자 관리
   - [ ] `/manage/users/<user_id>` - 사용자 관리
     - [ ] `/manage/users/<user_id>/edit` - 사용자 수정
     - [ ] `/manage/users/<user_id>/delete` - 사용자 삭제
-  - [ ] `/manage/services` - 서비스 관리
-  - [ ] `/manage/services/create` - 서비스 생성
-  - [ ] `/manage/services/<service_id>` - 서비스 관리
-    - [ ] `/manage/services/<service_id>/edit` - 서비스 수정
-    - [ ] `/manage/services/<service_id>/delete` - 서비스 삭제
+  - [x] `/manage/services` - 서비스 관리
+  - [x] `/manage/services/create` - 서비스 생성
+  - [x] `/manage/services/<service_id>` - 서비스 관리
+    - [x] `/manage/services/<service_id>/update` - 서비스 수정
+    - [x] `/manage/services/<service_id>/delete` - 서비스 삭제
   - [ ] `/manage/ads` - 광고 관리
   - [ ] `/manage/announcements` - 공지사항 관리
   - [ ] `/manage/feedbacks` - 피드백 관리
