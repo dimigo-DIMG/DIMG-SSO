@@ -26,6 +26,14 @@
             <div class="alert alert-danger" role="alert">
               CSRF 토큰이 일치하지 않습니다.
             </div>
+            {% elif failed == 110 %}
+            <div class="alert alert-danger" role="alert">
+              토큰이 유요하지 않습니다.
+            </div>
+            {% elif failed == 100 %}
+            <div class="alert alert-danger" role="alert">
+              이미 인증된 유저입니다.
+            </div>
             {% endif %}
             <h1>Login</h1>
             <form class="mt-5 pb-5" action="/account/login" method="post">
@@ -58,7 +66,7 @@
               <div class="row mb-4">
                 <div class="col">
                   <!-- Simple link -->
-                  <a href="/account/reset-pw">비밀번호를 잊으셨나요?</a>
+                  <a href="/account/forgot-password">비밀번호를 잊으셨나요?</a>
                 </div>
               </div>
 
@@ -102,12 +110,12 @@
     document
       .getElementById("google-login")
       .addEventListener("click", function () {
-        window.location.href = "/account/oauth/r/google";
+        window.location.href = "/account/oauth/l/google";
       });
     document
       .getElementById("microsoft-login")
       .addEventListener("click", function () {
-        window.location.href = "/account/oauth/r/microsoft";
+        window.location.href = "/account/oauth/l/microsoft";
       });
   </script>
 </html>

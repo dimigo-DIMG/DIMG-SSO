@@ -17,6 +17,7 @@
 }
 
 .service-settings {
+  transform: translate(-50%, -50%);
   border-radius: 4px;
   width: 100%;
   height: 100%;

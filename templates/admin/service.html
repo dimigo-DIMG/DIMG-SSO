@@ -85,7 +85,8 @@
               style="width: 100%; height: 100%; object-fit: contain"
             />
 
-            <div class="service-settings">
+            <div class="service-settings" onclick="document.location.href='/manage/services/{{service.client_id}}'"
+            >
               <i class="bi bi-gear ico-center mobile-center-no"></i>
             </div>
           </div>
@@ -99,7 +100,7 @@
               {% endif %}
             </div>
             <div class="service-label-link">
-              <a href="#!"
+              <a href="{{service.main_page}}"
                 >{{service.main_page}}<i class="bi bi-box-arrow-up-right"></i
               ></a>
             </div>
@@ -107,44 +108,6 @@
           </div>
         </div>
         {% endfor %}
-        <div class="section-item">
-          <div class="service-icon hover-shadow">
-            <div class="service-settings">
-              <i class="bi bi-gear ico-center mobile-center-no"></i>
-            </div>
-          </div>
-          <div class="service-label">
-            <div class="service-label-title">
-              <span class="semi-title-text">DIMG-PaaS</span>
-              <span class="badge rounded-pill bg-success">Formal</span>
-            </div>
-            <div class="service-label-link">
-              <a href="#!">dimg.io<i class="bi bi-box-arrow-up-right"></i></a>
-            </div>
-            <div class="service-label-desc pt-1">
-              천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루
-            </div>
-          </div>
-        </div>
-        <div class="section-item">
-          <div class="service-icon hover-shadow">
-            <div class="service-settings">
-              <i class="bi bi-gear ico-center mobile-center-no"></i>
-            </div>
-          </div>
-          <div class="service-label">
-            <div class="service-label-title">
-              <span class="semi-title-text">DIMG-PaaS</span>
-              <span class="badge rounded-pill bg-secondary">Informal</span>
-            </div>
-            <div class="service-label-link">
-              <a href="#!">dimg.io<i class="bi bi-box-arrow-up-right"></i></a>
-            </div>
-            <div class="service-label-desc pt-1">
-              천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루
-            </div>
-          </div>
-        </div>
       </div>
     </div>
     <script

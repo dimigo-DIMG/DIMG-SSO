@@ -41,13 +41,12 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     verification_token_secret = SECRET
 
     async def on_after_request_verify(self, user: User, token: str, request: Optional[Request] = None) -> None:
-        
         await mailer.send_email(user.email, "이메일 인증", f"이메일 인증을 완료하려면 다음 링크를 클릭하세요: {https_prefix}://{MAIN_HOST}/account/verify?token={token}")
         print(f"Verification requested for user {user.id}. Verification token: {token}")
 
     async def on_after_forgot_password(self, user: User, token: str, request: Optional[Request] = None) -> None:
         print(f"User {user.id} has forgot their password. Reset token: {token}")
-        await mailer.send_email(user.email, "비밀번호 초기화", f"비밀번호를 초기화하려면 다음 링크를 클릭하세요: {https_prefix}://{MAIN_HOST}/account/reset?token={token}")
+        await mailer.send_email(user.email, "비밀번호 초기화", f"비밀번호를 초기화하려면 다음 링크를 클릭하세요: {https_prefix}://{MAIN_HOST}/account/password-reset?token={token}")
 
     
     async def oauth_associate_callback(self: BaseUserManager[models.UOAP, models.ID], user: models.UOAP, oauth_name: str, access_token: str, account_id: str, account_email: str, expires_at: int | None = None, refresh_token: str | None = None, request: Request | None = None) -> models.UOAP:
@@ -121,6 +120,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
 
 async def get_user_manager(user_db: SQLAlchemyUserDatabase = Depends(get_user_db)):
     yield UserManager(user_db)
+
 
 cookie_transport = CookieTransport(cookie_max_age=3600)
 
