@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    {% include "header.html" %}
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/interface.general.css')}}"
+    />
+    <title>권한 요청</title>
+  </head>
+  <style>
+    #main-container {
+      justify-content: center;
+      align-items: center;
+    }
+
+    .section {
+      padding: 30px 40px;
+      border-radius: 10px;
+      background-color: #fff;
+    }
+
+    #page-info {
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #888;
+      width: 720px;
+    }
+
+    #page-name {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    #page-content {
+      max-height: 720px;
+      overflow-y: auto;
+    }
+  </style>
+  <body>
+    <div id="container">
+      {% include "jumbotron.html" %}
+      <div id="main-container">
+        <div class="section">
+          <div id="page-info">
+            <div id="page-name">접근 허가 요청</div>
+            <div id="page-desc">
+              이 서비스를 이용하려면 다음 권한을 허용해주세요.
+            </div>
+          </div>
+          <div id="page-content">
+            <ul>
+              <li>팔로우 상태를 봅니다</li>
+              <li>노트를 작성하거나 삭제합니다</li>
+            </ul>
+          </div>
+          <div class="d-grid gap-2 d-md-block pt-3">
+            <button class="btn btn-secondary col-2" type="button">취소</button>
+            <button class="btn btn-primary col-2" type="button">허가</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include "footer.html" %}
+  </body>
+</html>

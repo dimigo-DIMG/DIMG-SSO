@@ -2,46 +2,55 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/interface.general.css')}}"
+    />
+    <title>Terms and Conditions</title>
   </head>
-  <title>Terms and Conditions</title>
+  <style>
+    .container {
+      margin-top: 32px;
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+  </style>
   <body>
-    <div class="container-fluid">
-      <div class="row vh-100">
-        {% include "jumbotron.html" %}
-        <div class="col-md-9">
-          {% include "navbar.html" %}
-          <div class="container">
-            <h1>Terms & Conditions</h1>
-            <div
-              data-mdb-alert-init=""
-              class="alert alert-success"
-              role="alert"
-              data-mdb-color="success"
-              data-mdb-alert-initialized="true"
-            >
-              These terms and conditions are currently in effect.
-            </div>
-            <h3 style="padding-bottom: 10px; border-bottom: 1px solid #ccc">
-              제1조. Project의 목적
-            </h3>
-            <ol>
-              <li>
-                Curabitur dapibus arcu sit amet laoreet lacinia. Duis tristique
-                urna tortor, a commodo orci venenatis lobortis. Donec quis
-                imperdiet neque, in scelerisque tellus. In quis pulvinar nulla.
-                Vestibulum efficitur vehicula nulla, eu ultricies dolor suscipit
-                ac. Ut sed dolor ligula. Pellentesque scelerisque sapien est, id
-                accumsan lorem vehicula a.
-              </li>
-              <li>
-                Etiam lacinia ut ipsum at lacinia. Vivamus viverra accumsan dui
-                eu eleifend. Nunc condimentum porta quam. Aliquam magna sapien,
-                dapibus non est nec, ullamcorper tincidunt libero. Vivamus vitae
-                purus at nisi ullamcorper pretium. Cras quis tortor purus. Sed
-                ut mi efficitur ligula elementum pharetra non et sapien.
-              </li>
-            </ol>
+    <div id="container">
+      {% include "jumbotron.html" %}
+      <div id="main-container">
+        {% include "navbar.html" %}
+        <div class="container">
+          <h1>Terms & Conditions</h1>
+          <div
+            data-mdb-alert-init=""
+            class="alert alert-success"
+            role="alert"
+            data-mdb-color="success"
+            data-mdb-alert-initialized="true"
+          >
+            These terms and conditions are currently in effect.
           </div>
+          <h3 style="padding-bottom: 10px; border-bottom: 1px solid #ccc">
+            제1조. Project의 목적
+          </h3>
+          <ol>
+            <li>
+              Curabitur dapibus arcu sit amet laoreet lacinia. Duis tristique
+              urna tortor, a commodo orci venenatis lobortis. Donec quis
+              imperdiet neque, in scelerisque tellus. In quis pulvinar nulla.
+              Vestibulum efficitur vehicula nulla, eu ultricies dolor suscipit
+              ac. Ut sed dolor ligula. Pellentesque scelerisque sapien est, id
+              accumsan lorem vehicula a.
+            </li>
+            <li>
+              Etiam lacinia ut ipsum at lacinia. Vivamus viverra accumsan dui eu
+              eleifend. Nunc condimentum porta quam. Aliquam magna sapien,
+              dapibus non est nec, ullamcorper tincidunt libero. Vivamus vitae
+              purus at nisi ullamcorper pretium. Cras quis tortor purus. Sed ut
+              mi efficitur ligula elementum pharetra non et sapien.
+            </li>
+          </ol>
         </div>
       </div>
     </div>

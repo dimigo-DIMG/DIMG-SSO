@@ -1,68 +1,55 @@
-<nav
-  class="navbar navbar-expand-lg shadow-none navbar-light bg-body-tertiary mb-5"
-  
->
-  <div class="container">
-    <a class="navbar-brand me-2" href="/">
-      <i class="fas fa-house"></i>
-    </a>
-
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-2">
+  <div class="container-fluid">
+    <span id="page-title" class="navbar-brand">{{ location }}</span>
     <button
-      data-mdb-collapse-init
       class="navbar-toggler"
       type="button"
-      data-mdb-target="#navbarButtonsExample"
-      aria-controls="navbarButtonsExample"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarText"
+      aria-controls="navbarText"
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
-      <i class="fas fa-bars"></i>
+      <span class="navbar-toggler-icon"></span>
     </button>
-
-    <div class="collapse navbar-collapse" id="navbarButtonsExample">
+    <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="/contact">연락하기</a>
+          <a class="nav-link" aria-current="page" href="/">홈</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/terms">이용약관</a>
         </li>
       </ul>
-      <!-- When not logged in -->
       {% if not user %}
-      <div class="d-flex align-items-center">
-        <a class="btn btn-primary px-3 me-2" href="/account/login">로그인</a>
-        <a class="btn btn-link me-3" href="/account/register">회원가입</a>
+      <!-- 로그인 상태가 아닐 경우 -->
+      <div class="">
+        <a class="btn btn-primary px-3" href="/account/login">로그인</a>
+        <a class="btn btn-secondary" href="/account/register">회원가입</a>
       </div>
       {% else %}
-      <!-- When logged in -->
-      <div class="dropdown">
-        <a
-          data-mdb-dropdown-init
-          class="dropdown-toggle d-flex align-items-center hidden-arrow"
-          href="#"
-          id="navbarDropdownMenuAvatar"
-          role="button"
-          aria-expanded="false"
-        >
-          <!-- user email -->
-          <span class="me-2">{{ user.email }}</span>
-        </a>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="navbarDropdownMenuAvatar"
-        >
-          <li>
-            <a class="dropdown-item" href="#">프로필</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">설정</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="/account/logout">로그아웃</a>
-          </li>
-        </ul>
-      </div> 
+      <!-- 로그인 상태일 경우 -->
+      <a
+        class="nav-link dropdown-toggle"
+        href="#"
+        id="navbarDropdown"
+        role="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {{ user.email }}
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <li>
+          <a class="dropdown-item" href="/account">프로필 및 설정</a>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li>
+          <a class="dropdown-item" href="/account/logout">로그아웃</a>
+        </li>
+      </ul>
       {% endif %}
     </div>
   </div>

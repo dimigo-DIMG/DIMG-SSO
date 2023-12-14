@@ -2,76 +2,96 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/interface.general.css')}}"
+    />
+    <title>회원가입</title>
   </head>
-  <title>Sign up</title>
+  <style>
+    .container {
+      margin-top: 32px;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      flex-grow: 1;
+    }
+
+    #form-signup {
+      width: 460px;
+    }
+  </style>
   <body>
-    <div class="container-fluid">
-      <div class="row vh-100">
-        {% include "jumbotron.html" %}
-        <div
-          class="col-md-9"
-          style="display: grid; grid-template-rows: min-content"
-        >
-          {% include "navbar.html" %}
-          <div
-            class="col-xl-5 pb-5"
-            style="justify-self: center; align-self: center"
-          >
+    <div id="container">
+      {% include "jumbotron.html" %}
+      <div id="main-container">
+        {% include "navbar.html" %}
+        <div class="container">
+          <div id="form-signup">
+            {% if failed == 1 %}
+            <div class="alert alert-danger" role="alert">
+              유저가 이미 존재합니다.
+            </div>
+            {% elif failed == 2 %}
+            <div class="alert alert-danger" role="alert">
+              CSRF 토큰이 일치하지 않습니다.
+            </div>
+            {% elif failed == 3 %}
+            <div class="alert alert-danger" role="alert">
+              비밀번호가 올바르지 않습니다.
+            </div>
+            {% endif %}
             <h1>Register</h1>
-            <form class="mt-5 pb-5" method="post">
-              {% if failed == 1 %}
-              <div class="alert alert-danger" role="alert">
-                유저가 이미 존재합니다.
-              </div>
-              {% elif failed == 2 %}
-              <div class="alert alert-danger" role="alert">
-                CSRF 토큰이 일치하지 않습니다.
-              </div>
-              {% elif failed == 3 %}
-              <div class="alert alert-danger" role="alert">
-                비밀번호가 올바르지 않습니다.
-              </div>
-              {% endif %} {% if csrf_token %}
+            <form class="mt-4" method="post">
+              {% if csrf_token %}
               <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
               {% endif %}
-              <div data-mdb-input-init class="form-outline mb-4">
+              <!-- Email input -->
+              <div class="mb-3">
+                <label for="formEmail" class="form-label">이메일</label>
                 <input
                   type="email"
-                  id="formEmail"
                   name="email"
-                  class="form-control form-control-lg"
+                  class="form-control"
+                  id="formEmail"
+                  aria-describedby="emailHelp"
                 />
-                <label class="form-label" for="formEmail">이메일 주소</label>
-              </div>
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input
-                  type="password"
-                  id="form1Example2"
-                  name="password"
-                  class="form-control form-control-lg"
-                />
-                <label class="form-label" for="form1Example2">패스워드</label>
               </div>
 
-              <div data-mdb-input-init class="form-outline mb-4">
+              <!-- PW input -->
+              <div class="mb-3">
+                <label for="formInputPassword" class="form-label"
+                  >비밀번호</label
+                >
                 <input
                   type="password"
-                  id="formReEnterPW"
-                  class="form-control form-control-lg"
+                  name="password"
+                  class="form-control"
+                  id="formInputPassword"
                 />
-                <label class="form-label" for="formReEnterPW">
-                  패스워드 재입력
-                </label>
               </div>
+
+              <!-- PW re-enter input -->
+              <div class="mb-3">
+                <label for="formReEnterPW" class="form-label"
+                  >비밀번호 재입력</label
+                >
+                <input
+                  type="password"
+                  name="password"
+                  class="form-control"
+                  id="formReEnterPW"
+                />
+              </div>
+
+              <!-- Agree terms and conditions -->
               <div class="row mb-4">
                 <div class="col d-flex">
                   <div class="form-check">
                     <input
                       class="form-check-input"
                       type="checkbox"
-                      value=""
                       id="formTermsChk"
-                      required
                     />
                     <label class="form-check-label" for="formTermsChk">
                       <a href="/terms" target="_blank">이용약관</a>에
@@ -80,14 +100,18 @@
                   </div>
                 </div>
               </div>
-              <button
-                data-mdb-ripple-init
-                type="submit"
-                class="btn btn-primary btn-block"
-                style="padding: 0.6rem 1.5rem; font-size: 12pt"
-              >
-                가입하기
-              </button>
+
+              <!-- Submit button -->
+              <div class="d-grid gap-2">
+                <button
+                  data-mdb-ripple-init
+                  type="submit"
+                  class="btn btn-primary btn-block"
+                  style="padding: 0.6rem 1.5rem; font-size: 12pt"
+                >
+                  회원가입
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -101,14 +125,14 @@
       e.preventDefault();
       // check if password and re-enter password are same
       if (
-        document.querySelector("#form1Example2").value !=
-        document.querySelector("#formReEnterPW").value
+        document.getElementById("formInputPassword").value !=
+        document.getElementById("formReEnterPW").value
       ) {
         alert("비밀번호가 일치하지 않습니다.");
         return;
       }
       // check if terms and conditions are accepted
-      if (!document.querySelector("#formTermsChk").checked) {
+      if (!document.getElementById("formTermsChk").checked) {
         alert("이용약관에 동의해주세요.");
         return;
       }
