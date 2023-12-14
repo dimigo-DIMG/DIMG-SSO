@@ -38,7 +38,9 @@ current_user_optional = fastapi_users.current_user(optional=True)
 
 @app.get("/")
 async def root(request: Request, user: User = Depends(current_user_optional)):
-    return templates.TemplateResponse("index.html", {"request": request, "user": user})
+    return templates.TemplateResponse(
+        "index.html", {"request": request, "user": user, "location": "홈"}
+    )
 
 
 @app.get("/contact")
@@ -47,8 +49,10 @@ async def contact(request: Request):
 
 
 @app.get("/terms")
-async def terms(request: Request):
-    return templates.TemplateResponse("terms.html", {"request": request})
+async def terms(request: Request, user: User = Depends(current_user_optional)):
+    return templates.TemplateResponse(
+        "terms.html", {"request": request, "user": user, "location": "이용약관"}
+    )
 
 
 @app.get("/account/login")
@@ -273,8 +277,14 @@ async def admin_service_root(request: Request):
 @app.get("/account")
 async def account_root(request: Request, user: User = Depends(current_user_optional)):
     return templates.TemplateResponse(
-        "account/index.html", {"request": request, "user": user}
+        "account/index.html", {"request": request, "user": user, "location": "설정"}
     )
+
+
+# permission page
+@app.get("/service/permission")
+async def show_permission(request: Request):
+    return templates.TemplateResponse("service/permission.html", {"request": request})
 
 
 @app.on_event("startup")
