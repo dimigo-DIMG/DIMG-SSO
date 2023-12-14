@@ -12,7 +12,3 @@ body {
   flex-direction: column;
   flex: 1;
 }
-
-#main-container > .container {
-  padding: 24px 48px 0 48px;
-}
