@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    {% include "header.html" %}
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/interface.general.css')}}"
+    />
+    <title>설정</title>
+  </head>
+  <style>
+    .profile-area {
+      background-color: #fff;
+    }
+  </style>
+  <body>
+    <div id="container">
+      {% include "jumbotron.html" %}
+      <div id="main-container">
+        <!-- Navbar -->
+        {% include "navbar.html" %}
+        <div class="container">
+          <div id="user-profile-section" class="container-section">
+            <!-- username & etc.  -->
+            <div id="usernameEtc-area" class="profile-area">
+              <div id="user-icon-division">
+                <img id="img-user-icon" alt="아이콘" />
+              </div>
+              <div id="username-division"></div>
+              <div id="user-etc-division"></div>
+            </div>
+
+            <!-- email  -->
+            <div id="email-area" class="profile-area"></div>
+
+            <!-- password -->
+            <div id="pw-area" class="profile-area"></div>
+
+            <!-- Google connection -->
+            <div id="google-conn-area" class="profile-area"></div>
+
+            <!-- Microsoft connection -->
+            <div id="microsoft-conn-area" class="profile-area"></div>
+          </div>
+          <div id="modify-section" class="container-section">
+            <!-- Default -->
+            <div id="default-editable-area" class=""></div>
+
+            <!-- username & etc.  -->
+            <div id="usernameEtc-editable-area" class="d-none"></div>
+
+            <!-- email  -->
+            <div id="email-editable-area" class="d-none"></div>
+
+            <!-- password -->
+            <div id="pw-editable-area" class="d-none"></div>
+
+            <!-- Google connection -->
+            <div id="google-editable-area" class="d-none"></div>
+
+            <!-- Microsoft connection -->
+            <div id="microsoft-editable-area" class="d-none"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='/js/bootstrap.bundle.min.js') }}"
+    ></script>
+    <script type="text/javascript">
+      let disabled_circles = document.getElementsByClassName(
+        "section-btn disabled"
+      );
+      // console.log(disabled_circles);
+      for (let i = 0; i < disabled_circles.length; i++) {
+        let circle = disabled_circles[i];
+        circle.addEventListener("click", () => alert("준비 중인 기능입니다."));
+      }
+    </script>
+  </body>
+</html>

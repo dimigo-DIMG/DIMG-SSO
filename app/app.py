@@ -38,7 +38,7 @@ current_user_optional = fastapi_users.current_user(optional=True)
 
 @app.get("/")
 async def root(request: Request, user: User = Depends(current_user_optional)):
-    return templates.TemplateResponse("home.html", {"request": request, "user": user})
+    return templates.TemplateResponse("index.html", {"request": request, "user": user})
 
 
 @app.get("/contact")
@@ -98,7 +98,7 @@ async def login(
     # check csrf token
     if form.get("csrf_token") != request.session.get("csrf_token"):
         request.session["failed"] = 2
-        #redirect tp get
+        # redirect tp get
         return RedirectResponse("/account/login", status_code=303)
 
     next_url = request.session.get("next")
@@ -193,14 +193,13 @@ async def register(
     res = schemas.model_validate(UserRead, user)
     response = RedirectResponse("/account/login", status_code=303)
     return response
-    
+
+
 @app.get("/account/password")
 async def password(request: Request, user: User = Depends(current_user_optional)):
     if user:
         return RedirectResponse("/")
     return templates.TemplateResponse("auth/reset_pw.html", {"request": request})
-
-
 
 
 @app.get("/account/oauth/r/{provider}")
@@ -268,6 +267,14 @@ async def admin_service_root(request: Request):
 @app.get("/dev/service/add")
 async def admin_service_root(request: Request):
     return templates.TemplateResponse("admin/add_service.html", {"request": request})
+
+
+# user settings page
+@app.get("/account")
+async def account_root(request: Request, user: User = Depends(current_user_optional)):
+    return templates.TemplateResponse(
+        "account/index.html", {"request": request, "user": user}
+    )
 
 
 @app.on_event("startup")
