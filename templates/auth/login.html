@@ -11,6 +11,9 @@
   <style>
     #main-container > .container {
       align-items: center;
+      display: flex;
+      justify-content: center;
+      flex-grow: 1;
     }
 
     #form-login {
@@ -36,10 +39,10 @@
             {% endif %}
             <h1>Login</h1>
             <form class="mt-4" action="/account/login" method="post">
-              <!-- Email input -->
               {% if csrf_token %}
               <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
               {% endif %}
+              <!-- Email input -->
               <div class="mb-3">
                 <label for="formInputEmail" class="form-label">이메일</label>
                 <input
@@ -50,6 +53,7 @@
                   aria-describedby="emailHelp"
                 />
               </div>
+              <!-- PW input -->
               <div class="mb-3">
                 <label for="formInputPassword" class="form-label"
                   >비밀번호</label

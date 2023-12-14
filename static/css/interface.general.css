@@ -15,7 +15,4 @@ body {
 
 #main-container > .container {
   padding: 24px 48px 0 48px;
-  display: flex;
-  justify-content: center;
-  flex-grow: 1;
 }
