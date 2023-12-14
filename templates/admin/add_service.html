@@ -137,7 +137,7 @@
           <!-- submit 버튼 -->
           <div class="row mt-4 mx-1 gap-2">
             <input class="col invisible" type="button" />
-            <button class="col btn btn-secondary" type="button">취소</button>
+            <button class="col btn btn-primary" type="button">확인</button>
           </div>
         </div>
       </div>
@@ -162,13 +162,13 @@
 
     <!-- Sidebar -->
     <div id="sidebar">
-      <a class="hover-shadow" href="/dev/dashboard">
+      <a class="hover-shadow" href="/manage/dashboard">
         <i class="bi bi-command ico-center"></i>
       </a>
-      <a class="hover-shadow active" href="/dev/service">
+      <a class="hover-shadow active" href="/manage/services">
         <i class="bi bi-bag-dash ico-center"></i>
       </a>
-      <a class="hover-shadow" href="/dev/users">
+      <a class="hover-shadow" href="/manage/users">
         <i class="bi bi-people ico-center"></i>
       </a>
       <a class="hover-shadow disabled" href="#">
@@ -201,6 +201,7 @@
               id="inputServiceName"
               class="form-control"
               type="text"
+              name="name"
               placeholder="서비스 이름"
             />
           </div>
@@ -215,6 +216,7 @@
                 id="inputIsOfficial"
                 class="form-check-input"
                 type="checkbox"
+                name="is_official"
               />
               <span>공식 서비스로 등록한다면 선택</span>
             </div>
@@ -223,7 +225,7 @@
           <!-- 서비스 설명 div -->
           <div id="form-service-desc" class="form-item">
             <label for="inputServiceDesc">서비스 설명</label>
-            <textarea id="inputServiceDesc" class="form-control"></textarea>
+            <textarea id="inputServiceDesc" class="form-control" name="description"></textarea>
           </div>
 
           <!-- 서비스 로고 div -->
@@ -247,6 +249,7 @@
               class="form-control"
               type="text"
               placeholder="로그인 콜백"
+              name="login_callback"
             />
           </div>
 
@@ -260,6 +263,7 @@
               class="form-control"
               type="text"
               placeholder="서비스 탈퇴 페이지"
+              name="unregister_url"
             />
           </div>
 
@@ -271,6 +275,7 @@
               class="form-control"
               type="text"
               placeholder="메인 페이지"
+              name="main_url"
             />
           </div>
         </div>
@@ -289,6 +294,7 @@
               class="form-control"
               type="text"
               placeholder="스코프"
+              name="scopes"
             />
           </div>
 
@@ -299,10 +305,11 @@
             </label>
             <div class="d-flex align-items-center inner-form">
               <input
-                id="inputServiceScope"
+                id="inputReRegisterDays"
                 class="form-control"
                 type="number"
                 value="3"
+                name="register_cooldown"
               />
               <span>일</span>
             </div>
@@ -311,13 +318,13 @@
 
         <!-- submit 버튼 -->
         <div class="d-grid gap-2 my-5">
-          <button class="btn btn-primary" type="button">추가</button>
+          <button class="btn btn-primary" type="button" id="add-button">추가</button>
         </div>
       </div>
     </div>
     <script
       type="text/javascript"
-      src="{{ url_for('static', path='/js/bootstrap.bundle.min.js') }}"
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
     ></script>
     <script type="text/javascript">
       let disabled_circles = document.getElementsByClassName("disabled");
@@ -329,6 +336,80 @@
 
       let ico_previous = document.getElementById("ico-href-previous");
       ico_previous.addEventListener("click", () => history.back());
+
+      // on beforeunload
+      window.addEventListener("beforeunload", (e) => {
+        e.preventDefault();
+        e.returnValue = "";
+      });
+      // form submit
+      let add_button = document.getElementById("add-button");
+      add_button.addEventListener("click", () => {
+        let cover = document.getElementById("cover");
+        let service_add_confirm = document.getElementById(
+          "service-add-confirm"
+        );
+        let service_add_notification = document.getElementById(
+          "service-add-notification"
+        );
+        
+
+        cover.style.display = "flex";
+        service_add_confirm.style.display = "block";
+
+        let confirm_button = document.getElementsByClassName("btn-primary")[0];
+        let cancel_button = document.getElementsByClassName("btn-secondary")[0];
+        
+        confirm_button.addEventListener("click", () => {
+          service_add_confirm.style.display = "none";
+          let fd = new FormData();
+          fd.append("name", document.getElementById("inputServiceName").value);
+          fd.append("csrf_token", "{{ csrf_token}}");
+          fd.append("is_official", document.getElementById("inputIsOfficial").checked);
+          fd.append("description", document.getElementById("inputServiceDesc").value);
+          fd.append("login_callback", document.getElementById("inputLoginCallback").value);
+          fd.append("unregister_url", document.getElementById("inputServiceOut").value);
+          fd.append("main_page", document.getElementById("inputMainPage").value);
+          fd.append("scopes", document.getElementById("inputServiceScope").value);
+          fd.append("register_cooldown", document.getElementById("inputReRegisterDays").value);
+
+          file = document.getElementById("inputServiceLogo").files[0];
+          if (file) {
+            fd.append("logo", file);
+          }
+
+          $.ajax({
+            type: "POST",
+            url: "/manage/services/create",
+            enctype:'multipart/form-data',
+            processData:false,
+            contentType:false,
+            cache:false,
+            data: fd,
+            async: false,
+            success: function (response) {
+              console.log(response);
+              cover.style.display = "none";
+
+            },
+            error: function (response) {
+              console.log(response);
+              alert("서비스 추가에 실패했습니다.");
+              cover.style.display = "none";
+            }
+            
+          })
+          
+        });
+
+        cancel_button.addEventListener("click", () => {
+          service_add_confirm.style.display = "none";
+          cover.style.display = "none";
+        });
+
+        
+      });
+      
     </script>
   </body>
 </html>

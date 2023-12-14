@@ -1,13 +1,13 @@
-from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
+from fastapi import Depends, FastAPI, HTTPException, Request, Response, status, Form, UploadFile, File
 from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_users import exceptions, schemas
 from fastapi_users.router import oauth as oauth_router
 from fastapi_users.authentication import JWTStrategy
 
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Annotated
 
-from app.db import User, create_db_and_tables, get_user_db
+from app.db import Service, User, create_db_and_tables, get_async_session, get_user_db
 from app.schemas import UserCreate, UserRead, UserUpdate
 from app.users import (
     SECRET,
@@ -25,6 +25,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 import random
+
+from app.backends.services import create_service, get_all_services
 
 app = FastAPI()
 
@@ -204,7 +206,7 @@ async def password(request: Request, user: User = Depends(current_user_optional)
         return RedirectResponse("/")
     return templates.TemplateResponse("auth/reset_pw.html", {"request": request})
 
-@app.get("/account/oauth/r/{provider}")
+@app.get("/account/oauth/l/{provider}")
 async def oauth_login(request: Request, provider: str):
     callback_route = f"oauth:{provider}.{auth_backend.name}.callback"
     redirect_uri = request.url_for(callback_route)
@@ -222,17 +224,91 @@ async def oauth_login(request: Request, provider: str):
     # redirect to oauth provider
     return RedirectResponse(url)
 
+@app.get("/account/oauth/c/{provider}")
+async def oauth_connect(request: Request, provider: str, user: User = Depends(current_active_user)):
+    callback_route = f"oauth-associate:{provider}.callback"
+    redirect_uri = request.url_for(callback_route)
+
+    state_data: Dict[str, str] = {"sub": str(user.id)}
+    state = oauth_router.generate_state_token(state_data, SECRET)
+
+    if provider == "google":
+        url = await google_oauth_client.get_authorization_url(redirect_uri, state)
+    elif provider == "microsoft":
+        url = await microsoft_oauth_client.get_authorization_url(redirect_uri, state)
+    else:
+        raise Exception("Invalid provider")
+
+    # redirect to oauth provider
+    return RedirectResponse(url)
+
 @app.get("/manage")
 async def manage(request: Request, user: User = Depends(current_user_admin)):
     return templates.TemplateResponse("admin/index.html", {"request": request, "user": user})
 
 @app.get("/manage/services")
-async def manage_service(request: Request, user: User = Depends(current_user_admin)):
-    return templates.TemplateResponse("admin/service.html", {"request": request, "user": user})
+async def manage_service(request: Request, user: User = Depends(current_user_admin), db = Depends(get_async_session)):
+    services: list[Service] = await get_all_services(db)
+    print(services)
+    return templates.TemplateResponse("admin/service.html", {"request": request, "user": user, "services": services})
 
 @app.get("/manage/services/create")
 async def manage_service(request: Request, user: User = Depends(current_user_admin)):
-    return templates.TemplateResponse("admin/add_service.html", {"request": request, "user": user})
+    csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
+    request.session["csrf_token"] = csrf_token
+
+    return templates.TemplateResponse("admin/add_service.html", {"request": request, "user": user, "csrf_token": csrf_token})
+
+@app.post("/manage/services/create")
+async def manage_service(request: Request, logo: Annotated[UploadFile, File()], user: User = Depends(current_user_admin), db = Depends(get_async_session)):
+    #save to static
+    form = await request.form()
+    if not form.get("csrf_token") or form.get("csrf_token") != request.session.get("csrf_token"):
+        raise HTTPException(status_code=403, detail="CSRF token mismatch")
+    
+    if logo:
+        random_name = "".join([random.choice("0123456789abcdef") for _ in range(32)])
+        with open(f"static/icons/{random_name}.png", "wb") as f:
+            f.write(await logo.read())
+    generated_client_id = "".join([random.choice("0123456789abcdef") for _ in range(6)])
+
+    if not form.get("login_callback"):
+        raise HTTPException(status_code=400, detail="Login callback is required")
+    if not form.get("unregister_url"):
+        raise HTTPException(status_code=400, detail="Unregister callback is required")
+    if not form.get("main_page"):
+        raise HTTPException(status_code=400, detail="Main page is required")
+    if not form.get("scopes"):
+        raise HTTPException(status_code=400, detail="Scopes is required")
+    if not form.get("register_cooldown"):
+        raise HTTPException(status_code=400, detail="Register cooldown is required")
+    
+    #more random include _ and . and - and ! + A-Z + a-z
+    generated_client_secret = "".join([random.choice("0123456789_-.!ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz") for _ in range(32)])
+    service = Service(
+        client_id=generated_client_id,
+        client_secret=generated_client_secret,
+        name=form.get("name") or "Unnamed Service",
+        description=form.get("description") or "No description",
+        is_official=form.get("is_official") == "on",
+        icon=f"/static/icons/{random_name}.png" if logo else None,
+        login_callback=form.get("login_callback"),
+        unregister_page=form.get("unregister_url") ,
+        main_page=form.get("main_page"),
+        scopes=form.get("scopes"),
+        register_cooldown=form.get("register_cooldown"),
+    )
+    
+    await create_service(db, service)
+    responseJson = {"client_id": generated_client_id, "client_secret": generated_client_secret}
+    
+    print(responseJson)
+    request.session.pop("csrf_token")
+    return responseJson
+
+    
+
+
 
 app.include_router(
     fastapi_users.get_reset_password_router(),
@@ -251,12 +327,22 @@ app.include_router(
 )
 app.include_router(
     fastapi_users.get_oauth_router(google_oauth_client, auth_backend, SECRET),
-    prefix="/account/oauth/google",
+    prefix="/account/oauth/google/login",
+    tags=["auth"],
+)
+app.include_router(
+    fastapi_users.get_oauth_associate_router(google_oauth_client, UserRead, SECRET),
+    prefix="/account/oauth/google/connect",
     tags=["auth"],
 )
 app.include_router(
     fastapi_users.get_oauth_router(microsoft_oauth_client, auth_backend, SECRET),
-    prefix="/account/oauth/microsoft",
+    prefix="/account/oauth/microsoft/login",
+    tags=["auth"],
+)
+app.include_router(
+    fastapi_users.get_oauth_associate_router(microsoft_oauth_client, UserRead, SECRET),
+    prefix="/account/oauth/microsoft/connect",
     tags=["auth"],
 )
 
@@ -264,22 +350,6 @@ app.include_router(
 @app.get("/authenticated-route")
 async def authenticated_route(user: User = Depends(current_active_user)):
     return {"message": f"Hello {user.email}!"}
-
-
-# developer page(admin page)
-@app.get("/dev")
-async def admin_root(request: Request):
-    return templates.TemplateResponse("admin/index.html", {"request": request})
-
-
-@app.get("/dev/service")
-async def admin_service_root(request: Request):
-    return templates.TemplateResponse("admin/service.html", {"request": request})
-
-
-@app.get("/dev/service/add")
-async def admin_service_root(request: Request):
-    return templates.TemplateResponse("admin/add_service.html", {"request": request})
 
 
 @app.on_event("startup")

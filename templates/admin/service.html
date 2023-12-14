@@ -39,13 +39,13 @@
   <body>
     <!-- Sidebar -->
     <div id="sidebar">
-      <a class="hover-shadow" href="/dev/dashboard">
+      <a class="hover-shadow" href="/manage/dashboard">
         <i class="bi bi-command ico-center"></i>
       </a>
-      <a class="hover-shadow active" href="/dev/service">
+      <a class="hover-shadow active" href="/manage/service">
         <i class="bi bi-bag-dash ico-center"></i>
       </a>
-      <a class="hover-shadow" href="/dev/users">
+      <a class="hover-shadow" href="/manage/users">
         <i class="bi bi-people ico-center"></i>
       </a>
       <a class="hover-shadow disabled" href="#">
@@ -75,6 +75,36 @@
         </div>
 
         <!-- 유저 서비스 list items-->
+
+        {% for service in services %}
+        <div class="section-item">
+          
+          <div class="service-icon hover-shadow">
+            <img display="block" src="{{service.icon_url}}" 
+            style="width: 100%; height: 100%; object-fit: contain;"/>
+            
+            <div class="service-settings">
+              <i class="bi bi-gear ico-center mobile-center-no" ></i>
+            </div>
+          </div>
+          <div class="service-label">
+            <div class="service-label-title">
+              <span class="semi-title-text">{{service.name}}</span>
+              {% if service.is_official %}
+              <span class="badge rounded-pill bg-success">Formal</span>
+              {% else %}
+              <span class="badge rounded-pill bg-secondary">Informal</span>
+              {% endif %}
+            </div>
+            <div class="service-label-link">
+              <a href="#!">{{service.main_page}}<i class="bi bi-box-arrow-up-right"></i></a>
+            </div>
+            <div class="service-label-desc pt-1">
+              {{service.description}}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
         <div class="section-item">
           <div class="service-icon hover-shadow">
             <div class="service-settings">
@@ -131,7 +161,7 @@
       // console.log(add_service);
       add_service.addEventListener(
         "click",
-        () => (location.href = "/dev/service/add")
+        () => (location.href = "/manage/services/create")
       );
     </script>
   </body>
