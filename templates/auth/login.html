@@ -2,23 +2,30 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/interface.general.css')}}"
+    />
+    <title>로그인</title>
   </head>
-  <title>로그인</title>
+  <style>
+    #main-container > .container {
+      align-items: center;
+    }
+
+    #form-login {
+      width: 460px;
+    }
+  </style>
   <body>
-    <div class="container-fluid">
-      <div class="row vh-100">
-        {% include "jumbotron.html" %}
-        <div
-          class="col-md-9"
-          style="display: grid; grid-template-rows: min-content"
-        >
-          {% include "navbar.html" %}
-          <div
-            class="col-xl-5 pb-5"
-            style="justify-self: center; align-self: center"
-          >
-            <!-- error messages -->
+    <div id="container">
+      {% include "jumbotron.html" %}
+      <div id="main-container">
+        {% include "navbar.html" %}
+        <div class="container">
+          <div id="form-login">
             {% if failed == 1 %}
+            <!-- error messages -->
             <div class="alert alert-danger" role="alert">
               이메일이나 비밀번호가 일치하지 않습니다.
             </div>
@@ -28,69 +35,79 @@
             </div>
             {% endif %}
             <h1>Login</h1>
-            <form class="mt-5 pb-5" action="/account/login" method="post">
+            <form class="mt-4" action="/account/login" method="post">
               <!-- Email input -->
               {% if csrf_token %}
               <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
               {% endif %}
-              <div data-mdb-input-init class="form-outline mb-4">
+              <div class="mb-3">
+                <label for="formInputEmail" class="form-label">이메일</label>
                 <input
                   type="email"
-                  id="form1Example1"
                   name="email"
-                  class="form-control form-control-lg"
+                  class="form-control"
+                  id="formInputEmail"
+                  aria-describedby="emailHelp"
                 />
-                <label class="form-label" for="form1Example1">이메일</label>
               </div>
-
-              <!-- Password input -->
-              <div data-mdb-input-init class="form-outline mb-4">
+              <div class="mb-3">
+                <label for="formInputPassword" class="form-label"
+                  >비밀번호</label
+                >
                 <input
                   type="password"
-                  id="form1Example2"
                   name="password"
-                  class="form-control form-control-lg"
+                  class="form-control"
+                  id="formInputPassword"
                 />
-                <label class="form-label" for="form1Example2">비밀번호</label>
               </div>
 
               <!-- 2 column grid layout for inline styling -->
-              <div class="row mb-4">
-                <div class="col">
-                  <!-- Simple link -->
-                  <a href="/account/reset-pw">비밀번호를 잊으셨나요?</a>
-                </div>
+              <div class="mb-4">
+                <a href="/account/reset-pw">비밀번호를 잊으셨나요?</a>
               </div>
 
               <!-- Submit button -->
-              <button
-                data-mdb-ripple-init
-                type="submit"
-                class="btn btn-primary btn-block"
-                style="padding: 0.6rem 1.5rem; font-size: 12pt"
-              >
-                로그인
-              </button>
-              <!-- Login with Google -->
-              <button
-                data-mdb-ripple-init
-                id="google-login"
-                type="button"
-                class="btn btn-danger btn-block"
-                style="padding: 0.6rem 1.5rem; font-size: 12pt"
-              >
-                <i class="fab fa-google me-2"></i>구글로 로그인
-              </button>
-              <!-- Login with Microsoft -->
-              <button
-                data-mdb-ripple-init
-                id="microsoft-login"
-                type="button"
-                class="btn btn-secondary btn-block"
-                style="padding: 0.6rem 1.5rem; font-size: 12pt"
-              >
-                <i class="fab fa-microsoft me-2"></i>마이크로소프트로 로그인
-              </button>
+              <div class="d-grid gap-2">
+                <button
+                  data-mdb-ripple-init
+                  type="submit"
+                  class="btn btn-primary btn-block"
+                  style="padding: 0.6rem 1.5rem; font-size: 12pt"
+                >
+                  로그인
+                </button>
+                <!-- Login with Google -->
+                <button
+                  id="google-login"
+                  type="button"
+                  class="btn btn-danger btn-block"
+                  style="padding: 0.6rem 1.5rem; font-size: 12pt"
+                >
+                  <i class="bi bi-google"></i> 구글로 로그인
+                </button>
+                <!-- Login with Microsoft -->
+                <button
+                  id="microsoft-login"
+                  type="button"
+                  class="btn btn-secondary btn-block"
+                  style="padding: 0.6rem 1.5rem; font-size: 12pt"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-microsoft"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M7.462 0H0v7.19h7.462zM16 0H8.538v7.19H16zM7.462 8.211H0V16h7.462zm8.538 0H8.538V16H16z"
+                    />
+                  </svg>
+                  마이크로소프트로 로그인
+                </button>
+              </div>
             </form>
           </div>
         </div>

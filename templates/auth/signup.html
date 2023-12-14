@@ -2,94 +2,89 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/interface.general.css')}}"
+    />
   </head>
-  <title>Sign up</title>
+  <title>회원가입</title>
   <body>
-    <div class="container-fluid">
-      <div class="row vh-100">
-        {% include "jumbotron.html" %}
-        <div
-          class="col-md-9"
-          style="display: grid; grid-template-rows: min-content"
-        >
-          {% include "navbar.html" %}
-          <div
-            class="col-xl-5 pb-5"
-            style="justify-self: center; align-self: center"
-          >
-            <h1>Register</h1>
-            <form class="mt-5 pb-5" method="post">
-              {% if failed == 1 %}
-              <div class="alert alert-danger" role="alert">
-                유저가 이미 존재합니다.
-              </div>
-              {% elif failed == 2 %}
-              <div class="alert alert-danger" role="alert">
-                CSRF 토큰이 일치하지 않습니다.
-              </div>
-              {% elif failed == 3 %}
-              <div class="alert alert-danger" role="alert">
-                비밀번호가 올바르지 않습니다.
-              </div>
-              {% endif %} {% if csrf_token %}
-              <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
-              {% endif %}
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input
-                  type="email"
-                  id="formEmail"
-                  name="email"
-                  class="form-control form-control-lg"
-                />
-                <label class="form-label" for="formEmail">이메일 주소</label>
-              </div>
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input
-                  type="password"
-                  id="form1Example2"
-                  name="password"
-                  class="form-control form-control-lg"
-                />
-                <label class="form-label" for="form1Example2">패스워드</label>
-              </div>
+    <div id="container">
+      {% include "jumbotron.html" %}
+      <div id="main-container">
+        {% include "navbar.html" %}
+        <div class="container">
+          <h1>Register</h1>
+          <form class="mt-5 pb-5" method="post">
+            {% if failed == 1 %}
+            <div class="alert alert-danger" role="alert">
+              유저가 이미 존재합니다.
+            </div>
+            {% elif failed == 2 %}
+            <div class="alert alert-danger" role="alert">
+              CSRF 토큰이 일치하지 않습니다.
+            </div>
+            {% elif failed == 3 %}
+            <div class="alert alert-danger" role="alert">
+              비밀번호가 올바르지 않습니다.
+            </div>
+            {% endif %} {% if csrf_token %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            {% endif %}
+            <div data-mdb-input-init class="form-outline mb-4">
+              <input
+                type="email"
+                id="formEmail"
+                name="email"
+                class="form-control form-control-lg"
+              />
+              <label class="form-label" for="formEmail">이메일 주소</label>
+            </div>
+            <div data-mdb-input-init class="form-outline mb-4">
+              <input
+                type="password"
+                id="form1Example2"
+                name="password"
+                class="form-control form-control-lg"
+              />
+              <label class="form-label" for="form1Example2">패스워드</label>
+            </div>
 
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input
-                  type="password"
-                  id="formReEnterPW"
-                  class="form-control form-control-lg"
-                />
-                <label class="form-label" for="formReEnterPW">
-                  패스워드 재입력
-                </label>
-              </div>
-              <div class="row mb-4">
-                <div class="col d-flex">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="formTermsChk"
-                      required
-                    />
-                    <label class="form-check-label" for="formTermsChk">
-                      <a href="/terms" target="_blank">이용약관</a>에
-                      동의합니다.
-                    </label>
-                  </div>
+            <div data-mdb-input-init class="form-outline mb-4">
+              <input
+                type="password"
+                id="formReEnterPW"
+                class="form-control form-control-lg"
+              />
+              <label class="form-label" for="formReEnterPW">
+                패스워드 재입력
+              </label>
+            </div>
+            <div class="row mb-4">
+              <div class="col d-flex">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="formTermsChk"
+                    required
+                  />
+                  <label class="form-check-label" for="formTermsChk">
+                    <a href="/terms" target="_blank">이용약관</a>에 동의합니다.
+                  </label>
                 </div>
               </div>
-              <button
-                data-mdb-ripple-init
-                type="submit"
-                class="btn btn-primary btn-block"
-                style="padding: 0.6rem 1.5rem; font-size: 12pt"
-              >
-                가입하기
-              </button>
-            </form>
-          </div>
+            </div>
+            <button
+              data-mdb-ripple-init
+              type="submit"
+              class="btn btn-primary btn-block"
+              style="padding: 0.6rem 1.5rem; font-size: 12pt"
+            >
+              가입하기
+            </button>
+          </form>
         </div>
       </div>
     </div>
