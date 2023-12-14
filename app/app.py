@@ -7,7 +7,7 @@ from fastapi_users.authentication import JWTStrategy
 
 from typing import Dict, Tuple
 
-from app.db import User, create_db_and_tables
+from app.db import User, create_db_and_tables, get_user_db
 from app.schemas import UserCreate, UserRead, UserUpdate
 from app.users import (
     SECRET,
@@ -18,6 +18,7 @@ from app.users import (
     microsoft_oauth_client,
     get_user_manager,
     UserManager,
+    init_user
 )
 
 from fastapi.staticfiles import StaticFiles
@@ -34,6 +35,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 current_user_optional = fastapi_users.current_user(optional=True)
+current_user_admin = fastapi_users.current_user(active=True, superuser=True)
 
 
 @app.get("/")
@@ -180,6 +182,7 @@ async def register(
     try:
         user_create = UserCreate(email=form.get("email"), password=form.get("password"))
         user = await user_manager.create(user_create, safe=True, request=request)
+        user_manager.request_verify(user)
 
     except exceptions.UserAlreadyExists:
         request.session["failed"] = 1
@@ -192,6 +195,7 @@ async def register(
     # return RedirectResponse("/account/login", status_code=303)
     res = schemas.model_validate(UserRead, user)
     response = RedirectResponse("/account/login", status_code=303)
+
     return response
     
 @app.get("/account/password")
@@ -199,9 +203,6 @@ async def password(request: Request, user: User = Depends(current_user_optional)
     if user:
         return RedirectResponse("/")
     return templates.TemplateResponse("auth/reset_pw.html", {"request": request})
-
-
-
 
 @app.get("/account/oauth/r/{provider}")
 async def oauth_login(request: Request, provider: str):
@@ -221,6 +222,17 @@ async def oauth_login(request: Request, provider: str):
     # redirect to oauth provider
     return RedirectResponse(url)
 
+@app.get("/manage")
+async def manage(request: Request, user: User = Depends(current_user_admin)):
+    return templates.TemplateResponse("admin/index.html", {"request": request, "user": user})
+
+@app.get("/manage/services")
+async def manage_service(request: Request, user: User = Depends(current_user_admin)):
+    return templates.TemplateResponse("admin/service.html", {"request": request, "user": user})
+
+@app.get("/manage/services/create")
+async def manage_service(request: Request, user: User = Depends(current_user_admin)):
+    return templates.TemplateResponse("admin/add_service.html", {"request": request, "user": user})
 
 app.include_router(
     fastapi_users.get_reset_password_router(),
@@ -274,3 +286,4 @@ async def admin_service_root(request: Request):
 async def on_startup():
     # Not needed if you setup a migration system like Alembic
     await create_db_and_tables()
+    await init_user()

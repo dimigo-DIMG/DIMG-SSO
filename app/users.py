@@ -18,8 +18,8 @@ import app.mailer as mailer
 
 from fastapi_users import exceptions, models
 
-from app.db import User, get_user_db
-
+from app.db import User, get_async_session, get_user_db
+from app.schemas import UserCreate
 SECRET = os.getenv("MAIN_SECRET", "")
 MAIN_HOST = os.getenv("MAIN_HOST", "")
 IS_HTTPS = os.getenv("IS_HTTPS", "false").lower() == "true"
@@ -131,9 +131,6 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
 
         return user
 
-        
-
-
 async def get_user_manager(user_db: SQLAlchemyUserDatabase = Depends(get_user_db)):
     yield UserManager(user_db)
 
@@ -149,5 +146,31 @@ auth_backend = AuthenticationBackend(
 )
 
 fastapi_users = FastAPIUsers[User, uuid.UUID](get_user_manager, [auth_backend])
-
 current_active_user = fastapi_users.current_user(active=True)
+
+import contextlib
+
+async def init_user():
+    get_async_session_ctx = contextlib.asynccontextmanager(get_async_session)
+    get_user_db_ctx = contextlib.asynccontextmanager(get_user_db)
+    get_user_manager_ctx = contextlib.asynccontextmanager(get_user_manager)
+
+    async with get_async_session_ctx() as session:
+        async with get_user_db_ctx(session) as user_db:
+            async with get_user_manager_ctx(user_db) as user_manager:
+                admin_email = os.getenv("F_ADMIN_USER", "")
+                admin_password = os.getenv("F_ADMIN_PASS", "")
+                try:
+                    await user_manager.get_by_email(admin_email)
+                except exceptions.UserNotExists:
+                    await user_manager.create(
+                        UserCreate(
+                            email=admin_email,
+                            password=admin_password,
+                            is_superuser=True,
+                            is_verified=True,
+                        )
+                    )
+                    print("Admin user created")
+    
+
