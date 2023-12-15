@@ -1,0 +1,28 @@
+<div id="google-editable-area" class="profile-area">
+  <div class="modify-info">
+    <div class="modify-info-title">
+      <i class="bi bi-caret-left"></i>
+      디미고 구글 계정 연동
+    </div>
+    <div class="modify-info-desc mt-">
+      <!-- success -->
+      {% if True %}
+      <div>
+        디미고 구글 계정이 아닌 계정으로 연동할 수 없습니다.
+      </div>
+      {% else %}
+      <!-- failed -->
+      <div>
+        디미고 구글 계정을 연동하는 과정에서 예기치 못한 오류가
+        발생했습니다. 관리자에게 문의해주세요.
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="d-flex gap-2 mt-auto">
+    <button class="col invisible"></button>
+    <button type="submit" class="col btn btn-primary form-input">
+      확인
+    </button>
+  </div>
+</div>

@@ -108,6 +108,7 @@ async def login(request: Request, user: User = Depends(current_user_optional)):
             "csrf_token": csrf_token,
             "failed": failed,
             "reg_success": reg_success,
+            "location": "로그인",
         },
     )
 
@@ -185,7 +186,12 @@ async def register(request: Request, user: User = Depends(current_user_optional)
     request.session["csrf_token"] = csrf_token
     return templates.TemplateResponse(
         "auth/signup.html",
-        {"request": request, "failed": failed, "csrf_token": csrf_token},
+        {
+            "request": request,
+            "failed": failed,
+            "csrf_token": csrf_token,
+            "location": "회원가입",
+        },
     )
 
 

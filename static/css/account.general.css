@@ -1,0 +1,30 @@
+.container {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+  gap: 2vw;
+}
+
+.container > .container-section {
+  width: 500px;
+}
+
+.profile-area {
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+#user-profile-section > .profile-area {
+  padding: 20px 30px;
+}
+
+#modify-section > .profile-area {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 25px;
+  height: 100%;
+}
+
+.input-necessary {
+  color: #c00;
+}
