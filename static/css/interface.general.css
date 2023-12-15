@@ -12,3 +12,70 @@ body {
   flex-direction: column;
   flex: 1;
 }
+
+/* Sidebar */
+#side-viewbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #54aeb6;
+}
+
+#viewbar-logo > span {
+  display: block;
+  text-align: center;
+}
+
+#logo-txt-main {
+  color: #fff;
+  font-size: 96px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -9.6px;
+}
+
+#logo-txt-sub {
+  color: #fff;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+}
+
+/* Navbar */
+#page-title {
+  color: #000;
+  font-family: Pretendard;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.dropdown-menu {
+  left: unset !important;
+  right: 10px;
+}
+
+@media (max-width: 767.98px) {
+  /* Mobile Styles */
+  #side-viewbar {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1210px) {
+  /* Desktop(small) and Tablet Styles */
+  #side-viewbar {
+    width: 250px;
+  }
+}
+
+@media (min-width: 1210px) {
+  /* Desktop(big) Styles */
+  #side-viewbar {
+    width: 20vw;
+  }
+}
