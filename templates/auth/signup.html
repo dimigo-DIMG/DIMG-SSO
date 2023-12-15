@@ -20,6 +20,12 @@
     #form-signup {
       width: 460px;
     }
+
+    .form-input {
+      padding: 10px 14px;
+      line-height: 28px;
+      font-size: 16px;
+    }
   </style>
   <body>
     <div id="container">
@@ -52,7 +58,7 @@
                 <input
                   type="email"
                   name="email"
-                  class="form-control"
+                  class="form-control form-input"
                   id="formEmail"
                   aria-describedby="emailHelp"
                 />
@@ -66,7 +72,7 @@
                 <input
                   type="password"
                   name="password"
-                  class="form-control"
+                  class="form-control form-input"
                   id="formInputPassword"
                 />
               </div>
@@ -79,7 +85,7 @@
                 <input
                   type="password"
                   name="password"
-                  class="form-control"
+                  class="form-control form-input"
                   id="formReEnterPW"
                 />
               </div>
@@ -106,8 +112,7 @@
                 <button
                   data-mdb-ripple-init
                   type="submit"
-                  class="btn btn-primary btn-block"
-                  style="padding: 0.6rem 1.5rem; font-size: 12pt"
+                  class="btn btn-primary btn-block form-input"
                 >
                   회원가입
                 </button>

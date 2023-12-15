@@ -1,4 +1,15 @@
-from fastapi import Body, Depends, FastAPI, HTTPException, Request, Response, status, Form, UploadFile, File
+from fastapi import (
+    Body,
+    Depends,
+    FastAPI,
+    HTTPException,
+    Request,
+    Response,
+    status,
+    Form,
+    UploadFile,
+    File,
+)
 from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_users import exceptions, schemas
@@ -18,7 +29,7 @@ from app.users import (
     microsoft_oauth_client,
     get_user_manager,
     UserManager,
-    init_user
+    init_user,
 )
 
 from fastapi.staticfiles import StaticFiles
@@ -26,7 +37,13 @@ from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 import random
 
-from app.backends.services import create_service, delete_service, get_all_services, get_service_by_id, update_service
+from app.backends.services import (
+    create_service,
+    delete_service,
+    get_all_services,
+    get_service_by_id,
+    update_service,
+)
 
 app = FastAPI()
 
@@ -203,8 +220,14 @@ async def register(
     response = RedirectResponse("/account/login", status_code=303)
 
     return response
+
+
 @app.get("account/verify")
-async def verify(request: Request, user: User = Depends(current_user_optional), user_manager: UserManager = Depends(get_user_manager)):
+async def verify(
+    request: Request,
+    user: User = Depends(current_user_optional),
+    user_manager: UserManager = Depends(get_user_manager),
+):
     if user:
         return RedirectResponse("/")
     token = request.query_params.get("token")
@@ -220,8 +243,8 @@ async def verify(request: Request, user: User = Depends(current_user_optional), 
     except exceptions.UserAlreadyVerified:
         request.session["failed"] = 100
     return RedirectResponse("/account/login", status_code=303)
-    
-    
+
+
 @app.get("/account/forgot-password")
 async def password(request: Request, user: User = Depends(current_user_optional)):
     if user:
@@ -231,7 +254,11 @@ async def password(request: Request, user: User = Depends(current_user_optional)
         request.session.pop("failed")
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
     request.session["csrf_token"] = csrf_token
-    return templates.TemplateResponse("auth/reset_pw.html", {"request": request, "failed": failed, "csrf_token": csrf_token})
+    return templates.TemplateResponse(
+        "auth/reset_pw.html",
+        {"request": request, "failed": failed, "csrf_token": csrf_token},
+    )
+
 
 @app.post("/account/forgot-password")
 async def password(
@@ -253,11 +280,12 @@ async def password(
         return RedirectResponse("/account/forgot-password", status_code=303)
     return RedirectResponse("/account/login", status_code=303)
 
+
 @app.get("/account/reset-password")
 async def reset_password(request: Request, user: User = Depends(current_user_optional)):
     if user:
         return RedirectResponse("/")
-    
+
     token = request.query_params.get("token")
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
     request.session["csrf_token"] = csrf_token
@@ -266,18 +294,25 @@ async def reset_password(request: Request, user: User = Depends(current_user_opt
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid reset password token",
         )
-    return templates.TemplateResponse("auth/reset_pw_next.html", {"request": request, "token": token, "csrf_token": csrf_token})
+    return templates.TemplateResponse(
+        "auth/reset_pw_next.html",
+        {"request": request, "token": token, "csrf_token": csrf_token},
+    )
+
 
 @app.post("/account/reset-password")
-async def reset_password(request: Request, user: User = Depends(current_user_optional), user_manager: UserManager = Depends(get_user_manager)):
-    
+async def reset_password(
+    request: Request,
+    user: User = Depends(current_user_optional),
+    user_manager: UserManager = Depends(get_user_manager),
+):
     form = await request.form()
     if form.get("csrf_token") != request.session.get("csrf_token"):
         request.session["failed"] = 2
         # redirect tp get
         return RedirectResponse("/account/login", status_code=303)
     request.session.pop("csrf_token")
-    
+
     password = form.get("password")
     token = form.get("token")
     if user:
@@ -302,7 +337,6 @@ async def reset_password(request: Request, user: User = Depends(current_user_opt
     return RedirectResponse("/account/login", status_code=303)
 
 
-
 @app.get("/account/oauth/l/{provider}")
 async def oauth_login(request: Request, provider: str):
     callback_route = f"oauth:{provider}.{auth_backend.name}.callback"
@@ -321,8 +355,11 @@ async def oauth_login(request: Request, provider: str):
     # redirect to oauth provider
     return RedirectResponse(url)
 
+
 @app.get("/account/oauth/c/{provider}")
-async def oauth_connect(request: Request, provider: str, user: User = Depends(current_active_user)):
+async def oauth_connect(
+    request: Request, provider: str, user: User = Depends(current_active_user)
+):
     callback_route = f"oauth-associate:{provider}.callback"
     redirect_uri = request.url_for(callback_route)
 
@@ -339,35 +376,59 @@ async def oauth_connect(request: Request, provider: str, user: User = Depends(cu
     # redirect to oauth provider
     return RedirectResponse(url)
 
+
 @app.get("/manage")
 async def manage(request: Request, user: User = Depends(current_user_admin)):
-    return templates.TemplateResponse("admin/index.html", {"request": request, "user": user})
+    return templates.TemplateResponse(
+        "admin/index.html", {"request": request, "user": user}
+    )
+
 
 @app.get("/manage/services")
-async def service_list(request: Request, user: User = Depends(current_user_admin), db = Depends(get_async_session)):
+async def service_list(
+    request: Request,
+    user: User = Depends(current_user_admin),
+    db=Depends(get_async_session),
+):
     services: list[Service] = await get_all_services(db)
     print(services)
-    return templates.TemplateResponse("admin/service.html", {"request": request, "user": user, "services": services})
+    return templates.TemplateResponse(
+        "admin/service.html", {"request": request, "user": user, "services": services}
+    )
+
 
 @app.get("/manage/services/create")
 async def service_create(request: Request, user: User = Depends(current_user_admin)):
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
     request.session["csrf_token"] = csrf_token
 
-    return templates.TemplateResponse("admin/add_service.html", {"request": request, "user": user, "csrf_token": csrf_token})
+    return templates.TemplateResponse(
+        "admin/add_service.html",
+        {"request": request, "user": user, "csrf_token": csrf_token},
+    )
+
 
 @app.post("/manage/services/create")
-async def service_create(request: Request, logo: Optional[UploadFile] = File(None), user: User = Depends(current_user_admin), db = Depends(get_async_session)):
-    #save to static
+async def service_create(
+    request: Request,
+    logo: Optional[UploadFile] = File(None),
+    user: User = Depends(current_user_admin),
+    db=Depends(get_async_session),
+):
+    # save to static
     form = await request.form()
-    if not form.get("csrf_token") or form.get("csrf_token") != request.session.get("csrf_token"):
+    if not form.get("csrf_token") or form.get("csrf_token") != request.session.get(
+        "csrf_token"
+    ):
         raise HTTPException(status_code=403, detail="CSRF token mismatch")
-    
+
     if logo:
         random_name = "".join([random.choice("0123456789abcdef") for _ in range(32)])
         with open(f"static/icons/{random_name}.png", "wb") as f:
             f.write(await logo.read())
-    generated_client_id = "".join([random.choice("0123456789abcdef") for _ in range(12)])
+    generated_client_id = "".join(
+        [random.choice("0123456789abcdef") for _ in range(12)]
+    )
 
     if not form.get("login_callback"):
         raise HTTPException(status_code=400, detail="Login callback is required")
@@ -379,9 +440,16 @@ async def service_create(request: Request, logo: Optional[UploadFile] = File(Non
         raise HTTPException(status_code=400, detail="Scopes is required")
     if not form.get("register_cooldown"):
         raise HTTPException(status_code=400, detail="Register cooldown is required")
-    
-    #more random include _ and . and - and ! + A-Z + a-z
-    generated_client_secret = "".join([random.choice("0123456789_-.!ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz") for _ in range(32)])
+
+    # more random include _ and . and - and ! + A-Z + a-z
+    generated_client_secret = "".join(
+        [
+            random.choice(
+                "0123456789_-.!ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            )
+            for _ in range(32)
+        ]
+    )
     print("is_official: " + form.get("is_official"))
     service = Service(
         client_id=generated_client_id,
@@ -391,41 +459,75 @@ async def service_create(request: Request, logo: Optional[UploadFile] = File(Non
         is_official=form.get("is_official") == "true",
         icon=f"/static/icons/{random_name}.png" if logo else None,
         login_callback=form.get("login_callback"),
-        unregister_page=form.get("unregister_url") ,
+        unregister_page=form.get("unregister_url"),
         main_page=form.get("main_page"),
         scopes=form.get("scopes"),
         register_cooldown=form.get("register_cooldown"),
     )
-    
+
     await create_service(db, service)
-    responseJson = {"client_id": generated_client_id, "client_secret": generated_client_secret}
-    
+    responseJson = {
+        "client_id": generated_client_id,
+        "client_secret": generated_client_secret,
+    }
+
     print(responseJson)
     request.session.pop("csrf_token")
     return responseJson
 
+
 @app.get("/manage/services/{client_id}")
-async def service_edit(request: Request, client_id: str, user: User = Depends(current_user_admin), db = Depends(get_async_session)):
+async def service_edit(
+    request: Request,
+    client_id: str,
+    user: User = Depends(current_user_admin),
+    db=Depends(get_async_session),
+):
     service: Service = await get_service_by_id(db, client_id)
     print(service)
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
     request.session["csrf_token"] = csrf_token
-    return templates.TemplateResponse("admin/edit_service.html", {"request": request, "user": user, "service": service, "csrf_token": csrf_token})
+    return templates.TemplateResponse(
+        "admin/edit_service.html",
+        {
+            "request": request,
+            "user": user,
+            "service": service,
+            "csrf_token": csrf_token,
+        },
+    )
+
 
 @app.post("/manage/services/{client_id}/delete")
-async def service_delete(request: Request, client_id: str, user: User = Depends(current_user_admin), db = Depends(get_async_session)):
+async def service_delete(
+    request: Request,
+    client_id: str,
+    user: User = Depends(current_user_admin),
+    db=Depends(get_async_session),
+):
     form = await request.form()
-    if not form.get("csrf_token") or form.get("csrf_token") != request.session.get("csrf_token"):
+    if not form.get("csrf_token") or form.get("csrf_token") != request.session.get(
+        "csrf_token"
+    ):
         raise HTTPException(status_code=403, detail="CSRF token mismatch")
     request.session.pop("csrf_token")
 
     await delete_service(db, client_id)
     return Response(status_code=204)
 
+
 @app.post("/manage/services/{client_id}/update")
-async def service_update(request: Request, client_id: str, logo: Optional[UploadFile] = File(None), user: User = Depends(current_user_admin), db = Depends(get_async_session)):
+async def service_update(
+    request: Request,
+    client_id: str,
+    logo: Optional[UploadFile] = File(None),
+    user: User = Depends(current_user_admin),
+    db=Depends(get_async_session),
+):
     form = await request.form()
-    if not form.get("csrf_token") or form.get("csrf_token") != request.session.get("csrf_token"):
+    if not form.get("csrf_token") or form.get("csrf_token") != request.session.get(
+        "csrf_token"
+    ):
         raise HTTPException(status_code=403, detail="CSRF token mismatch")
     request.session.pop("csrf_token")
 
@@ -444,7 +546,7 @@ async def service_update(request: Request, client_id: str, logo: Optional[Upload
         raise HTTPException(status_code=400, detail="Scopes is required")
     if not form.get("register_cooldown"):
         raise HTTPException(status_code=400, detail="Register cooldown is required")
-    
+
     service.name = form.get("name") or "Unnamed Service"
     service.description = form.get("description") or "No description"
     service.is_official = form.get("is_official") == "true"
@@ -465,8 +567,6 @@ app.include_router(
     prefix="/account",
     tags=["auth"],
 )
-
-
 
 
 app.include_router(
