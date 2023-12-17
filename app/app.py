@@ -120,6 +120,7 @@ async def login(request: Request, user: User = Depends(current_user_optional)):
             "csrf_token": csrf_token,
             "failed": failed,
             "reg_success": reg_success,
+            "location": "로그인",
         },
     )
 
@@ -197,7 +198,12 @@ async def register(request: Request, user: User = Depends(current_user_optional)
     request.session["csrf_token"] = csrf_token
     return templates.TemplateResponse(
         "auth/signup.html",
-        {"request": request, "failed": failed, "csrf_token": csrf_token},
+        {
+            "request": request,
+            "failed": failed,
+            "csrf_token": csrf_token,
+            "location": "회원가입",
+        },
     )
 
 
@@ -705,6 +711,12 @@ async def allow_permission(request: Request, client_id: str, user: User = Depend
 
     # redirect to api/sso/token/get
     return RedirectResponse(f"/api/sso/token/get?client_id={client_id}")
+
+
+# error page
+@app.get("/error")
+async def error_root(request: Request):
+    return templates.TemplateResponse("error.html", {"request": request})
 
 
 @app.on_event("startup")
