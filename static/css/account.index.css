@@ -1,0 +1,171 @@
+/*** User Profile Section ***/
+
+.title-division,
+.content-division {
+  margin-bottom: 5px;
+}
+
+.content-division {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.title-division {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+/* username > 제목 영역 > 원형 아이콘 영역 */
+
+#user-icon-box {
+  position: relative;
+  cursor: pointer;
+}
+
+#img-user-icon {
+  border-radius: 50%;
+  width: 80px;
+}
+
+#change-user-icon {
+  border-radius: 0 0 40px 40px;
+  position: absolute;
+  bottom: 0;
+  width: 80px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  opacity: 0.8;
+  animation: opacity 0.5s ease-out;
+}
+
+#user-icon-box:hover #change-user-icon {
+  opacity: 1;
+}
+
+#change-user-icon > i {
+  font-size: 24px;
+  color: #fff;
+}
+
+/* username > 컨텐츠 영역 */
+#username-txt {
+  color: #000;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.edit-this-area {
+  width: 80px;
+  height: 30px;
+  border: none;
+  border-radius: 15px;
+  background: #ddeaeb;
+}
+
+.user-etc-box {
+  color: #888;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* :not(username) */
+.content-txt {
+  margin-right: auto;
+}
+
+/* google, microsoft 영역*/
+.conn-status {
+  border-radius: 50%;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+
+.conn-status.verified {
+  background-color: #32cd32;
+}
+
+.conn-status.unauthorized {
+  background-color: #ffc107;
+}
+
+.conn-btn-here {
+  justify-content: end;
+}
+
+
+/*** Modify Section ***/
+
+/* 일반 */
+#default-editable-area {
+  justify-content: center;
+  align-items: center;
+}
+
+#default-editable-area > .logo-txt-main {
+  color: #f5f5f5;
+  font-size: 96px;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -9.6px;
+}
+
+/* :not(일반) > info */
+.modify-info-title {
+  margin-bottom: 10px;
+  color: #000;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.modify-info-title > i {
+  position: relative;
+  bottom: 3px;
+}
+
+/* :not(일반) > content */
+.modify-form .form-label {
+  color: #000;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+/* form input 필수 입력 조건 */
+.form-input-conditions li.pass {
+  color: #198754;
+}
+
+.form-input-conditions li.pass::before {
+  content: "check";
+  font-family: bootstrap-icons !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -0.125em;
+  margin-right: 5px;
+}
+
+.form-input-conditions li.restrict {
+  color: #dc3545;
+}
+
+.form-input-conditions li.restrict::before {
+  content: "x";
+  font-family: bootstrap-icons !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -0.125em;
+  margin-right: 5px;
+}

@@ -59,23 +59,20 @@ body {
   right: 10px;
 }
 
+.form-input {
+  padding: 8px 14px;
+  line-height: 28px;
+  font-size: 16px;
+}
+
 @media (max-width: 767.98px) {
   /* Mobile Styles */
-  #side-viewbar {
-    display: none;
+  #container {
+    display: block;
   }
-}
 
-@media (min-width: 768px) and (max-width: 1210px) {
-  /* Desktop(small) and Tablet Styles */
-  #side-viewbar {
-    width: 250px;
-  }
-}
-
-@media (min-width: 1210px) {
-  /* Desktop(big) Styles */
-  #side-viewbar {
-    width: 20vw;
+  #main-container > .container {
+    padding-left: 30px;
+    padding-right: 30px;
   }
 }

@@ -1,3 +1,4 @@
+import datetime
 from fastapi import (
     Body,
     Depends,
@@ -15,10 +16,20 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_users import exceptions, schemas
 from fastapi_users.router import oauth as oauth_router
 from fastapi_users.authentication import JWTStrategy
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from typing import Dict, Optional, Tuple, Annotated
 
-from app.db import Service, User, create_db_and_tables, get_async_session, get_user_db
+from sqlalchemy import select
+
+from app.db import (
+    Service,
+    ServiceConnection,
+    User,
+    create_db_and_tables,
+    get_async_session,
+    get_user_db,
+)
 from app.schemas import UserCreate, UserRead, UserUpdate
 from app.users import (
     SECRET,
@@ -31,6 +42,7 @@ from app.users import (
     UserManager,
     init_user,
 )
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -40,8 +52,10 @@ import random
 from app.backends.services import (
     create_service,
     delete_service,
+    generate_access_token,
     get_all_services,
     get_service_by_id,
+    get_service_connection,
     update_service,
 )
 
@@ -108,6 +122,7 @@ async def login(request: Request, user: User = Depends(current_user_optional)):
             "csrf_token": csrf_token,
             "failed": failed,
             "reg_success": reg_success,
+            "location": "로그인",
         },
     )
 
@@ -185,7 +200,12 @@ async def register(request: Request, user: User = Depends(current_user_optional)
     request.session["csrf_token"] = csrf_token
     return templates.TemplateResponse(
         "auth/signup.html",
-        {"request": request, "failed": failed, "csrf_token": csrf_token},
+        {
+            "request": request,
+            "failed": failed,
+            "csrf_token": csrf_token,
+            "location": "회원가입",
+        },
     )
 
 
@@ -594,17 +614,170 @@ app.include_router(
 # user settings page
 @app.get("/account")
 async def account_root(request: Request, user: User = Depends(current_user_optional)):
+    google_mail = None
+    microsoft_mail = None
+    for oauth_account in user.oauth_accounts:
+        if oauth_account.provider == "google":
+            google_mail = oauth_account.account_email
+        elif oauth_account.provider == "microsoft":
+            microsoft_mail = oauth_account.account_email
+
     return templates.TemplateResponse(
-        "account/index.html", {"request": request, "user": user, "location": "설정"}
+        "account/index.html",
+        {
+            "request": request,
+            "user": user,
+            "google_mail": google_mail,
+            "microsoft_mail": microsoft_mail,
+            "location": "설정",
+            "menu": 2
+        },
     )
 
 
-# permission page
-@app.get("/service/permission")
-async def show_permission(request: Request):
-    return templates.TemplateResponse("service/permission.html", {"request": request})
+@app.get("/api/sso/token/get")
+async def get_token(
+    request: Request,
+    user: User = Depends(current_active_user),
+    db=Depends(get_async_session),
+):
+    client_id = request.query_params.get("client_id")
+    state = request.query_params.get("state") or request.session.get("state")
+    if request.session.get("state"):
+        request.session.pop("state")
+
+    if not client_id:
+        raise HTTPException(status_code=400, detail="client_id is required")
+    if not state:
+        raise HTTPException(status_code=400, detail="state is required")
+
+    # check if service exists
+    service: Service = await get_service_by_id(db, client_id)
+    if not service:
+        raise HTTPException(status_code=404, detail="Service not found")
+
+    # check if serviceconnection exists
+    service_connection = await get_service_connection(db, user.id, client_id)
+    if not service_connection:
+        # redirect to permission page with state
+        request.session["state"] = state
+        return RedirectResponse(f"/service/permission/{client_id}", status_code=303)
+
+    if service_connection.unregistered:
+        # redirect to api/sso/token/get
+        return RedirectResponse(f"/service/permission/{client_id}", status_code=303)
+
+    # check if token exists
+    generated_token = await generate_access_token(
+        db, user.id, client_id, datetime.date.today() + datetime.timedelta(days=1)
+    )
+    if not generated_token:
+        raise HTTPException(status_code=500, detail="Failed to generate access token")
+
+    # redirect to login_callback
+    return RedirectResponse(
+        f"{service.login_callback}?token={generated_token.token}&state={state}",
+        status_code=303,
+    )
 
 
+@app.get("/service/permission/{client_id}")
+async def show_permission(
+    request: Request,
+    client_id: str,
+    user: User = Depends(current_active_user),
+    db=Depends(get_async_session),
+):
+    service: Service = await get_service_by_id(db, client_id)
+    if not service:
+        raise HTTPException(status_code=404, detail="Service not found")
+    csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
+    request.session["csrf_token"] = csrf_token
+    return templates.TemplateResponse(
+        "service/permission.html",
+        {
+            "request": request,
+            "user": user,
+            "service": service,
+            "csrf_token": csrf_token,
+        },
+    )
+
+
+@app.post("/service/permission/{client_id}/allow")
+async def allow_permission(
+    request: Request,
+    client_id: str,
+    user: User = Depends(current_active_user),
+    db: AsyncSession = Depends(get_async_session),
+):
+    service: Service = await get_service_by_id(db, client_id)
+    if not service:
+        raise HTTPException(status_code=404, detail="Service not found")
+    form = await request.form()
+    if not form.get("csrf_token") or form.get("csrf_token") != request.session.get(
+        "csrf_token"
+    ):
+        raise HTTPException(status_code=403, detail="CSRF token mismatch")
+    request.session.pop("csrf_token")
+
+    # check if serviceconnection exists
+    service_connection = await get_service_connection(db, user.id, client_id)
+    if service_connection:
+        if service_connection.unregistered is None:
+            raise HTTPException(status_code=403, detail="Service already connected")
+        # chk cooldown
+        elif (
+            service_connection.unregistered
+            + datetime.timedelta(days=service.register_cooldown)
+            > datetime.date.today()
+        ):
+            raise HTTPException(status_code=403, detail="Cooldown not expired")
+        else:
+            service_connection.unregistered = None
+            service_connection.registered = datetime.date.today()
+            await db.add(service_connection)
+            await db.commit()
+            await db.refresh(service_connection)
+            return RedirectResponse(
+                f"/api/sso/token/get?client_id={client_id}", status_code=303
+            )
+
+    # cid : Connection ID ( unique identifier, primary key )
+    # generate cid with random int without collision
+    cid = random.randint(0, 1000000000)
+    tg = await db.execute(select(ServiceConnection).where(ServiceConnection.cid == cid))
+    if tg.scalar():
+        cid = random.randint(0, 1000000000)
+
+    # create service connection
+    service_connection = ServiceConnection(
+        cid=cid, user_id=user.id, service_id=client_id, registered=datetime.date.today()
+    )
+    db.add(service_connection)
+    await db.commit()
+
+    # redirect to api/sso/token/get
+    return RedirectResponse(f"/api/sso/token/get?client_id={client_id}")
+
+
+# error page
+@app.get("/error")
+async def error_root(request: Request):
+    return templates.TemplateResponse("error.html", {"request": request})
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request, exc):
+    return templates.TemplateResponse("error.html", {"request": request, "error": str(exc.detail), "code": exc.status_code})
+# handle 404
+@app.exception_handler(404)
+async def http_exception_handler(request, exc):
+    return templates.TemplateResponse("error.html", {"request": request, "error": "페이지를 찾을 수 없어요.", "code": 404})
+
+# handle internal server error
+@app.exception_handler(500)
+async def http_exception_handler(request, exc):
+    return templates.TemplateResponse("error.html", {"request": request, "error": "서버 내부 오류가 발생했어요. 관리자에게 문의해주세요.", "code": 500})
 @app.on_event("startup")
 async def on_startup():
     # Not needed if you setup a migration system like Alembic

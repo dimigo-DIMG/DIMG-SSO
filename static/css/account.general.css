@@ -1,0 +1,60 @@
+.container {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+  gap: 2vw;
+}
+
+.container > .container-section {
+  width: 500px;
+}
+
+.profile-area {
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+#user-profile-section > .profile-area {
+  padding: 20px 30px;
+}
+
+#modify-section > .profile-area {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 25px;
+  height: 100%;
+}
+
+.input-necessary {
+  color: #c00;
+}
+
+@media (max-width: 769px) {
+  #side-viewbar {
+    display: none;
+  }
+
+  .container > .container-section:not(.focused) {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1280px) {
+  #side-viewbar {
+    display: none;
+  }
+
+  .modify-go-previous {
+    display: none;
+  }
+}
+
+@media (min-width: 1280px) {
+  #side-viewbar {
+    width: 20vw;
+  }
+
+  .modify-go-previous {
+    display: none;
+  }
+}
