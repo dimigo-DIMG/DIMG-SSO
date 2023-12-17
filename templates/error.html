@@ -47,8 +47,8 @@
       <div id="main-container">
         <div class="section">
           <div id="page-info">
-            <div id="page-name">404 Bad Request</div>
-            <div id="page-desc">잘못된 접근입니다.</div>
+            <div id="page-name">ERROR {{code}}</div>
+            <div id="page-desc">{{error}}</div>
           </div>
           <div class="d-grid gap-2 d-md-block pt-3">
             <button class="btn btn-secondary col-2" type="button">
@@ -62,7 +62,7 @@
     <script type="text/javascript">
       const button = document.querySelector("button");
       button.addEventListener("click", () => {
-        history.back();
+        location.href = "/"
       });
     </script>
   </body>

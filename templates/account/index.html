@@ -29,29 +29,29 @@
           <div id="user-profile-section" class="container-section">
             {% include "account/section-profile.html" %}
           <div id="modify-section" class="container-section focused">
-            {% if False %}
+            {% if menu==0 %}
             <!-- Default -->
             <div id="default-editable-area" class="profile-area">
               <span class="logo-txt-main">DIMG</span>
             </div>
 
-            {% elif False %}
+            {% elif menu==1 %}
             <!-- username & etc.  -->
             {% include "account/modify-user.html" %}
             
-            {% elif False %}
+            {% elif menu==2 %}
             <!-- email  -->
             {% include "account/modify-email.html" %}
             
-            {% elif True %}
+            {% elif menu==3 %}
             <!-- password -->
             {% include "account/modify-pw.html" %}
 
-            {% elif False %}
+            {% elif menu==4 %}
             <!-- Google -->
             {% include "account/modify-google.html" %}
             
-            {% else %}
+            {% elif menu==5 %}
             <!-- Microsoft -->
             {% include "account/modify-microsoft.html" %}
             {% endif %}
