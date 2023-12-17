@@ -1,5 +1,16 @@
 import datetime
-from fastapi import Body, Depends, FastAPI, HTTPException, Request, Response, status, Form, UploadFile, File
+from fastapi import (
+    Body,
+    Depends,
+    FastAPI,
+    HTTPException,
+    Request,
+    Response,
+    status,
+    Form,
+    UploadFile,
+    File,
+)
 from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_users import exceptions, schemas
@@ -11,7 +22,14 @@ from typing import Dict, Optional, Tuple, Annotated
 
 from sqlalchemy import select
 
-from app.db import Service, ServiceConnection, User, create_db_and_tables, get_async_session, get_user_db
+from app.db import (
+    Service,
+    ServiceConnection,
+    User,
+    create_db_and_tables,
+    get_async_session,
+    get_user_db,
+)
 from app.schemas import UserCreate, UserRead, UserUpdate
 from app.users import (
     SECRET,
@@ -30,7 +48,15 @@ from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 import random
 
-from app.backends.services import create_service, delete_service, generate_access_token, get_all_services, get_service_by_id, get_service_connection, update_service
+from app.backends.services import (
+    create_service,
+    delete_service,
+    generate_access_token,
+    get_all_services,
+    get_service_by_id,
+    get_service_connection,
+    update_service,
+)
 
 app = FastAPI()
 
@@ -596,11 +622,23 @@ async def account_root(request: Request, user: User = Depends(current_user_optio
             microsoft_mail = oauth_account.account_email
 
     return templates.TemplateResponse(
-        "account/index.html", {"request": request, "user": user, "google_mail": google_mail, "microsoft_mail": microsoft_mail,"location": "설정"}
+        "account/index.html",
+        {
+            "request": request,
+            "user": user,
+            "google_mail": google_mail,
+            "microsoft_mail": microsoft_mail,
+            "location": "설정",
+        },
     )
 
+
 @app.get("/api/sso/token/get")
-async def get_token(request: Request, user: User = Depends(current_active_user), db = Depends(get_async_session)):
+async def get_token(
+    request: Request,
+    user: User = Depends(current_active_user),
+    db=Depends(get_async_session),
+):
     client_id = request.query_params.get("client_id")
     state = request.query_params.get("state") or request.session.get("state")
     if request.session.get("state"):
@@ -610,47 +648,74 @@ async def get_token(request: Request, user: User = Depends(current_active_user),
         raise HTTPException(status_code=400, detail="client_id is required")
     if not state:
         raise HTTPException(status_code=400, detail="state is required")
-    
+
     # check if service exists
     service: Service = await get_service_by_id(db, client_id)
     if not service:
         raise HTTPException(status_code=404, detail="Service not found")
-    
+
     # check if serviceconnection exists
     service_connection = await get_service_connection(db, user.id, client_id)
     if not service_connection:
         # redirect to permission page with state
         request.session["state"] = state
         return RedirectResponse(f"/service/permission/{client_id}", status_code=303)
-    
+
     if service_connection.unregistered:
         # redirect to api/sso/token/get
         return RedirectResponse(f"/service/permission/{client_id}", status_code=303)
-    
+
     # check if token exists
-    generated_token = await generate_access_token(db, user.id, client_id, datetime.date.today() + datetime.timedelta(days=1))
+    generated_token = await generate_access_token(
+        db, user.id, client_id, datetime.date.today() + datetime.timedelta(days=1)
+    )
     if not generated_token:
         raise HTTPException(status_code=500, detail="Failed to generate access token")
-    
+
     # redirect to login_callback
-    return RedirectResponse(f"{service.login_callback}?token={generated_token.token}&state={state}", status_code=303)
+    return RedirectResponse(
+        f"{service.login_callback}?token={generated_token.token}&state={state}",
+        status_code=303,
+    )
+
 
 @app.get("/service/permission/{client_id}")
-async def show_permission(request: Request, client_id: str, user: User = Depends(current_active_user), db = Depends(get_async_session)):
+async def show_permission(
+    request: Request,
+    client_id: str,
+    user: User = Depends(current_active_user),
+    db=Depends(get_async_session),
+):
     service: Service = await get_service_by_id(db, client_id)
     if not service:
         raise HTTPException(status_code=404, detail="Service not found")
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
     request.session["csrf_token"] = csrf_token
-    return templates.TemplateResponse("service/permission.html", {"request": request, "user": user, "service": service, "csrf_token": csrf_token})
+    return templates.TemplateResponse(
+        "service/permission.html",
+        {
+            "request": request,
+            "user": user,
+            "service": service,
+            "csrf_token": csrf_token,
+        },
+    )
+
 
 @app.post("/service/permission/{client_id}/allow")
-async def allow_permission(request: Request, client_id: str, user: User = Depends(current_active_user), db: AsyncSession = Depends(get_async_session)):
+async def allow_permission(
+    request: Request,
+    client_id: str,
+    user: User = Depends(current_active_user),
+    db: AsyncSession = Depends(get_async_session),
+):
     service: Service = await get_service_by_id(db, client_id)
     if not service:
         raise HTTPException(status_code=404, detail="Service not found")
     form = await request.form()
-    if not form.get("csrf_token") or form.get("csrf_token") != request.session.get("csrf_token"):
+    if not form.get("csrf_token") or form.get("csrf_token") != request.session.get(
+        "csrf_token"
+    ):
         raise HTTPException(status_code=403, detail="CSRF token mismatch")
     request.session.pop("csrf_token")
 
@@ -660,7 +725,11 @@ async def allow_permission(request: Request, client_id: str, user: User = Depend
         if service_connection.unregistered is None:
             raise HTTPException(status_code=403, detail="Service already connected")
         # chk cooldown
-        elif service_connection.unregistered + datetime.timedelta(days=service.register_cooldown) > datetime.date.today():
+        elif (
+            service_connection.unregistered
+            + datetime.timedelta(days=service.register_cooldown)
+            > datetime.date.today()
+        ):
             raise HTTPException(status_code=403, detail="Cooldown not expired")
         else:
             service_connection.unregistered = None
@@ -668,8 +737,10 @@ async def allow_permission(request: Request, client_id: str, user: User = Depend
             await db.add(service_connection)
             await db.commit()
             await db.refresh(service_connection)
-            return RedirectResponse(f"/api/sso/token/get?client_id={client_id}", status_code=303)        
-    
+            return RedirectResponse(
+                f"/api/sso/token/get?client_id={client_id}", status_code=303
+            )
+
     # cid : Connection ID ( unique identifier, primary key )
     # generate cid with random int without collision
     cid = random.randint(0, 1000000000)
@@ -679,10 +750,7 @@ async def allow_permission(request: Request, client_id: str, user: User = Depend
 
     # create service connection
     service_connection = ServiceConnection(
-        cid=cid,
-        user_id=user.id,
-        service_id=client_id,
-        registered=datetime.date.today()
+        cid=cid, user_id=user.id, service_id=client_id, registered=datetime.date.today()
     )
     db.add(service_connection)
     await db.commit()

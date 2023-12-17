@@ -18,6 +18,7 @@ from sqlalchemy import UUID, Column, ForeignKey, Integer, String, Boolean, Date
 DATABASE_URL = "sqlite+aiosqlite:///./test.db"
 UUID_ID = uuid.UUID
 
+
 class Base(DeclarativeBase):
     pass
 
@@ -106,9 +107,11 @@ class ServiceConnection(Base):
     cid = Column(Integer, primary_key=True, index=True)
     registered = Column(Date)
     unregistered = Column(Date, nullable=True)
+
     @declared_attr
     def user_id(cls) -> Mapped[GUID]:
         return mapped_column(GUID, ForeignKey("user.id"))
+
     service_id = Column(String, ForeignKey("services.client_id"))
     user = relationship(
         "User",
@@ -137,9 +140,11 @@ class AccessToken(Base):
     """
     token = Column(String, primary_key=True, index=True)
     expire = Column(Date)
+
     @declared_attr
     def user_id(cls) -> Mapped[GUID]:
         return mapped_column(GUID, ForeignKey("user.id"))
+
     service_id = Column(String, ForeignKey("services.client_id"))
     user = relationship(
         "User",
