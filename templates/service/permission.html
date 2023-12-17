@@ -18,17 +18,39 @@
       align-items: center;
     }
 
-    .section {
+    .input-spacing {
       padding: 30px 40px;
+    }
+
+    .service-spacing {
+      padding: 20px;
+    }
+
+    #service-name {
+      color: #000;
+      font-size: 32px;
+      font-weight: 500;
+      line-height: normal;
+    }
+
+    #service-desc {
+      color: #000;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    .section {
       border-radius: 10px;
+      width: 720px;
       background-color: #fff;
+      overflow: hidden;
     }
 
     #page-info {
       margin-bottom: 20px;
       padding-bottom: 10px;
       border-bottom: 1px solid #888;
-      width: 720px;
     }
 
     #page-name {
@@ -46,7 +68,21 @@
     <div id="container">
       {% include "jumbotron.html" %}
       <div id="main-container">
-        <div class="section">
+        <div class="section d-flex mb-3">
+          <img
+            width="100px"
+            src="{{ url_for('static',
+          path='/icons/6e0da971957e34d37e7914a2c7b4e015.png') }}"
+            alt="서비스 로고"
+          />
+          <div class="service-spacing">
+            <div id="service-name">DIMG-PaaS</div>
+            <div id="service-desc">
+              천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루
+            </div>
+          </div>
+        </div>
+        <div class="section input-spacing">
           <div id="page-info">
             <div id="page-name">접근 허가 요청</div>
             <div id="page-desc">
