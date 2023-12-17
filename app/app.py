@@ -1,20 +1,5 @@
-<<<<<<< HEAD
 import datetime
 from fastapi import Body, Depends, FastAPI, HTTPException, Request, Response, status, Form, UploadFile, File
-=======
-from fastapi import (
-    Body,
-    Depends,
-    FastAPI,
-    HTTPException,
-    Request,
-    Response,
-    status,
-    Form,
-    UploadFile,
-    File,
-)
->>>>>>> 0d6a8783fd5e443d0769b3dedd136e8374706be2
 from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_users import exceptions, schemas
@@ -45,17 +30,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 import random
 
-<<<<<<< HEAD
 from app.backends.services import create_service, delete_service, generate_access_token, get_all_services, get_service_by_id, get_service_connection, update_service
-=======
-from app.backends.services import (
-    create_service,
-    delete_service,
-    get_all_services,
-    get_service_by_id,
-    update_service,
-)
->>>>>>> 0d6a8783fd5e443d0769b3dedd136e8374706be2
 
 app = FastAPI()
 
@@ -612,13 +587,16 @@ app.include_router(
 # user settings page
 @app.get("/account")
 async def account_root(request: Request, user: User = Depends(current_user_optional)):
+    google_mail = None
+    microsoft_mail = None
     for oauth_account in user.oauth_accounts:
         if oauth_account.provider == "google":
             google_mail = oauth_account.account_email
         elif oauth_account.provider == "microsoft":
             microsoft_mail = oauth_account.account_email
+
     return templates.TemplateResponse(
-        "account/index.html", {"request": request, "user": user, google_mail: google_mail, microsoft_mail: microsoft_mail,"location": "설정"}
+        "account/index.html", {"request": request, "user": user, "google_mail": google_mail, "microsoft_mail": microsoft_mail,"location": "설정"}
     )
 
 @app.get("/api/sso/token/get")
