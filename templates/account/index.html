@@ -145,14 +145,25 @@
                   <span class="conn-status"></span>
                 </span>
               </div>
+              {% if microsoft_email %}
               <div class="content-division">
-                <span class="content-txt">chunzhi23@dimigoh.goe.go.kr</span>
+                <span class="content-txt">{microsoft_email}</span>
               </div>
               <div class="content-division">
                 <button id="edit-usernameEtc-btn" class="edit-this-area">
                   <i class="bi bi-pencil"></i>수정
                 </button>
               </div>
+              {% else %}
+              <div class="content-division">
+                <span class="content-txt">연결되지 않음</span>
+              </div>
+              <div class="content-division">
+                <button id="edit-usernameEtc-btn" class="edit-this-area">
+                  <i class="bi bi-plus"></i>연결
+                </button>
+              </div> 
+              {% endif %}
             </div>
           </div>
           <div id="modify-section" class="container-section">

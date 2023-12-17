@@ -1,6 +1,8 @@
+import datetime
+import uuid
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.db import Service
+from app.db import Service, ServiceConnection, AccessToken
 from fastapi import HTTPException
 
 async def get_all_services(db: AsyncSession):
@@ -44,3 +46,24 @@ async def update_service(db: AsyncSession, service: Service):
     await db.refresh(service)
     return service
 
+async def get_service_connection(db: AsyncSession, user_id: str, service_id: str):
+    service_connection = await db.execute(select(ServiceConnection).filter(ServiceConnection.user_id == user_id, ServiceConnection.service_id == service_id))
+    service_connection = service_connection.scalar()
+    return service_connection
+
+async def generate_access_token(db: AsyncSession, user_id: str, service_id: str, expire: datetime):
+    # check if already exists
+    access_token = await db.execute(select(AccessToken).filter(AccessToken.user_id == user_id, AccessToken.service_id == service_id))
+    access_token = access_token.scalar()
+    if access_token is not None:
+        if access_token.expire < datetime.date.today():
+            await db.delete(access_token)
+            await db.commit()
+        else:
+            return access_token
+    
+    token = str(uuid.uuid4())
+    access_token = AccessToken(token=token, expire=expire, user_id=user_id, service_id=service_id)
+    db.add(access_token)
+    await db.commit()
+    return access_token

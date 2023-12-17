@@ -12,7 +12,7 @@
 ### 2. 목표 기능 (route)
 
 - [x] `/` - 메인 페이지
-- [ ] `/account` - 계정 루트
+- [ ] `/account` - 계정 페이지
   - [x] `/account/register` - 회원가입
   - [x] `/account/login` - 로그인
   - [x] `/account/logout` - 로그아웃
@@ -22,7 +22,7 @@
   - [x] `/account/verify` - 이메일 인증
   - [ ] `/account/delete` - 계정 삭제
   
-- [x] `/manage` - 관리자 루트
+- [x] `/manage` - 관리자 페이지
   - [ ] `/manage/dashboard` - 대시보드
   - [ ] `/manage/users` - 사용자 관리
   - [ ] `/manage/users/<user_id>` - 사용자 관리
@@ -37,11 +37,11 @@
   - [ ] `/manage/announcements` - 공지사항 관리
   - [ ] `/manage/feedbacks` - 피드백 관리
 
-- [ ] `/service` - 서비스 루트
-  - [ ] `/service/connect` - 서비스 연결
+- [ ] `/service` - 서비스 (전체)
+  - [ ] `/service/permission` - 서비스 연결 페이지
 
-- [ ] `/api` - API 루트
-  - [ ] `/api/sso` - SSO API 루트
+- [ ] `/api` - API (전체)
+  - [ ] `/api/sso` - SSO API (전체)
     - [ ] `/api/sso/token/get` - 토큰 발급
     - [ ] `/api/sso/token/info` - 토큰 정보
   

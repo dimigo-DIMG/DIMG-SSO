@@ -6,7 +6,7 @@
       rel="stylesheet"
       href="{{url_for('static', path='/css/interface.general.css')}}"
     />
-    <title>권한 요청</title>
+    <title>서비스 연결</title>
   </head>
   <style>
     #main-container {
@@ -44,24 +44,33 @@
       <div id="main-container">
         <div class="section">
           <div id="page-info">
-            <div id="page-name">접근 허가 요청</div>
+            <div id="page-name">계정 권한 허가</div>
             <div id="page-desc">
-              이 서비스를 이용하려면 다음 권한을 허용해주세요.
+              {{service.name}}({{service.client_id[0:5]}}...) 서비스를 이용하려면 다음 권한이 필요해요.
             </div>
           </div>
           <div id="page-content">
             <ul>
-              <li>팔로우 상태를 봅니다</li>
-              <li>노트를 작성하거나 삭제합니다</li>
+              <li>계정 정보를 봅니다.</li>
+              <li>디미고인 재학생 인증 정보를 봅니다.</li>
+              <li>가입된 다른 서비스의 목록을 봅니다.</li>
             </ul>
           </div>
-          <div class="d-grid gap-2 d-md-block pt-3">
-            <button class="btn btn-secondary col-2" type="button">취소</button>
-            <button class="btn btn-primary col-2" type="button">허가</button>
-          </div>
+          
+          <form class="d-grid gap-2 d-md-block pt-3" action="/service/permission/{{service.client_id}}/allow" method="post">
+            <input type="hidden" name="csrf_token" value="{{csrf_token}}">
+            <button class="btn btn-secondary col-2" type="button" id="reject">거부</button>
+            <button class="btn btn-primary col-2" type="submit" id="accept">허가</button>
+          </form>
         </div>
       </div>
     </div>
     {% include "footer.html" %}
+    <script>
+      
+      document.getElementById("reject").addEventListener("click", function() {
+        location.href = "{{service.main_page}}";
+      });
+    </script>
   </body>
 </html>
