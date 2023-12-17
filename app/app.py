@@ -611,6 +611,12 @@ async def show_permission(request: Request):
     return templates.TemplateResponse("service/permission.html", {"request": request})
 
 
+# error page
+@app.get("/error")
+async def error_root(request: Request):
+    return templates.TemplateResponse("error.html", {"request": request})
+
+
 @app.on_event("startup")
 async def on_startup():
     # Not needed if you setup a migration system like Alembic

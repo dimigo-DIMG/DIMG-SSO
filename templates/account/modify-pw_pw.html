@@ -1,5 +1,8 @@
 <div class="modify-info">
-  <div class="modify-info-title">비밀번호</div>
+  <div class="modify-info-title">
+    <i class="bi bi-caret-left" onclick="chkFormChanged(this)"></i>
+    비밀번호
+  </div>
   <div class="modify-info-desc mt-">
     <div>
       DIMG-SSO에 로그인하는데 필요한 비밀번호를 변경합니다.
@@ -17,9 +20,7 @@
       class="form-control form-input"
       id="pw_formInputOriginalPW"
     />
-    <div class="invalid-feedback">
-      올바른 비밀번호가 아닙니다.
-    </div>
+    <div class="invalid-feedback">올바른 비밀번호가 아닙니다.</div>
   </div>
   <div class="mb-3">
     <label for="pw_formInputOriginalPW" class="form-label"
@@ -28,7 +29,7 @@
     <input
       type="password"
       class="form-control form-input"
-      id="pw_formInputOriginalPW"
+      id="pw_formInputNewPW"
     />
   </div>
   <div class="mb-3">
@@ -38,7 +39,7 @@
     <input
       type="password"
       class="form-control form-input"
-      id="pw_formInputOriginalPW"
+      id="pw_formInputNewRePW"
     />
     <div class="form-input-conditions" class="form-text">
       <ul>
