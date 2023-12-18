@@ -288,7 +288,6 @@ async def password(request: Request, user: User = Depends(current_user_optional)
         {"request": request, "failed": failed, "csrf_token": csrf_token},
     )
 
-
 @app.post("/account/forgot-password")
 async def password(
     request: Request,  # type: ignore
@@ -639,10 +638,60 @@ async def account_root(request: Request, user: User = Depends(current_user_optio
             "google_mail": google_mail,
             "microsoft_mail": microsoft_mail,
             "location": "설정",
-            "menu": 3,
+            "menu": 0,
         },
     )
 
+@app.get("/account/modify/{menu}")
+async def account_profile(request: Request, menu, user: User = Depends(current_user_optional)):
+    google_mail = None
+    microsoft_mail = None
+    for oauth_account in user.oauth_accounts:
+        if oauth_account.provider == "google":
+            google_mail = oauth_account.account_email
+        elif oauth_account.provider == "microsoft":
+            microsoft_mail = oauth_account.account_email
+
+    # chk menu is int
+    if not menu.isdigit():
+        raise HTTPException(status_code=404, detail="Page not found")
+    
+    menu = int(menu)
+    if menu not in [1, 2, 3]:
+        raise HTTPException(status_code=404, detail="Page not found")
+    
+    csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
+    request.session["csrf_token"] = csrf_token
+    
+    return templates.TemplateResponse(
+        "account/index.html",
+        {
+            "request": request,
+            "user": user,
+            "google_mail": google_mail,
+            "microsoft_mail": microsoft_mail,
+            "location": "설정",
+            "menu": menu,
+            "csrf_token": csrf_token,
+        },
+    )
+
+@app.post("/account/modify/profile")
+async def account_profile(request: Request, user: User = Depends(current_active_user), db=Depends(get_async_session)):
+    form = await request.form()
+    if not form.get("csrf_token") or form.get("csrf_token") != request.session.get(
+        "csrf_token"
+    ):
+        raise HTTPException(status_code=403, detail="CSRF token mismatch")
+    request.session.pop("csrf_token")
+
+    new_nick = form.get("nickname")
+    new_birth = form.get("birth")
+    new_gender = form.get("gender")
+
+    await db.commit()
+    await db.refresh(user)
+    return RedirectResponse("/account/modify/1", status_code=303)
 
 @app.get("/api/sso/token/get")
 async def get_token(
@@ -774,7 +823,7 @@ async def allow_permission(
 @app.get("/manage/dashboard")
 async def manage_dashboard(request: Request, db: AsyncSession = Depends(get_async_session)):
     statistics = await get_all_statistics(db)
-    return templates.TemplateResponse("admin/dashboard.html", {"request": request, "statistics": statistics})
+    return templates.TemplateResponse("admin/dashboard.html", {"request": request, "statistics": statistics })
 
 
 # error page

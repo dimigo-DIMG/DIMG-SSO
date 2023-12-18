@@ -1,5 +1,6 @@
 <!-- username & etc.  -->
 <div id="usernameEtc-area" class="profile-area mb-4">
+  
   <div class="content-division">
     <div id="user-icon-box">
       <img
@@ -13,16 +14,26 @@
     </div>
   </div>
   <div class="content-division">
-    <span id="username-txt" class="me-auto">chunzhi23</span>
-    <button id="edit-usernameEtc-btn" class="edit-this-area">
+    {% if user.nickname %}
+    <span id="username-txt" class="me-auto">{{user.nickname}}</span>
+    {% else %}
+    <span id="username-txt" class="me-auto">{{user.email.split("@")[0]}}</span>
+    {% endif %}
+    <button id="edit-usernameEtc-btn" class="edit-this-area" onclick="document.location.href='/account/modify/1'">
       <i class="bi bi-pencil"></i>
       수정
     </button>
   </div>
+ 
   <div class="content-division">
     <div class="user-etc-box">
-      <i class="bi bi-gift"></i> 2005. 7. 15.
+      {% if user.birthday %}
+      <i class="bi bi-gift"></i> {{user.birthday}}
+      {% else %}
+      <i class="bi bi-gift"></i> 생일 정보 없음
+      {% endif %}
     </div>
+    
     <div class="user-etc-box">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -37,9 +48,12 @@
           d="M11.5 1a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-3.45 3.45A4 4 0 0 1 8.5 10.97V13H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V14H6a.5.5 0 0 1 0-1h1.5v-2.03a4 4 0 1 1 3.471-6.648L14.293 1zm-.997 4.346a3 3 0 1 0-5.006 3.309 3 3 0 0 0 5.006-3.31z"
         />
       </svg>
-      남
+      {{ user.gender or "성별 지정 안됨" }}
     </div>
+    
+    
   </div>
+  
 </div>
 
 <!-- email  -->
@@ -48,8 +62,9 @@
     <span class="division-title-text">이메일</span>
   </div>
   <div class="content-division">
-    <span class="content-txt">ssomang@dimg.rerac.dev</span>
-    <button id="edit-email-btn" class="edit-this-area">
+    <span class="content-txt">{{user.email}}</span>
+    <button id="edit-email-btn" class="edit-this-area" onclick="document.location.href='/account/modify/2'"
+    >
       <i class="bi bi-pencil"></i>
       수정
     </button>
@@ -63,7 +78,8 @@
   </div>
   <div class="content-division">
     <span class="content-txt">****************</span>
-    <button id="edit-password-btn" class="edit-this-area">
+    <button id="edit-password-btn" class="edit-this-area" onclick="document.location.href='/account/modify/3'"
+    >
       <i class="bi bi-pencil"></i>
       수정
     </button>
@@ -76,16 +92,26 @@
     <span class="division-title-text">
       <i class="bi bi-google"></i>
       디미고 구글 계정
+      {% if google_mail %}
       <div class="conn-status verified"></div>
+      {% else %}
+      <div class="conn-status unauthorized"></div>
+      {% endif %}
     </span>
   </div>
   <div class="content-division">
-    <span class="content-txt">chunzhi23@dimigo.hs.kr</span>
+    <span class="content-txt">{{google_mail or "연동 안됨"}}</span>
   </div>
   <div class="content-division conn-btn-here">
-    <button id="edit-google-btn" class="edit-this-area">
+    <button id="edit-google-btn" class="edit-this-area" onclick="document.location.href='/account/oauth/c/google'"
+    >
+      {% if google_mail %}
       <i class="bi bi-pencil"></i>
       수정
+      {% else %}
+      <i class="bi bi-plus"></i>
+      연동
+      {% endif %}
     </button>
   </div>
 </div>
@@ -107,16 +133,26 @@
         />
       </svg>
       디미고 Microsoft 계정
+      {% if microsoft_mail %}
       <div class="conn-status verified"></div>
+      {% else %}
+      <div class="conn-status unauthorized"></div>
+      {% endif %}
     </span>
   </div>
   <div class="content-division">
-    <span class="content-txt">chunzhi23@dimigoh.goe.go.kr</span>
+    <span class="content-txt">{{microsoft_mail or "연동 안됨"}}</span>
   </div>
   <div class="content-division conn-btn-here">
-    <button id="edit-microsoft-btn" class="edit-this-area">
+    <button id="edit-microsoft-btn" class="edit-this-area" onclick="document.location.href='/account/oauth/c/microsoft'"
+    >
+      {% if microsoft_mail %}
       <i class="bi bi-pencil"></i>
       수정
+      {% else %}
+      <i class="bi bi-plus"></i>
+      연동
+      {% endif %}
     </button>
   </div>
 </div>
