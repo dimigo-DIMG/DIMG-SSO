@@ -31,3 +31,8 @@
 span.no-service {
   color: #888;
 }
+
+.service-item > img {
+  border: 1px solid #888;
+  border-radius: 10px;
+}

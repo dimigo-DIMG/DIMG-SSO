@@ -34,19 +34,19 @@
             <div id="service-scrollable">
               <!-- DIMG 서비스 list -->
               <div id="dimg-service-list">
-                <span class="service-div-tit d-block">DIMG 서비스</span>
-                {% if False %}
+                <span class="service-div-tit d-block">DIMG 공식 서비스</span>
+                {% if not o_services %}
                 <!-- 서비스가 없을 경우 -->
                 <span class="no-service">
-                  아직 등록된 서비스가 없습니다.<br />
-                  가장 먼저 서비스를 등록해보세요!
+                  아직 등록된 서비스가 없어요.<br />
+                  본 메시지는 비정상 상황이므로 문의하기를 통해 연락해주세요
                 </span>
                 {% else %}
                 <!-- 서비스가 있을 경우 -->
-                {% for _ in range(1) %}
-                <a class="service-item" href="#!">
-                  <img src="{{ url_for('static', path='img/chunzhi23.png')}}" alt="DIMG-PaaS" height="120px">
-                  <span class="d-block">DIMG-PaaS</span>
+                {% for service in o_services %}
+                <a class="service-item" href="{{ service.main_page }}" target="_blank">
+                  <img src="{{ service.icon }}" alt="{{ service.name }}" height="120px" width="120px">
+                  <span class="d-block">{{ service.name }}</span>
                 </a>
                 {% endfor %}
                 {% endif %}
@@ -54,19 +54,19 @@
 
               <!-- 등록 서비스 list -->
               <div id="enrolled-service-list">
-                <span class="service-div-tit d-block">등록된 서비스</span>
-                {% if True %}
+                <span class="service-div-tit d-block">비공식 서비스</span>
+                {% if not u_services %}
                 <!-- 서비스가 없을 경우 -->
                 <span class="no-service">
-                  아직 등록된 서비스가 없습니다.<br />
-                  가장 먼저 서비스를 등록해보세요!
+                  아직 등록된 서비스가 없어요.<br />
+                  서비스 등록 요청은 문의를 통해 부탁드려요!
                 </span>
                 {% else %}
                 <!-- 서비스가 있을 경우 -->
-                {% for _ in range(3) %}
-                <a class="service-item" href="#!">
-                  <img src="{{ url_for('static', path='img/logo_asdf.png')}}" alt="Makers" height="120px">
-                  <span class="d-block">Makers</span>
+                {% for service in u_services %}
+                <a class="service-item" href="{{ service.main_page }}" target="_blank">
+                  <img src="{{ service.icon }}" alt="{{ service.name }}" height="120px" width="120px">
+                  <span class="d-block">{{ service.name }}</span>
                 </a>
                 {% endfor %}
                 {% endif %}

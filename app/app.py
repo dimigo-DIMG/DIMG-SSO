@@ -42,6 +42,10 @@ from app.users import (
     UserManager,
     init_user,
 )
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from app.backends.statistics import get_all_statistics, update_statistics, add_login_count, add_failed_login_count
+
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from fastapi.staticfiles import StaticFiles
@@ -72,9 +76,11 @@ current_user_admin = fastapi_users.current_user(active=True, superuser=True)
 
 
 @app.get("/")
-async def root(request: Request, user: User = Depends(current_user_optional)):
+async def root(request: Request, user: User = Depends(current_user_optional), db=Depends(get_async_session)):
+    o_services, u_services = await get_all_services(db, True)
+    
     return templates.TemplateResponse(
-        "index.html", {"request": request, "user": user, "location": "홈"}
+        "index.html", {"request": request, "user": user, "location": "홈", "o_services": o_services, "u_services": u_services}
     )
 
 
@@ -132,34 +138,36 @@ async def login(
     request: Request,
     user_manager: UserManager = Depends(get_user_manager),
     strategy: JWTStrategy = Depends(auth_backend.get_strategy),
+    db=Depends(get_async_session),
 ):
     # request form
     form = await request.form()
     # check csrf token
     if form.get("csrf_token") != request.session.get("csrf_token"):
         request.session["failed"] = 2
-        # redirect tp get
+        await add_failed_login_count(db)
         return RedirectResponse("/account/login", status_code=303)
 
     next_url = request.session.get("next")
 
     if not form.get("email") or not form.get("password"):
         request.session["failed"] = 1
+        await add_failed_login_count(db)
         return RedirectResponse("/account/login", status_code=303)
 
     try:
         credentials = OAuth2PasswordRequestForm(
             username=form.get("email"), password=form.get("password"), scope=""
         )
-        print(await user_manager.get_by_email(credentials.username))
         user = await user_manager.authenticate(credentials)
     except Exception as e:
         request.session["failed"] = 1
+        await add_failed_login_count(db)
         return RedirectResponse("/account/login", status_code=303)
 
     if user is None or not user.is_active:
-        print("user is none")
         request.session["failed"] = 1
+        await add_failed_login_count(db)
         return RedirectResponse("/account/login", status_code=303)
 
     response = await auth_backend.login(strategy, user)
@@ -171,6 +179,7 @@ async def login(
         response.headers["location"] = "/"
         response.status_code = 303
     await user_manager.on_after_login(user, request, response)
+    add_login_count(db)
     return response
 
 
@@ -630,7 +639,7 @@ async def account_root(request: Request, user: User = Depends(current_user_optio
             "google_mail": google_mail,
             "microsoft_mail": microsoft_mail,
             "location": "설정",
-            "menu": 2,
+            "menu": 3,
         },
     )
 
@@ -763,8 +772,9 @@ async def allow_permission(
 
 # /manage/dashboard
 @app.get("/manage/dashboard")
-async def manage_dashboard(request: Request):
-    return templates.TemplateResponse("admin/dashboard.html", {"request": request})
+async def manage_dashboard(request: Request, db: AsyncSession = Depends(get_async_session)):
+    statistics = await get_all_statistics(db)
+    return templates.TemplateResponse("admin/dashboard.html", {"request": request, "statistics": statistics})
 
 
 # error page
@@ -804,3 +814,11 @@ async def on_startup():
     # Not needed if you setup a migration system like Alembic
     await create_db_and_tables()
     await init_user()
+    await update_statistics()
+
+
+
+scheduler = AsyncIOScheduler()
+#1시간마다 통계 업데이트
+scheduler.add_job(update_statistics, "interval", hours=1)
+scheduler.start()

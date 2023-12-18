@@ -221,11 +221,19 @@
 
               <!-- 해당 chartjs 생성 -->
               <script src="{{ url_for('static', path='js/chartjs/dashboard.login.js') }}"></script>
+              <script>
+                var data = [
+                  {% for statistic in statistics %}
+                  { date: "{{ statistic.date }}", user_count: {{ statistic.user_count }}, dimigo_user_count: {{ statistic.dimigo_user_count }}, expired_user_count: {{ statistic.expired_user_count }}, login_count: {{ statistic.login_count }}, failed_login_count: {{ statistic.failed_login_count }}, official_service_count: {{ statistic.official_service_count }}, unofficial_service_count: {{ statistic.unofficial_service_count }} },
+                  {% endfor %}
+                ]
+              </script>
             </div>
           </div>
         </div>
       </div>
     </div>
+    
     {% include "footer.html" %}
   </body>
 </html>
