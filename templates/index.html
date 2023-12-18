@@ -14,7 +14,7 @@
       rel="stylesheet"
       href="{{url_for('static', path='/css/root.index.css')}}"
     />
-    <title>DIMG-SSO</title>
+    <title>DIMGSSO - 홈</title>
   </head>
   <body>
     <div id="container">
@@ -30,7 +30,9 @@
             DIMG의 모든 서비스를 이용할 수 있습니다.
           </p>
           <div id="usable-service">
-            <span class="lead">DIMG-SSO를 지원하는 서비스는 다음과 같습니다.</span>
+            <span class="lead"
+              >DIMG-SSO를 지원하는 서비스는 다음과 같습니다.</span
+            >
             <div id="service-scrollable">
               <!-- DIMG 서비스 list -->
               <div id="dimg-service-list">
@@ -48,8 +50,7 @@
                   <img src="{{ service.icon }}" alt="{{ service.name }}" height="120px" width="120px">
                   <span class="d-block">{{ service.name }}</span>
                 </a>
-                {% endfor %}
-                {% endif %}
+                {% endfor %} {% endif %}
               </div>
 
               <!-- 등록 서비스 list -->
@@ -68,8 +69,7 @@
                   <img src="{{ service.icon }}" alt="{{ service.name }}" height="120px" width="120px">
                   <span class="d-block">{{ service.name }}</span>
                 </a>
-                {% endfor %}
-                {% endif %}
+                {% endfor %} {% endif %}
               </div>
             </div>
           </div>

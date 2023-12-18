@@ -2,75 +2,77 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/interface.general.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/root.general.css')}}"
+    />
+    <title>DIMGSSO - 비밀번호 재설정</title>
   </head>
-  <title>Reset Password</title>
+  <style>
+    .container {
+      margin-top: 32px;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      flex-grow: 1;
+    }
+
+    #form-reset {
+      width: 460px;
+    }
+  </style>
   <body>
-    <div class="container-fluid">
-      <div class="row vh-100">
-        {% include "jumbotron.html" %}
-        <div
-          class="col-md-9"
-          style="display: grid; grid-template-rows: min-content"
-        >
-          {% include "navbar.html" %}
-          <div
-            class="col-xl-5 pb-5"
-            style="justify-self: center; align-self: center"
-          >
-            <h1>Reset Password</h1>
-            <form class="mt-5 pb-5" method="post">
-              {% if failed == 1 %}
-              <div class="alert alert-danger" role="alert">
-                이메일을 찾을 수 없습니다.
-              </div>
-              {% elif failed == 2 %}
-              <div class="alert alert-danger" role="alert">
-                CSRF 토큰이 일치하지 않습니다.
-              </div>
-              {% endif %}
+    <div id="container">
+      {% include "jumbotron.html" %}
+      <div id="main-container">
+        {% include "navbar.html" %}
+        <div class="container">
+          <div id="form-reset">
+            {% if failed == 1 %}
+            <div class="alert alert-danger" role="alert">
+              이메일을 찾을 수 없습니다.
+            </div>
+            {% elif failed == 2 %}
+            <div class="alert alert-danger" role="alert">
+              CSRF 토큰이 일치하지 않습니다.
+            </div>
+            {% endif %}
+            <h1>비밀번호 변경</h1>
+            <form class="mt-4" method="post">
               <!-- Token input -->
               {% if csrf_token %}
               <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
               {% endif %}
+
               <!-- Email input -->
-              <div data-mdb-input-init class="form-outline mb-4">
+              <div class="mb-3">
+                <label for="formEmail" class="form-label">이메일</label>
                 <input
                   type="email"
-                  id="form1Example1"
-                  class="form-control form-control-lg"
                   name="email"
+                  class="form-control form-input"
+                  id="formEmail"
+                  aria-describedby="emailHelp"
                 />
-                <label class="form-label" for="form1Example1"
-                  >이메일 주소</label
-                >
               </div>
 
               <!-- Submit button -->
-              <div class="row m-0" >
-                <!--<a
-                  class="btn btn-primary col-md"
+              <div class="d-flex gap-2">
+                <button
+                  id="go-back-login"
+                  class="btn btn-secondary col form-input"
                   type="button"
-                  data-mdb-ripple-init
-                  style="padding: 0.6rem 1.5rem; font-size: 12pt"
-                  href="#!"
                 >
-                  <i class="fas fa-check"></i> 전송
-                </a>-->
-                <a
-                  class="btn btn-secondary col-md"
-                  type="button"
-                  data-mdb-ripple-init
-                  style="padding: 0.6rem 1.5rem; font-size: 12pt"
-                  href="/account/login"
-                >
-                  <i class="fas fa-angles-left"></i> Login
-                </a>
-                <div class="col-md-1"></div>
-                <button type="submit" class="btn btn-primary col-md" style="padding: 0.6rem 1.5rem; font-size: 12pt">
-                  <i class="fas fa-check"></i> 전송
+                  <i class="bi bi-caret-left"></i>
+                  돌아가기
                 </button>
-                
-                
+                <button type="submit" class="btn btn-primary col form-input">
+                  전송
+                </button>
               </div>
             </form>
           </div>
@@ -78,5 +80,10 @@
       </div>
     </div>
     {% include "footer.html" %}
+    <script type="text/javascript">
+      document
+        .getElementById("go-back-login")
+        .addEventListener("click", () => (location.href = "/account/login"));
+    </script>
   </body>
 </html>
