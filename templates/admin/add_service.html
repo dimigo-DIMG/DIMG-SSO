@@ -356,13 +356,13 @@
         let cover = document.getElementById("cover");
 
         $("#outputServiceName").text($("#inputServiceName").val());
-          $("#outputIsOfficial").text(document.getElementById("inputIsOfficial").checked ? "공식" : "비공식");
-          $("#outputDescription").text(document.getElementById("inputServiceDesc").value);
-          $("#outputLoginCallback").text(document.getElementById("inputLoginCallback").value);
-          $("#outputUnregisterUrl").text(document.getElementById("inputServiceOut").value);
-          $("#outputMainPage").text(document.getElementById("inputMainPage").value);
-          $("#outputScopes").text(document.getElementById("inputServiceScope").value);
-          $("#outputRegisterCooldown").text(document.getElementById("inputReRegisterDays").value);
+        $("#outputIsOfficial").text(document.getElementById("inputIsOfficial").checked ? "공식" : "비공식");
+        $("#outputDescription").text(document.getElementById("inputServiceDesc").value);
+        $("#outputLoginCallback").text(document.getElementById("inputLoginCallback").value);
+        $("#outputUnregisterUrl").text(document.getElementById("inputServiceOut").value);
+        $("#outputMainPage").text(document.getElementById("inputMainPage").value);
+        $("#outputScopes").text(document.getElementById("inputServiceScope").value);
+        $("#outputRegisterCooldown").text(document.getElementById("inputReRegisterDays").value);
 
         cover.style.display = "flex";
         service_add_confirm.style.display = "block";
@@ -376,7 +376,7 @@
           let fd = new FormData();
           
           fd.append("name", document.getElementById("inputServiceName").value);
-          fd.append("csrf_token", "{{ csrf_token}}");
+          fd.append("csrf_token", "{{ csrf_token }}");
           fd.append("is_official", document.getElementById("inputIsOfficial").checked);
           fd.append("description", document.getElementById("inputServiceDesc").value);
           fd.append("login_callback", document.getElementById("inputLoginCallback").value);
