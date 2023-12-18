@@ -772,7 +772,11 @@ async def http_exception_handler(request, exc):
 # handle 404
 @app.exception_handler(404)
 async def http_exception_handler(request, exc):
-    return templates.TemplateResponse("error.html", {"request": request, "error": "페이지를 찾을 수 없어요.", "code": 404})
+    if str(exc.detail) == "Not Found":
+        msg = "페이지를 찾을 수 없어요."
+    else:
+        msg = str(exc.detail)
+    return templates.TemplateResponse("error.html", {"request": request, "error": msg, "code": 404})
 
 # handle internal server error
 @app.exception_handler(500)

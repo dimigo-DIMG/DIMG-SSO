@@ -70,15 +70,15 @@
       <div id="main-container">
         <div class="section d-flex mb-3">
           <img
+            height="100px"
             width="100px"
-            src="{{ url_for('static',
-          path='/icons/6e0da971957e34d37e7914a2c7b4e015.png') }}"
+            src="{{ service.icon }}"
             alt="서비스 로고"
           />
           <div class="service-spacing">
-            <div id="service-name">DIMG-PaaS</div>
+            <div id="service-name">{{service.name}}</div>
             <div id="service-desc">
-              천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루
+              {{service.description}} 
             </div>
           </div>
         </div>
