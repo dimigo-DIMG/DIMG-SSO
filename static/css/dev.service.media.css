@@ -25,23 +25,32 @@
   #sidebar > a.active {
     color: #0d6efd;
   }
+
+  #container {
+    margin: 0 20px;
+    padding-top: 100px;
+  }
+
+  #page-info {
+    width: 100%;
+  }
+
+  #page-info {
+    text-align: center;
+  }
 }
 
 @media (min-width: 768px) {
   /* Desktop and Tablet Styles */
   i.ico-center {
     position: absolute;
-    top: calc(50% - 3px);
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
 
   #container {
     padding-top: 100px;
-  }
-
-  #page-info {
-    width: 480px;
   }
 
   #sidebar {

@@ -1,27 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/general/bootstrap.min.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/general/styles.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/fonts/Pretendard/pretendard.css')}}"
-    />
+    {% include "header.html" %}
     <link
       rel="stylesheet"
       href="{{url_for('static', path='/css/dev.service.general.css')}}"
@@ -38,27 +18,8 @@
   </head>
   <body>
     <!-- Sidebar -->
-    <div id="sidebar">
-      <a class="hover-shadow" href="/manage/dashboard">
-        <i class="bi bi-command ico-center"></i>
-      </a>
-      <a class="hover-shadow active" href="/manage/services">
-        <i class="bi bi-bag-dash ico-center"></i>
-      </a>
-      <a class="hover-shadow" href="/manage/users">
-        <i class="bi bi-people ico-center"></i>
-      </a>
-      <a class="hover-shadow disabled" href="#">
-        <i class="bi bi-bell ico-center"></i>
-      </a>
-      <a class="hover-shadow disabled" href="#">
-        <i class="bi bi-badge-ad ico-center"></i>
-      </a>
-      <a class="hover-shadow disabled" href="#">
-        <i class="bi bi-question-circle ico-center"></i>
-      </a>
-    </div>
-
+    {% include "admin/sidebar.html" %}
+    
     <!-- Content -->
     <div id="container">
       <div id="page-info">
@@ -75,7 +36,6 @@
         </div>
 
         <!-- 유저 서비스 list items-->
-
         {% for service in services %}
         <div class="section-item">
           <div class="service-icon hover-shadow">
@@ -85,7 +45,9 @@
               style="width: 100%; height: 100%; object-fit: contain"
             />
 
-            <div class="service-settings" onclick="document.location.href='/manage/services/{{service.client_id}}'"
+            <div
+              class="service-settings"
+              onclick="document.location.href='/manage/services/{{service.client_id}}'"
             >
               <i class="bi bi-gear ico-center mobile-center-no"></i>
             </div>
@@ -110,18 +72,8 @@
         {% endfor %}
       </div>
     </div>
-    <script
-      type="text/javascript"
-      src="{{ url_for('static', path='/js/bootstrap.bundle.min.js') }}"
-    ></script>
+    {% include "footer.html" %}
     <script type="text/javascript">
-      let disabled_circles = document.getElementsByClassName("disabled");
-      // console.log(disabled_circles);
-      for (let i = 0; i < disabled_circles.length; i++) {
-        let circle = disabled_circles[i];
-        circle.addEventListener("click", () => alert("준비 중인 기능입니다."));
-      }
-
       let add_service = document.getElementById("add-service-btn");
       // console.log(add_service);
       add_service.addEventListener(

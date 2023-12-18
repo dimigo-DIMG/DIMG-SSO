@@ -1,0 +1,37 @@
+<div id="sidebar">
+  <a class="hover-shadow" href="/manage/dashboard">
+    <i class="bi bi-command ico-center"></i>
+  </a>
+  <a class="hover-shadow" href="/manage/services">
+    <i class="bi bi-bag-dash ico-center"></i>
+  </a>
+  <a class="hover-shadow" href="/manage/users">
+    <i class="bi bi-people ico-center"></i>
+  </a>
+  <a class="hover-shadow disabled" href="#">
+    <i class="bi bi-bell ico-center"></i>
+  </a>
+  <a class="hover-shadow disabled" href="#">
+    <i class="bi bi-badge-ad ico-center"></i>
+  </a>
+  <a class="hover-shadow disabled" href="#">
+    <i class="bi bi-question-circle ico-center"></i>
+  </a>
+</div>
+<script type="text/javascript">
+  const disabled_circles = document.getElementsByClassName("disabled");
+  // console.log(disabled_circles);
+  for (let i = 0; i < disabled_circles.length; i++) {
+    const circle = disabled_circles[i];
+    circle.addEventListener("click", () => alert("준비 중인 기능입니다."));
+  }
+
+  const pathname = window.location.href;
+  const anchors = document.querySelectorAll("#sidebar > a");
+  for (let i = 0; i < anchors.length; i++){
+    if (anchors[i].href === pathname) {
+      anchors[i].classList.add("active");
+      break;
+    }
+  }
+</script>

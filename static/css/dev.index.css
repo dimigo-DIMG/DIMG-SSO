@@ -37,11 +37,6 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.big-circle > i {
-  position: relative;
-  bottom: 3px;
-}
-
 .label {
   text-align: center;
   margin: 10px 0;

@@ -65,4 +65,5 @@
 
 - 기획/설계: 20기 [soumt](https://github.com/soumt-r)
 - 내부 시스템: 20기 [soumt](https://github.com/soumt-r)
-- 페이지 디자인: 20기 [wenna](https://github.com/chunzhi23)
+- 디자인: 20기 [wenna](https://github.com/chunzhi23)
+- 프론트앤드 개발: 20기 [wenna](https://github.com/chunzhi23)

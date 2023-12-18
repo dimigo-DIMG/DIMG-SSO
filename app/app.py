@@ -630,7 +630,7 @@ async def account_root(request: Request, user: User = Depends(current_user_optio
             "google_mail": google_mail,
             "microsoft_mail": microsoft_mail,
             "location": "설정",
-            "menu": 2
+            "menu": 2,
         },
     )
 
@@ -761,14 +761,26 @@ async def allow_permission(
     return RedirectResponse(f"/api/sso/token/get?client_id={client_id}")
 
 
+# /manage/dashboard
+@app.get("/manage/dashboard")
+async def manage_dashboard(request: Request):
+    return templates.TemplateResponse("admin/dashboard.html", {"request": request})
+
+
 # error page
 @app.get("/error")
 async def error_root(request: Request):
     return templates.TemplateResponse("error.html", {"request": request})
 
+
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request, exc):
-    return templates.TemplateResponse("error.html", {"request": request, "error": str(exc.detail), "code": exc.status_code})
+    return templates.TemplateResponse(
+        "error.html",
+        {"request": request, "error": str(exc.detail), "code": exc.status_code},
+    )
+
+
 # handle 404
 @app.exception_handler(404)
 async def http_exception_handler(request, exc):
@@ -781,7 +793,12 @@ async def http_exception_handler(request, exc):
 # handle internal server error
 @app.exception_handler(500)
 async def http_exception_handler(request, exc):
-    return templates.TemplateResponse("error.html", {"request": request, "error": "서버 내부 오류가 발생했어요. 관리자에게 문의해주세요.", "code": 500})
+    return templates.TemplateResponse(
+        "error.html",
+        {"request": request, "error": "서버 내부 오류가 발생했어요. 관리자에게 문의해주세요.", "code": 500},
+    )
+
+
 @app.on_event("startup")
 async def on_startup():
     # Not needed if you setup a migration system like Alembic

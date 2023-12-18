@@ -10,15 +10,12 @@
       rel="stylesheet"
       href="{{url_for('static', path='/css/root.general.css')}}"
     />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/root.index.css')}}"
+    />
     <title>DIMG-SSO</title>
   </head>
-  <style>
-    .container {
-      margin-top: 32px;
-      padding-left: 32px;
-      padding-right: 32px;
-    }
-  </style>
   <body>
     <div id="container">
       {% include "jumbotron.html" %}
@@ -28,12 +25,54 @@
           <h1 class="mb-4">DIMG-SSO에 어서오세요!</h1>
           <p class="lead">
             DIMG-SSO는 한국디지털미디어고등학교의 비공식 동아리 DIMG의 서비스를
-            위한 통합 인증 시스템입니다.
-            <br />
+            위한 통합 인증 시스템입니다.<br />
             한국디지털미디어고등학교의 구성원이라면 누구나 DIMG-SSO를 통해
             DIMG의 모든 서비스를 이용할 수 있습니다.
           </p>
-          <p class="lead">DIMG-SSO를 지원하는 서비스는 다음과 같습니다.</p>
+          <div id="usable-service">
+            <span class="lead">DIMG-SSO를 지원하는 서비스는 다음과 같습니다.</span>
+            <div id="service-scrollable">
+              <!-- DIMG 서비스 list -->
+              <div id="dimg-service-list">
+                <span class="service-div-tit d-block">DIMG 서비스</span>
+                {% if False %}
+                <!-- 서비스가 없을 경우 -->
+                <span class="no-service">
+                  아직 등록된 서비스가 없습니다.<br />
+                  가장 먼저 서비스를 등록해보세요!
+                </span>
+                {% else %}
+                <!-- 서비스가 있을 경우 -->
+                {% for _ in range(1) %}
+                <a class="service-item" href="#!">
+                  <img src="{{ url_for('static', path='img/chunzhi23.png')}}" alt="DIMG-PaaS" height="120px">
+                  <span class="d-block">DIMG-PaaS</span>
+                </a>
+                {% endfor %}
+                {% endif %}
+              </div>
+
+              <!-- 등록 서비스 list -->
+              <div id="enrolled-service-list">
+                <span class="service-div-tit d-block">등록된 서비스</span>
+                {% if True %}
+                <!-- 서비스가 없을 경우 -->
+                <span class="no-service">
+                  아직 등록된 서비스가 없습니다.<br />
+                  가장 먼저 서비스를 등록해보세요!
+                </span>
+                {% else %}
+                <!-- 서비스가 있을 경우 -->
+                {% for _ in range(3) %}
+                <a class="service-item" href="#!">
+                  <img src="{{ url_for('static', path='img/logo_asdf.png')}}" alt="Makers" height="120px">
+                  <span class="d-block">Makers</span>
+                </a>
+                {% endfor %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
