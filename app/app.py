@@ -630,7 +630,7 @@ async def account_root(request: Request, user: User = Depends(current_user_optio
             "google_mail": google_mail,
             "microsoft_mail": microsoft_mail,
             "location": "설정",
-            "menu": 2,
+            "menu": 3,
         },
     )
 
