@@ -10,7 +10,7 @@
       rel="stylesheet"
       href="{{url_for('static', path='/css/root.general.css')}}"
     />
-    <title>서비스 연결</title>
+    <title>DIMGSSO - 서비스 연결</title>
   </head>
   <style>
     #main-container {
@@ -70,15 +70,15 @@
       <div id="main-container">
         <div class="section d-flex mb-3">
           <img
+            height="100px"
             width="100px"
-            src="{{ url_for('static',
-          path='/icons/6e0da971957e34d37e7914a2c7b4e015.png') }}"
+            src="{{ service.icon }}"
             alt="서비스 로고"
           />
           <div class="service-spacing">
-            <div id="service-name">DIMG-PaaS</div>
+            <div id="service-name">{{service.name}}</div>
             <div id="service-desc">
-              천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루
+              {{service.description}} 
             </div>
           </div>
         </div>
@@ -86,7 +86,8 @@
           <div id="page-info">
             <div id="page-name">계정 권한 허가</div>
             <div id="page-desc">
-              {{service.name}}({{service.client_id[0:5]}}...) 서비스를 이용하려면 다음 권한이 필요해요.
+              {{service.name}}({{service.client_id[0:5]}}...) 서비스를
+              이용하려면 다음 권한이 필요해요.
             </div>
           </div>
           <div id="page-content">
@@ -96,19 +97,26 @@
               <li>가입된 다른 서비스의 목록을 봅니다.</li>
             </ul>
           </div>
-          
-          <form class="d-grid gap-2 d-md-block pt-3" action="/service/permission/{{service.client_id}}/allow" method="post">
-            <input type="hidden" name="csrf_token" value="{{csrf_token}}">
-            <button class="btn btn-secondary col-2" type="button" id="reject">거부</button>
-            <button class="btn btn-primary col-2" type="submit" id="accept">허가</button>
+
+          <form
+            class="d-grid gap-2 d-md-block pt-3"
+            action="/service/permission/{{service.client_id}}/allow"
+            method="post"
+          >
+            <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
+            <button class="btn btn-secondary col-2" type="button" id="reject">
+              거부
+            </button>
+            <button class="btn btn-primary col-2" type="submit" id="accept">
+              허가
+            </button>
           </form>
         </div>
       </div>
     </div>
     {% include "footer.html" %}
     <script>
-      
-      document.getElementById("reject").addEventListener("click", function() {
+      document.getElementById("reject").addEventListener("click", function () {
         location.href = "{{service.main_page}}";
       });
     </script>

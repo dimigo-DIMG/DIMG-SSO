@@ -1,6 +1,6 @@
 <div class="modify-info">
   <div class="modify-info-title">
-    <i class="bi bi-caret-left"></i>
+    <i class="bi bi-caret-left modify-go-previous" onclick="chkFormChanged(this)"></i>
     이메일 변경
   </div>
   <div class="modify-info-desc mt-">
@@ -14,15 +14,13 @@
   <div class="mb-3">
     <label for="email_formInputPW" class="form-label"
       >비밀번호<span class="input-necessary">*</span></label
-      >
+    >
     <input
       type="password"
       class="form-control form-input"
       id="email_formInputPW"
     />
-    <div class="invalid-feedback">
-      올바른 비밀번호가 아닙니다.
-    </div>
+    <div class="invalid-feedback">올바른 비밀번호가 아닙니다.</div>
   </div>
 </div>
 <div class="d-flex gap-2 mt-auto">

@@ -6,11 +6,18 @@ from app.db import Service, ServiceConnection, AccessToken
 from fastapi import HTTPException
 
 
-async def get_all_services(db: AsyncSession):
-    services = await db.execute(select(Service))
-    services = services.scalars().all()
-    return services
-
+async def get_all_services(db: AsyncSession, seperate_official: bool = False):
+    if not seperate_official:
+        services = await db.execute(select(Service))
+        services = services.scalars().all()
+        return services
+    else:
+        official_services = await db.execute(select(Service).filter(Service.is_official == True))
+        official_services = official_services.scalars().all()
+        unofficial_services = await db.execute(select(Service).filter(Service.is_official == False))
+        unofficial_services = unofficial_services.scalars().all()
+       
+        return official_services, unofficial_services
 
 async def get_service_by_id(db: AsyncSession, service_id: str):
     service: Service = await db.execute(

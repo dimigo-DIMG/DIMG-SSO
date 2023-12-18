@@ -2,74 +2,75 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/interface.general.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/root.general.css')}}"
+    />
+    <title>DIMGSSO - 비밀번호 재설정</title>
   </head>
-  <title>Reset Password</title>
+  <style>
+    .container {
+      margin-top: 32px;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      flex-grow: 1;
+    }
+
+    #form-reset {
+      width: 460px;
+    }
+  </style>
   <body>
-    <div class="container-fluid">
-      <div class="row vh-100">
-        {% include "jumbotron.html" %}
-        <div
-          class="col-md-9"
-          style="display: grid; grid-template-rows: min-content"
-        >
-          {% include "navbar.html" %}
-          <div
-            class="col-xl-5 pb-5"
-            style="justify-self: center; align-self: center"
-          >
+    <div id="container">
+      {% include "jumbotron.html" %}
+      <div id="main-container">
+        {% include "navbar.html" %}
+        <div class="container">
+          <div id="form-reset">
             <h1>Reset Password</h1>
-            <form class="mt-5 pb-5" method="post">
+            <form class="mt-4" method="post">
               <!-- Token input -->
               {% if csrf_token %}
               <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
               {% endif %}
-              <!-- Password input -->
               <input type="hidden" name="token" value="{{ token }}" />
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input
-                  type="password"
-                  id="form1Example2"
-                  name="password"
-                  class="form-control form-control-lg"
-                />
-                <label class="form-label" for="form1Example2">패스워드</label>
-              </div>
-              <div data-mdb-input-init class="form-outline mb-4">
-                <input
-                  type="password"
-                  id="formReEnterPW"
-                  class="form-control form-control-lg"
-                />
-                <label class="form-label" for="formReEnterPW"
-                  >패스워드 재입력</label
+
+              <!-- PW input -->
+              <div class="mb-3">
+                <label for="formInputPassword" class="form-label"
+                  >비밀번호</label
                 >
+                <input
+                  type="password"
+                  name="password"
+                  class="form-control form-input"
+                  id="formInputPassword"
+                />
+              </div>
+
+              <!-- PW re-enter input -->
+              <div class="mb-3">
+                <label for="formReEnterPW" class="form-label"
+                  >비밀번호 재입력</label
+                >
+                <input
+                  type="password"
+                  class="form-control form-input"
+                  id="formReEnterPW"
+                />
               </div>
 
               <!-- Submit button -->
-              <div class="row m-0" >
-                <!--<a
-                  class="btn btn-primary col-md"
-                  type="button"
-                  data-mdb-ripple-init
-                  style="padding: 0.6rem 1.5rem; font-size: 12pt"
-                  href="#!"
-                >
-                  <i class="fas fa-check"></i> 전송
-                </a>-->
-                <a
-                  class="btn btn-secondary col-md"
-                  type="button"
-                  data-mdb-ripple-init
-                  style="padding: 0.6rem 1.5rem; font-size: 12pt"
-                  href="/account/login"
-                >
-                  <i class="fas fa-angles-left"></i> Login
-                </a>
-                <div class="col-md-1"></div>
-                <button type="submit" class="btn btn-primary col-md" style="padding: 0.6rem 1.5rem; font-size: 12pt">
-                  <i class="fas fa-check"></i> 전송
+              <div class="d-flex gap-2">
+                <button class="col form-input invisible" type="button"></button>
+                <button type="submit" class="btn btn-primary col form-input">
+                  전송
                 </button>
-                
               </div>
             </form>
           </div>
@@ -79,9 +80,10 @@
     {% include "footer.html" %}
     <script>
       // check if password and re-entered password are the same
-      const pw = document.getElementById("form1Example2");
+      const pw = document.getElementById("formInputPassword");
       const rePw = document.getElementById("formReEnterPW");
       const submitBtn = document.querySelector("button[type=submit]");
+
       const pwCheck = () => {
         if (pw.value != rePw.value) {
           submitBtn.disabled = true;
@@ -91,23 +93,21 @@
           rePw.setCustomValidity("");
         }
       };
+
       pw.addEventListener("change", pwCheck);
       rePw.addEventListener("keyup", pwCheck);
 
       // submit button listener
-
-      document.querySelector("form").addEventListener("submit", (e) => {
+      const formNode = document.querySelector("#form-reset > form");
+      formNode.addEventListener("submit", (e) => {
         e.preventDefault();
         // check if password and re-enter password are same
-        if (
-          document.querySelector("#form1Example2").value !=
-          document.querySelector("#formReEnterPW").value
-        ) {
+        if (pw.value != rePw.value) {
           alert("패스워드가 일치하지 않습니다.");
           return;
         }
         // submit form
-        document.querySelector("form").submit();
+        formNode.submit();
       });
     </script>
   </body>

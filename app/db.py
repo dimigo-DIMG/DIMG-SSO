@@ -159,6 +159,35 @@ class AccessToken(Base):
         single_parent=True,
     )
 
+class Statistic(Base):
+    __tablename__ = "statistics"
+
+    """
+    Statistics for services
+
+    date: Date ( unique identifier, primary key )
+    user_count: Number of users
+
+    dimigo_user_count: Number of dimigo users 
+    expired_user_count: Number of expired users
+
+    official_service_count: Number of official services
+    unofficial_service_count: Number of unofficial services
+
+    login_count: Number of logins
+    failed_login_count: Number of failed logins
+    
+    """
+    date = Column(Date, primary_key=True, index=True)
+    user_count = Column(Integer)
+    dimigo_user_count = Column(Integer)
+    expired_user_count = Column(Integer)
+    official_service_count = Column(Integer)
+    unofficial_service_count = Column(Integer)
+
+    login_count = Column(Integer)
+    failed_login_count = Column(Integer)
+
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)

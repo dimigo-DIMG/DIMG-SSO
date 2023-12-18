@@ -1,10 +1,34 @@
 <div id="email-editable-area" class="profile-area">
   {% if True %}
   <!-- 이메일 입력 화면 -->
-  {% include "account/modify-email_email.html" %} 
+  {% include "account/modify-email_email.html" %}
   
   {% else %}
   <!-- 결과 화면 출력 화면 -->
-  {% include "account/modify-email_result.html" %} 
+  {% include "account/modify-email_result.html" %}
   {% endif %}
 </div>
+<script type="text/javascript">
+  const chkFormChanged = (node) => {
+    let is_changed = false;
+
+    const email_form = document.getElementById("email_formInputEmail").value;
+    if (email_form) is_changed = true;
+
+    const pw_form = document.getElementById("email_formInputPW").value;
+    if (pw_form) is_changed = true;
+
+    if (is_changed) {
+      const confirmation = confirm(
+        "이 페이지를 나가시겠습니까? 진행 사항이 저장되지 않을 수 있습니다."
+      );
+
+      if (!confirmation) {
+        // User chose to stay on the page
+        return;
+      }
+    }
+    // Continue with navigating to the previous page
+    console.log("Go to previous page");
+  };
+</script>

@@ -1,5 +1,5 @@
 .section-item {
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .service-icon {
@@ -55,20 +55,6 @@
 
 @media (max-width: 767.98px) {
   /* Mobile Styles */
-  #container {
-    margin: 0 20px;
-    padding-top: 100px;
-  }
-
-  #page-info,
-  .section-item {
-    width: 100%;
-  }
-
-  #page-info {
-    text-align: center;
-  }
-
   i.mobile-center-yes {
     position: absolute;
     top: calc(50% - 3px);
@@ -100,9 +86,7 @@
 
 @media (min-width: 768px) {
   /* Desktop and Tablet Styles */
-
   .section-item {
-    width: 480px;
     display: grid;
     grid-template-columns: 80px auto;
   }

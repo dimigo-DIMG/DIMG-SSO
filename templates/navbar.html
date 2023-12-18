@@ -43,6 +43,11 @@
         <li>
           <a class="dropdown-item" href="/account">프로필 및 설정</a>
         </li>
+        {% if user.is_superuser %}
+        <li>
+          <a class="dropdown-item" href="/manage">관리자 페이지</a>
+        </li>
+        {% endif %}
         <li>
           <hr class="dropdown-divider" />
         </li>
