@@ -18,7 +18,8 @@
       rel="stylesheet"
       href="{{url_for('static', path='/css/account.media.css')}}"
     />
-    <title>설정</title>
+    <title>DIMGSSO - 설정</title>
+  </head>
   <body>
     <div id="container">
       {% include "jumbotron.html" %}
@@ -28,33 +29,25 @@
         <div class="container">
           <div id="user-profile-section" class="container-section">
             {% include "account/section-profile.html" %}
-          <div id="modify-section" class="container-section focused">
-            {% if menu==0 %}
-            <!-- Default -->
-            <div id="default-editable-area" class="profile-area">
-              <span class="logo-txt-main">DIMG</span>
+            <div id="modify-section" class="container-section focused">
+              {% if menu==0 %}
+              <!-- Default -->
+              <div id="default-editable-area" class="profile-area">
+                <span class="logo-txt-main">DIMG</span>
+              </div>
+
+              {% elif menu==1 %}
+              <!-- username & etc.  -->
+              {% include "account/modify-user.html" %} {% elif menu==2 %}
+              <!-- email  -->
+              {% include "account/modify-email.html" %} {% elif menu==3 %}
+              <!-- password -->
+              {% include "account/modify-pw.html" %} {% elif menu==4 %}
+              <!-- Google -->
+              {% include "account/modify-google.html" %} {% elif menu==5 %}
+              <!-- Microsoft -->
+              {% include "account/modify-microsoft.html" %} {% endif %}
             </div>
-
-            {% elif menu==1 %}
-            <!-- username & etc.  -->
-            {% include "account/modify-user.html" %}
-            
-            {% elif menu==2 %}
-            <!-- email  -->
-            {% include "account/modify-email.html" %}
-            
-            {% elif menu==3 %}
-            <!-- password -->
-            {% include "account/modify-pw.html" %}
-
-            {% elif menu==4 %}
-            <!-- Google -->
-            {% include "account/modify-google.html" %}
-            
-            {% elif menu==5 %}
-            <!-- Microsoft -->
-            {% include "account/modify-microsoft.html" %}
-            {% endif %}
           </div>
         </div>
       </div>

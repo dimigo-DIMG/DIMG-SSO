@@ -18,7 +18,7 @@
       type="text/javascript"
       src="https://code.jquery.com/jquery-3.6.0.min.js"
     ></script>
-    <title>DIMG-SSO 관리 - 서비스 추가</title>
+    <title>DIMGSSO - 관리 · 서비스 · 추가</title>
   </head>
   <body>
     <!-- Cover -->
@@ -75,7 +75,6 @@
             <div id="show-service-out" class="show-item">
               <label>서비스 탈퇴 페이지</label>
               <span id="outputUnregisterUrl"></span>
-    
             </div>
 
             <!-- 메인 페이지 div -->
@@ -116,7 +115,9 @@
       <div id="service-add-notification" class="cover-item">
         <div class="cover-item-info mb-4">
           <div class="cover-item-name">서비스가 추가되었습니다!</div>
-          <div class="cover-item-desc">서비스 이름: <span id="outputServiceName"></span></div>
+          <div class="cover-item-desc">
+            서비스 이름: <span id="outputServiceName"></span>
+          </div>
           <div id="form-service-name" class="form-item">
             <label for="inputServiceName">Client ID</label>
             <input
@@ -141,8 +142,7 @@
             <span>
               Client Secret은 한 번만 보여지므로 분실하지 않도록 주의해주세요.
             </span>
-          </div>  
-
+          </div>
         </div>
         <div class="cover-item-container">
           <!-- submit 버튼 -->
@@ -216,7 +216,6 @@
               placeholder="서비스 이름"
             />
             <!-- 복사 -->
-
           </div>
 
           <!-- 서비스 공식/비공식 여부 div -->
@@ -238,7 +237,11 @@
           <!-- 서비스 설명 div -->
           <div id="form-service-desc" class="form-item">
             <label for="inputServiceDesc">서비스 설명</label>
-            <textarea id="inputServiceDesc" class="form-control" name="description"></textarea>
+            <textarea
+              id="inputServiceDesc"
+              class="form-control"
+              name="description"
+            ></textarea>
           </div>
 
           <!-- 서비스 로고 div -->
@@ -331,14 +334,18 @@
 
         <!-- submit 버튼 -->
         <div class="d-grid gap-2 my-5">
-          <button class="btn btn-primary" type="button" id="add-button">추가</button>
+          <button class="btn btn-primary" type="button" id="add-button">
+            추가
+          </button>
         </div>
       </div>
     </div>
     {% include "footer.html" %}
     <script type="text/javascript">
       let service_add_confirm = document.getElementById("service-add-confirm");
-      let service_add_notification = document.getElementById("service-add-notification");
+      let service_add_notification = document.getElementById(
+        "service-add-notification"
+      );
       let ico_previous = document.getElementById("ico-href-previous");
       ico_previous.addEventListener("click", () => history.back());
 
@@ -356,78 +363,107 @@
         let cover = document.getElementById("cover");
 
         $("#outputServiceName").text($("#inputServiceName").val());
-        $("#outputIsOfficial").text(document.getElementById("inputIsOfficial").checked ? "공식" : "비공식");
-        $("#outputDescription").text(document.getElementById("inputServiceDesc").value);
-        $("#outputLoginCallback").text(document.getElementById("inputLoginCallback").value);
-        $("#outputUnregisterUrl").text(document.getElementById("inputServiceOut").value);
-        $("#outputMainPage").text(document.getElementById("inputMainPage").value);
-        $("#outputScopes").text(document.getElementById("inputServiceScope").value);
-        $("#outputRegisterCooldown").text(document.getElementById("inputReRegisterDays").value);
+        $("#outputIsOfficial").text(
+          document.getElementById("inputIsOfficial").checked ? "공식" : "비공식"
+        );
+        $("#outputDescription").text(
+          document.getElementById("inputServiceDesc").value
+        );
+        $("#outputLoginCallback").text(
+          document.getElementById("inputLoginCallback").value
+        );
+        $("#outputUnregisterUrl").text(
+          document.getElementById("inputServiceOut").value
+        );
+        $("#outputMainPage").text(
+          document.getElementById("inputMainPage").value
+        );
+        $("#outputScopes").text(
+          document.getElementById("inputServiceScope").value
+        );
+        $("#outputRegisterCooldown").text(
+          document.getElementById("inputReRegisterDays").value
+        );
 
         cover.style.display = "flex";
         service_add_confirm.style.display = "block";
-        
       });
       let confirm_button = document.getElementsByClassName("btn-primary")[0];
-        let cancel_button = document.getElementsByClassName("btn-secondary")[0];
-        
-        confirm_button.addEventListener("click", () => {
-          service_add_confirm.style.display = "none";
-          let fd = new FormData();
-          
-          fd.append("name", document.getElementById("inputServiceName").value);
-          fd.append("csrf_token", "{{ csrf_token }}");
-          fd.append("is_official", document.getElementById("inputIsOfficial").checked);
-          fd.append("description", document.getElementById("inputServiceDesc").value);
-          fd.append("login_callback", document.getElementById("inputLoginCallback").value);
-          fd.append("unregister_url", document.getElementById("inputServiceOut").value);
-          fd.append("main_page", document.getElementById("inputMainPage").value);
-          fd.append("scopes", document.getElementById("inputServiceScope").value);
-          fd.append("register_cooldown", document.getElementById("inputReRegisterDays").value);
+      let cancel_button = document.getElementsByClassName("btn-secondary")[0];
 
-          file = document.getElementById("inputServiceLogo").files[0];
-          if (file) {
-            fd.append("logo", file);
-          }
-          // prevent multiple clicks
-          confirm_button.disabled = true;
-          
-          $.ajax({
-            type: "POST",
-            url: "/manage/services/create",
-            enctype:'multipart/form-data',
-            processData:false,
-            contentType:false,
-            cache:false,
-            data: fd,
-            async: false,
-            success: function (response) {
-              console.log(response);
+      confirm_button.addEventListener("click", () => {
+        service_add_confirm.style.display = "none";
+        let fd = new FormData();
 
-              service_add_notification.style.display = "block";
-              document.getElementById("outputClientID").value = response.client_id;
-              document.getElementById("outputClientSecret").value = response.client_secret;
-              let ok_button = document.getElementsByClassName("btn-primary")[1];
-              // unblock on beforeunload
-              window.removeEventListener("beforeunload", unload_blocker);
-              ok_button.addEventListener("click", () => {
-                location.href = "/manage/services";
-              });
-              
-            },
-            error: function (response) {
-              console.log(response);
-              alert("서비스 추가에 실패했습니다.");
-              cover.style.display = "none";
-              confirm_button.disabled = false;
-            }
-          })
+        fd.append("name", document.getElementById("inputServiceName").value);
+        fd.append("csrf_token", "{{ csrf_token }}");
+        fd.append(
+          "is_official",
+          document.getElementById("inputIsOfficial").checked
+        );
+        fd.append(
+          "description",
+          document.getElementById("inputServiceDesc").value
+        );
+        fd.append(
+          "login_callback",
+          document.getElementById("inputLoginCallback").value
+        );
+        fd.append(
+          "unregister_url",
+          document.getElementById("inputServiceOut").value
+        );
+        fd.append("main_page", document.getElementById("inputMainPage").value);
+        fd.append("scopes", document.getElementById("inputServiceScope").value);
+        fd.append(
+          "register_cooldown",
+          document.getElementById("inputReRegisterDays").value
+        );
+
+        file = document.getElementById("inputServiceLogo").files[0];
+        if (file) {
+          fd.append("logo", file);
+        }
+        // prevent multiple clicks
+        confirm_button.disabled = true;
+
+        $.ajax({
+          type: "POST",
+          url: "/manage/services/create",
+          enctype: "multipart/form-data",
+          processData: false,
+          contentType: false,
+          cache: false,
+          data: fd,
+          async: false,
+          success: function (response) {
+            console.log(response);
+
+            service_add_notification.style.display = "block";
+            document.getElementById("outputClientID").value =
+              response.client_id;
+            document.getElementById("outputClientSecret").value =
+              response.client_secret;
+            let ok_button = document.getElementsByClassName("btn-primary")[1];
+            // unblock on beforeunload
+            window.removeEventListener("beforeunload", unload_blocker);
+            ok_button.addEventListener("click", () => {
+              location.href = "/manage/services";
+            });
+          },
+          error: function (response) {
+            console.log(response);
+            alert("서비스 추가에 실패했습니다.");
+            cover.style.display = "none";
+            confirm_button.disabled = false;
+          },
         });
+      });
 
-        cancel_button.addEventListener("click", () => {
-          service_add_confirm.style.display = "none";
-          cover.style.display = "none";
-        });
+      cancel_button.addEventListener("click", () => {
+        service_add_confirm.style.display = "none";
+        cover.style.display = "none";
+      });
     </script>
   </body>
 </html>
