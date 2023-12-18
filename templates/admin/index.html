@@ -1,27 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/general/bootstrap.min.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/general/styles.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/fonts/Pretendard/pretendard.css')}}"
-    />
+    {% include "header.html" %}
     <link
       rel="stylesheet"
       href="{{url_for('static', path='/css/dev.index.css')}}"
@@ -66,15 +46,14 @@
           </div>
           <div class="label">공지사항</div>
         </a>
-        
-        <!-- 광고 버튼 --> 
+
+        <!-- 광고 버튼 -->
         <a class="section-btn disabled">
           <div class="big-circle">
             <i class="bi bi-badge-ad"></i>
           </div>
           <div class="label">광고</div>
         </a>
-      
 
         <!-- 질의응답 버튼 -->
         <a class="section-btn disabled">
@@ -85,10 +64,7 @@
         </a>
       </div>
     </div>
-    <script
-      type="text/javascript"
-      src="{{ url_for('static', path='/js/bootstrap.bundle.min.js') }}"
-    ></script>
+    {% include "footer.html" %}
     <script type="text/javascript">
       let disabled_circles = document.getElementsByClassName(
         "section-btn disabled"
