@@ -156,6 +156,7 @@
                   class="btn-check"
                   name="dmy-user"
                   id="btnUser-day"
+                  value="day"
                   autocomplete="off"
                   checked
                 />
@@ -168,6 +169,7 @@
                   class="btn-check"
                   name="dmy-user"
                   id="btnUser-month"
+                  value="month"
                   autocomplete="off"
                 />
                 <label class="btn btn-outline-primary" for="btnUser-month"
@@ -179,6 +181,7 @@
                   class="btn-check"
                   name="dmy-user"
                   id="btnUser-year"
+                  value="year"
                   autocomplete="off"
                 />
                 <label class="btn btn-outline-primary" for="btnUser-year"
@@ -200,6 +203,7 @@
                   class="btn-check"
                   name="dmy-login"
                   id="btnLogin-day"
+                  value="day"
                   autocomplete="off"
                   checked
                 />
@@ -212,6 +216,7 @@
                   class="btn-check"
                   name="dmy-login"
                   id="btnLogin-month"
+                  value="month"
                   autocomplete="off"
                 />
                 <label class="btn btn-outline-primary" for="btnLogin-month"
@@ -223,6 +228,7 @@
                   class="btn-check"
                   name="dmy-login"
                   id="btnLogin-year"
+                  value="year"
                   autocomplete="off"
                 />
                 <label class="btn btn-outline-primary" for="btnLogin-year"
@@ -235,15 +241,9 @@
       </div>
     </div>
     {% include "footer.html" %}
-    <script type="text/javascript">
-      /* 대시보드 정보 받아오기 */      
-      const stat = [{% for statistic in statistics %}
-        { date: "{{ statistic.date }}", user_count: {{ statistic.user_count }}, enrolled_user_count: {{ statistic.dimigo_user_count }}, graduated_user_count: {{ statistic.expired_user_count }}, login_count: {{ statistic.login_count }}, failed_login_count: {{ statistic.failed_login_count }}, official_service_count: {{ statistic.official_service_count }}, unofficial_service_count: {{ statistic.unofficial_service_count }} },{% endfor %}
-      ];
-    </script>
     <script
       type="text/javascript"
-      src="{{ url_for('static', path='js/dashboard.chart.js') }}"
+      src="{{ url_for('static', path='js/dashboard.chart.init.js') }}"
     ></script>
     <script
       type="text/javascript"
@@ -255,14 +255,19 @@
     ></script>
     <script
       type="text/javascript"
-      src="{{ url_for('static', path='js/dashboard.preprocess.js') }}"
+      src="{{ url_for('static', path='js/dashboard.chart.preprocess.js') }}"
     ></script>
     <script
       type="text/javascript"
-      src="{{ url_for('static', path='js/dashboard.initial.js') }}"
+      src="{{ url_for('static', path='js/dashboard.chart.custom.js') }}"
     ></script>
-    <script type="text/javascript">
-
-    </script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='js/dashboard.chart.update.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='js/dashboard.main.js') }}"
+    ></script>
   </body>
 </html>

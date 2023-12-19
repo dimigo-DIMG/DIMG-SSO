@@ -1,11 +1,12 @@
-const changeNode = (id, txt, className) => {
-  document.getElementById(id).innerText = txt;
+function changeNode(id, txt, className) {
+  const node = document.getElementById(id);
+  node.innerText = txt;
   if (className) {
-    document.getElementById(id).classList.add(className);
+    node.classList.add(className);
   }
 }
 
-const incrementalTxt = (val) => {
+function incrementalTxt(val) {
   if (val < 0) {
     return "minus";
   } else if (val > 0) {
@@ -15,7 +16,7 @@ const incrementalTxt = (val) => {
   }
 }
 
-(function () {
+function initialStatOverall(stat) {
   /* 종합 - 사용자 수 값 */
   const user_cnt = stat[stat.length - 1]["user_count"];
   const enrol_user_cnt = stat[stat.length - 1]["enrolled_user_count"];
@@ -46,7 +47,8 @@ const incrementalTxt = (val) => {
     const user_cnt_yest = stat[stat.length - 2]["user_count"];
     const enrol_user_cnt_yest = stat[stat.length - 2]["enrolled_user_count"];
     const grad_user_cnt_yest = stat[stat.length - 2]["graduated_user_count"];
-    const guest_cnt_yest = user_cnt_yest - (enrol_user_cnt_yest + grad_user_cnt_yest);
+    const guest_cnt_yest =
+      user_cnt_yest - (enrol_user_cnt_yest + grad_user_cnt_yest);
 
     user_change = user_cnt - user_cnt_yest;
     enrol_user_change = enrol_user_cnt - enrol_user_cnt_yest;
@@ -55,9 +57,21 @@ const incrementalTxt = (val) => {
   }
 
   changeNode("user-change", Math.abs(user_change), incrementalTxt(user_change));
-  changeNode("enrol-change", Math.abs(enrol_user_change), incrementalTxt(enrol_user_change));
-  changeNode("grad-change", Math.abs(grad_user_change), incrementalTxt(grad_user_change));
-  changeNode("guest-change", Math.abs(guest_change), incrementalTxt(guest_change));
+  changeNode(
+    "enrol-change",
+    Math.abs(enrol_user_change),
+    incrementalTxt(enrol_user_change)
+  );
+  changeNode(
+    "grad-change",
+    Math.abs(grad_user_change),
+    incrementalTxt(grad_user_change)
+  );
+  changeNode(
+    "guest-change",
+    Math.abs(guest_change),
+    incrementalTxt(guest_change)
+  );
 
   /* 종합 - 서비스 수 변동 */
   let servi_change = 0;
@@ -66,7 +80,8 @@ const incrementalTxt = (val) => {
 
   if (stat.length !== 1) {
     const offi_servi_cnt_yest = stat[stat.length - 1]["official_service_count"];
-    const unoffi_servi_cnt_yest = stat[stat.length - 1]["unofficial_service_count"];
+    const unoffi_servi_cnt_yest =
+      stat[stat.length - 1]["unofficial_service_count"];
     const servi_cnt_yest = offi_servi_cnt_yest + unoffi_servi_cnt_yest;
 
     servi_change = servi_cnt - servi_cnt_yest;
@@ -74,7 +89,19 @@ const incrementalTxt = (val) => {
     unoffi_servi_change = unoffi_servi_cnt - unoffi_servi_cnt_yest;
   }
 
-  changeNode("service-change", Math.abs(servi_change), incrementalTxt(servi_change));
-  changeNode("offi-change", Math.abs(offi_servi_change), incrementalTxt(offi_servi_change));
-  changeNode("unoffi-change", Math.abs(unoffi_servi_change), incrementalTxt(unoffi_servi_change));
-})();
+  changeNode(
+    "service-change",
+    Math.abs(servi_change),
+    incrementalTxt(servi_change)
+  );
+  changeNode(
+    "offi-change",
+    Math.abs(offi_servi_change),
+    incrementalTxt(offi_servi_change)
+  );
+  changeNode(
+    "unoffi-change",
+    Math.abs(unoffi_servi_change),
+    incrementalTxt(unoffi_servi_change)
+  );
+}

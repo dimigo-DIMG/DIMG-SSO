@@ -16,9 +16,9 @@ async def update_statistics():
       statics = Statistic(
           date=datetime.date.today(),
           user_count= (await db.execute(select(func.count()).select_from(select(User).subquery()))).scalar_one(),
-          
-          dimigo_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == True).subquery()))).scalar_one(),
-          expired_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == False).subquery()))).scalar_one(),
+
+          enrolled_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == True).subquery()))).scalar_one(),
+          graduated_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == False).subquery()))).scalar_one(),
           official_service_count= (await db.execute(select(func.count()).select_from(select(Service).filter(Service.is_official == True).subquery()))).scalar_one(),
           unofficial_service_count= (await db.execute(select(func.count()).select_from(select(Service).filter(Service.is_official == False).subquery()))).scalar_one(),
           login_count=0,
@@ -28,8 +28,8 @@ async def update_statistics():
       await db.commit()
     else:
       statics.user_count = (await db.execute(select(func.count()).select_from(select(User).subquery()))).scalar_one()
-      statics.dimigo_user_count = (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == True).subquery()))).scalar_one()
-      statics.expired_user_count = (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == False).subquery()))).scalar_one()
+      statics.enrolled_user_count = (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == True).subquery()))).scalar_one()
+      statics.graduated_user_count = (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == False).subquery()))).scalar_one()
       statics.official_service_count = (await db.execute(select(func.count()).select_from(select(Service).filter(Service.is_official == True).subquery()))).scalar_one()
       statics.unofficial_service_count = (await db.execute(select(func.count()).select_from(select(Service).filter(Service.is_official == False).subquery()))).scalar_one()
 
@@ -53,8 +53,8 @@ async def add_login_count(db: AsyncSession):
       statics = Statistic(
           date=datetime.date.today(),
           user_count= (await db.execute(select(func.count()).select_from(select(User).subquery()))).scalar_one(),
-          dimigo_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == True).subquery()))).scalar_one(),
-          expired_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == False).subquery()))).scalar_one(),
+          enrolled_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == True).subquery()))).scalar_one(),
+          graduated_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == False).subquery()))).scalar_one(),
           official_service_count= (await db.execute(select(func.count()).select_from(select(Service).filter(Service.is_official == True).subquery()))).scalar_one(),
           unofficial_service_count= (await db.execute(select(func.count()).select_from(select(Service).filter(Service.is_official == False).subquery()))).scalar_one(),
 
@@ -75,8 +75,8 @@ async def add_failed_login_count(db: AsyncSession):
       statics = Statistic(
           date=datetime.date.today(),
           user_count= (await db.execute(select(func.count()).select_from(select(User).subquery()))).scalar_one(),
-          dimigo_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == True).subquery()))).scalar_one(),
-          expired_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == False).subquery()))).scalar_one(),
+          enrolled_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == True).subquery()))).scalar_one(),
+          graduated_user_count= (await db.execute(select(func.count()).select_from(select(User).filter(User.is_dimigo == False).subquery()))).scalar_one(),
           official_service_count= (await db.execute(select(func.count()).select_from(select(Service).filter(Service.is_official == True).subquery()))).scalar_one(),
           unofficial_service_count= (await db.execute(select(func.count()).select_from(select(Service).filter(Service.is_official == False).subquery()))).scalar_one(),
 

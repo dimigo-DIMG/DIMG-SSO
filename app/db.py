@@ -168,8 +168,8 @@ class Statistic(Base):
     date: Date ( unique identifier, primary key )
     user_count: Number of users
 
-    dimigo_user_count: Number of dimigo users 
-    expired_user_count: Number of expired users
+    enrolled_user_count: Number of dimigo users 
+    graduated_user_count: Number of expired users
 
     official_service_count: Number of official services
     unofficial_service_count: Number of unofficial services
@@ -180,8 +180,8 @@ class Statistic(Base):
     """
     date = Column(Date, primary_key=True, index=True)
     user_count = Column(Integer)
-    dimigo_user_count = Column(Integer)
-    expired_user_count = Column(Integer)
+    enrolled_user_count = Column(Integer)
+    graduated_user_count = Column(Integer)
     official_service_count = Column(Integer)
     unofficial_service_count = Column(Integer)
 
