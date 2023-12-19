@@ -1,4 +1,8 @@
-<div class="modify-info">
+<form method="post" action="/account/modify/email">
+  {% if csrf_token %}
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+  {% endif %}
+  <div class="modify-info">
   <div class="modify-info-title">
     <i class="bi bi-caret-left modify-go-previous" onclick="chkFormChanged(this)"></i>
     이메일
@@ -40,3 +44,4 @@
   <button class="col btn btn-secondary form-input">취소</button>
   <button type="submit" class="col btn btn-primary form-input">다음</button>
 </div>
+</form>

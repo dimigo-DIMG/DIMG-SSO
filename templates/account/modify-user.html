@@ -1,4 +1,8 @@
-<div id="usernameEtc-editable-area" class="profile-area">
+
+<form action="/modify/profile" method="post" id="usernameEtc-editable-area" class="profile-area">
+  {% if csrf_token %}
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+  {% endif %}
   <div class="modify-info">
     <div class="modify-info-title">
       <i
@@ -22,6 +26,7 @@
         class="form-control form-input"
         id="user_formInputUsername"
         value="{{ user.nickname or "" }}"
+        name="nickname"
       />
       <div class="form-input-conditions" class="form-text">
         <ul>
@@ -36,11 +41,12 @@
         class="form-control form-input"
         id="user_formInputBirth"
         value="{{ user.birthday }}"
+        name="birthday"
       />
     </div>
     <div class="mb-auto">
       <label for="user_formInputGender" class="form-label">성별</label>
-      <select id="user_formInputGender" class="form-select form-input">
+      <select id="user_formInputGender" class="form-select form-input" name="gender">
         <option value="male">남성</option>
         <option value="female">여성</option>
         <option value="no">선택하지 않음</option>
@@ -51,7 +57,7 @@
     <button class="col btn btn-secondary form-input">취소</button>
     <button type="submit" class="col btn btn-primary form-input">저장</button>
   </div>
-</div>
+</form>
 <script type="text/javascript">
   (function () {
     const userGender = "{{ user.gender }}";
@@ -64,6 +70,7 @@
       }
     }
   });
+
 
   const chkFormChanged = (node) => {
     let is_changed = false;
@@ -90,6 +97,6 @@
       }
     }
     // Continue with navigating to the previous page
-    console.log("Go to previous page");
+    location.href = "/account";
   };
 </script>
