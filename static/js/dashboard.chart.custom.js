@@ -1,7 +1,6 @@
 function initialStatDetail() {
   /* 사용자 수 현황 chart */
-  const userChart = new CustomChart("user-stackedBar");
-  const chartPara_user = getParameterForChart(statistics.day, "bar", {
+  const user_para = {
     dataset_info_list: [
       {
         label: "재학생",
@@ -16,17 +15,19 @@ function initialStatDetail() {
       { label: "일반", rgb: "255, 199, 199", data_key: "guest_count" },
     ],
     stack_bool: true,
-    title: "일별 사용자 수 현황",
+    title: "사용자 수 현황",
     x_label: "시간(일)",
     y_label: "사용자 수(명)",
     type: "bar",
-    beginAtZero: true,
-  });
+    beginAtZero: false,
+  };
+
+  const userChart = new CustomChart("user-stackedBar");
+  const chartPara_user = getParameterForChart(statistics.day, "day", user_para);
   userChart.drawChart(chartPara_user);
 
   /* 로그인 시도 횟수 현황 chart */
-  const loginChart = new CustomChart("login-stackedBar");
-  const chartPara_login = getParameterForChart(statistics.day, "bar", {
+  const login_para = {
     dataset_info_list: [
       {
         label: "성공",
@@ -44,7 +45,16 @@ function initialStatDetail() {
     x_label: "시간(일)",
     y_label: "시도 횟수(번)",
     type: "bar",
-    beginAtZero: true,
-  });
+    beginAtZero: false,
+  };
+
+  const loginChart = new CustomChart("login-stackedBar");
+  const chartPara_login = getParameterForChart(
+    statistics.day, "day", login_para
+  );
   loginChart.drawChart(chartPara_login);
+
+  /* 일월년 radio로 chart 변경 */
+  changeChartRadio("dmy-user", userChart, user_para);
+  changeChartRadio("dmy-login", loginChart, login_para);
 }
