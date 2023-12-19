@@ -821,15 +821,20 @@ async def allow_permission(
 
 # /manage/dashboard
 @app.get("/manage/dashboard")
-async def manage_dashboard(request: Request, db: AsyncSession = Depends(get_async_session)):
-    statistics = await get_all_statistics(db)
-    return templates.TemplateResponse("admin/dashboard.html", {"request": request, "statistics": statistics })
-
+async def manage_dashboard(request: Request):
+    return templates.TemplateResponse("admin/dashboard.html", {"request": request})
 
 # error page
 @app.get("/error")
 async def error_root(request: Request):
     return templates.TemplateResponse("error.html", {"request": request})
+
+
+@app.get("/api/dashboard")
+async def api_dashboard(
+    db=Depends(get_async_session), user=Depends(current_user_admin)):
+    statistics = await get_all_statistics(db)
+    return statistics
 
 
 @app.exception_handler(StarletteHTTPException)
