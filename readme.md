@@ -12,18 +12,21 @@
 ### 2. 목표 기능 (route)
 
 - [x] `/` - 메인 페이지
-- [ ] `/account` - 계정 페이지
+- [x] `/account` - 계정 페이지
   - [x] `/account/register` - 회원가입
   - [x] `/account/login` - 로그인
   - [x] `/account/logout` - 로그아웃
-  - [ ] `/account/email` - 이메일 변경 (프로필 메뉴)
-  - [ ] `/account/password` - 비밀번호 변경 (프로필 메뉴)
-  - [x] `/account/password/forgot` - 비밀번호 찾기
+  - [x] '/account/modify' - 계정 정보 수정 (전체)
+    - [X] `/account/modify/email` - 이메일 변경 (프로필 메뉴)
+    - [X] `/account/modify/password` - 비밀번호 변경 (프로필 메뉴)
+    - [X] `/account/modify/profile` - 프로필 변경 (프로필 메뉴)
+  - [x] `/account/forgot-password` - 비밀번호 찾기 (인증 전)
+  - [x] `/account/reset-password` - 비밀번호 재설정 (인증 후)
   - [x] `/account/verify` - 이메일 인증
   - [ ] `/account/delete` - 계정 삭제
   
 - [x] `/manage` - 관리자 페이지
-  - [ ] `/manage/dashboard` - 대시보드
+  - [X] `/manage/dashboard` - 대시보드
   - [ ] `/manage/users` - 사용자 관리
   - [ ] `/manage/users/<user_id>` - 사용자 관리
     - [ ] `/manage/users/<user_id>/edit` - 사용자 수정
@@ -37,12 +40,12 @@
   - [ ] `/manage/announcements` - 공지사항 관리
   - [ ] `/manage/feedbacks` - 피드백 관리
 
-- [ ] `/service` - 서비스 (전체)
-  - [ ] `/service/permission` - 서비스 연결 페이지
+- [ ] `/service` - 서비스 (유저)
+  - [X] `/service/permission` - 서비스 연결 페이지
 
 - [ ] `/api` - API (전체)
   - [ ] `/api/sso` - SSO API (전체)
-    - [ ] `/api/sso/token/get` - 토큰 발급
+    - [X] `/api/sso/token/get` - 토큰 발급
     - [ ] `/api/sso/token/info` - 토큰 정보
   
 ### 3. 기술 스택
