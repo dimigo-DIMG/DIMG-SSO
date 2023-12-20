@@ -1,0 +1,128 @@
+/* General */
+.form-control.no-border {
+  border: 0;
+  box-shadow: none;
+}
+
+/* Individual */
+.container {
+  padding-top: 40px;
+}
+
+.container-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  background-color: #fff;
+}
+
+.dropdown-toggle,
+.dropdown-menu-tit {
+  color: #000;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.dropdown-menu-tit {
+  padding: var(--bs-dropdown-item-padding-y)
+    var(--bs-dropdown-item-padding-x);
+}
+
+.service-select {
+  padding: 5px;
+}
+
+.service-cnt {
+  white-space: nowrap;
+}
+
+.service-cnt > span {
+  color: #0d6efd;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.service-search {
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  display: flex;
+  align-items: center;
+}
+
+.service-search > i {
+  padding: .375rem .75rem;
+}
+
+/* 서비스 리스트 item */
+.service-ico {
+  margin-right: 10px;
+  border: 1px solid #888;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.service-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.service-info-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.service-info-tit {
+  color: #000;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.service-info-desc {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.is_official {
+  padding: 0 8px;
+  border-radius: 10px;
+  height: 20px;
+  color: #FFF;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -1.6px;
+  background: #54AEB6;
+}
+
+.service-menu {
+  padding: 0 15px;
+  border-left: 1px solid #eee;
+  width: 140px;
+  display: flex;
+  flex-direction: column;
+}
+
+.joined-label {
+  color: #888;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+@media (max-width: 767.98px) {
+  /* Mobile Styles */
+  .service-ico {
+    display: none;
+  }
+}

@@ -8,11 +8,11 @@
     />
     <link
       rel="stylesheet"
-      href="{{url_for('static', path='/css/dev.service.media.css')}}"
+      href="{{url_for('static', path='/css/dev.media.css')}}"
     />
     <link
       rel="stylesheet"
-      href="{{url_for('static', path='/css/dev.service.dashboard.css')}}"
+      href="{{url_for('static', path='/css/dev.dashboard.index.css')}}"
     />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>DIMGSSO - 관리 · 대시보드</title>
@@ -43,8 +43,8 @@
                   <div class="info-desc">
                     <div class="info-desc-title">사용자 수</div>
                     <div class="info-desc-number">
-                      <span class="num-total">823</span>
-                      <span class="num-change plus">53</span>
+                      <span id="user-total" class="num-total"></span>
+                      <span id="user-change" class="num-change"></span>
                     </div>
                   </div>
                 </div>
@@ -56,8 +56,8 @@
                   <div class="info-desc">
                     <div class="info-desc-title">재학생</div>
                     <div class="info-desc-number">
-                      <span class="num-total">641</span>
-                      <span class="num-change minus">129</span>
+                      <span id="enrol-total" class="num-total"></span>
+                      <span id="enrol-change" class="num-change"></span>
                     </div>
                   </div>
                 </div>
@@ -70,8 +70,22 @@
                   <div class="info-desc">
                     <div class="info-desc-title">졸업생</div>
                     <div class="info-desc-number">
-                      <span class="num-total">182</span>
-                      <span class="num-change plus">182</span>
+                      <span id="grad-total" class="num-total"></span>
+                      <span id="grad-change" class="num-change"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="division-dash"></div>
+
+                <!-- 일반 사용자 -->
+                <div id="guest-info" class="info-block">
+                  <div class="info-icon"><i class="bi bi-person"></i></div>
+                  <div class="info-desc">
+                    <div class="info-desc-title">일반</div>
+                    <div class="info-desc-number">
+                      <span id="guest-total" class="num-total"></span>
+                      <span id="guest-change" class="num-change"></span>
                     </div>
                   </div>
                 </div>
@@ -89,8 +103,8 @@
                   <div class="info-desc">
                     <div class="info-desc-title">서비스 수</div>
                     <div class="info-desc-number">
-                      <span class="num-total">3</span>
-                      <span class="num-change unchanged">0</span>
+                      <span id="service-total" class="num-total"></span>
+                      <span id="service-change" class="num-change"></span>
                     </div>
                   </div>
                 </div>
@@ -102,8 +116,8 @@
                   <div class="info-desc">
                     <div class="info-desc-title">공식</div>
                     <div class="info-desc-number">
-                      <span class="num-total">3</span>
-                      <span class="num-change unchanged">0</span>
+                      <span id="offi-total" class="num-total"></span>
+                      <span id="offi-change" class="num-change"></span>
                     </div>
                   </div>
                 </div>
@@ -116,8 +130,8 @@
                   <div class="info-desc">
                     <div class="info-desc-title">비공식</div>
                     <div class="info-desc-number">
-                      <span class="num-total">0</span>
-                      <span class="num-change unchanged">0</span>
+                      <span id="unoffi-total" class="num-total"></span>
+                      <span id="unoffi-change" class="num-change"></span>
                     </div>
                   </div>
                 </div>
@@ -142,6 +156,7 @@
                   class="btn-check"
                   name="dmy-user"
                   id="btnUser-day"
+                  value="day"
                   autocomplete="off"
                   checked
                 />
@@ -154,6 +169,7 @@
                   class="btn-check"
                   name="dmy-user"
                   id="btnUser-month"
+                  value="month"
                   autocomplete="off"
                 />
                 <label class="btn btn-outline-primary" for="btnUser-month"
@@ -165,15 +181,13 @@
                   class="btn-check"
                   name="dmy-user"
                   id="btnUser-year"
+                  value="year"
                   autocomplete="off"
                 />
                 <label class="btn btn-outline-primary" for="btnUser-year"
                   >년</label
                 >
               </div>
-
-              <!-- 해당 chartjs 생성 -->
-              <script src="{{ url_for('static', path='js/chartjs/dashboard.user.js') }}"></script>
             </div>
 
             <!-- 로그인 수 현황 -->
@@ -189,6 +203,7 @@
                   class="btn-check"
                   name="dmy-login"
                   id="btnLogin-day"
+                  value="day"
                   autocomplete="off"
                   checked
                 />
@@ -201,6 +216,7 @@
                   class="btn-check"
                   name="dmy-login"
                   id="btnLogin-month"
+                  value="month"
                   autocomplete="off"
                 />
                 <label class="btn btn-outline-primary" for="btnLogin-month"
@@ -212,28 +228,46 @@
                   class="btn-check"
                   name="dmy-login"
                   id="btnLogin-year"
+                  value="year"
                   autocomplete="off"
                 />
                 <label class="btn btn-outline-primary" for="btnLogin-year"
                   >년</label
                 >
               </div>
-
-              <!-- 해당 chartjs 생성 -->
-              <script src="{{ url_for('static', path='js/chartjs/dashboard.login.js') }}"></script>
-              <script>
-                var data = [
-                  {% for statistic in statistics %}
-                  { date: "{{ statistic.date }}", user_count: {{ statistic.user_count }}, dimigo_user_count: {{ statistic.dimigo_user_count }}, expired_user_count: {{ statistic.expired_user_count }}, login_count: {{ statistic.login_count }}, failed_login_count: {{ statistic.failed_login_count }}, official_service_count: {{ statistic.official_service_count }}, unofficial_service_count: {{ statistic.unofficial_service_count }} },
-                  {% endfor %}
-                ]
-              </script>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
     {% include "footer.html" %}
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='js/dashboard.chart.init.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='js/dashboard.statistics.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='js/dashboard.overall.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='js/dashboard.chart.preprocess.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='js/dashboard.chart.custom.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='js/dashboard.chart.update.js') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='js/dashboard.main.js') }}"
+    ></script>
   </body>
 </html>

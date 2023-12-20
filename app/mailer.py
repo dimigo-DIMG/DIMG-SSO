@@ -20,25 +20,29 @@ if smtp_starttls.lower() == "true":
     smtp.ehlo()
 else:
     smtp = smtplib.SMTP_SSL(smtp_host, smtp_port)
-smtp.connect(smtp_host, smtp_port)
-smtp.login(smtp_user, smtp_pass)
 
 
 async def send_email(to: str, subject: str, body: str):
+    smtp.connect(smtp_host, smtp_port)
+    smtp.login(smtp_user, smtp_pass)
     msg = MIMEMultipart()
     msg["From"] = smtp_addr
     msg["To"] = to
     msg["Subject"] = subject
     msg.attach(MIMEText(body, "plain"))
     smtp.sendmail(smtp_addr, to, msg.as_string())
+    smtp.quit()
     del msg
 
 
 async def send_email_html(to: str, subject: str, body: str):
+    smtp.connect(smtp_host, smtp_port)
+    smtp.login(smtp_user, smtp_pass)
     msg = MIMEMultipart()
     msg["From"] = smtp_addr
     msg["To"] = to
     msg["Subject"] = subject
     msg.attach(MIMEText(body, "html"))
     smtp.sendmail(smtp_addr, to, msg.as_string())
+    smtp.quit()
     del msg

@@ -1,5 +1,5 @@
 <div id="pw-editable-area" class="profile-area">
-  {% if True %}
+  {% if not result %}
   <!-- 비밀번호 입력 화면 -->
   {% include "account/modify-pw_pw.html" %}
   
@@ -34,6 +34,6 @@
       }
     }
     // Continue with navigating to the previous page
-    console.log("Go to previous page");
+    location.href = "/account";
   };
 </script>
