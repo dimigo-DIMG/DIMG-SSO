@@ -832,6 +832,12 @@ async def api_dashboard(
     return statistics
 
 
+# /manage/dashboard
+@app.get("/manage/user")
+async def manage_user(request: Request, user: User = Depends(current_user_admin)):
+    return templates.TemplateResponse("admin/user.html", {"request": request})
+
+
 # service page
 @app.get("/service")
 async def service_root(request: Request):
