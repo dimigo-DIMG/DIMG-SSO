@@ -589,6 +589,26 @@ async def service_update(
     await update_service(db, service)
     return Response(status_code=204)
 
+@app.get("/api/services")
+async def api_service_list(
+    request: Request,
+    db=Depends(get_async_session),
+):
+    services: list[Service] = await get_all_services(db)
+    services_json = []
+    for service in services:
+        services_json.append({
+            "client_id": service.client_id,
+            "name": service.name,
+            "description": service.description,
+            "is_official": service.is_official,
+            "icon": service.icon_url,
+            "unregister_page": service.unregister_page,
+            "main_page": service.main_page,
+            "scopes": service.scopes,
+            "register_cooldown": service.register_cooldown,
+        })
+    return services_json
 
 app.include_router(
     fastapi_users.get_verify_router(UserRead),

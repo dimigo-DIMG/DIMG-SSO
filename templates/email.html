@@ -87,6 +87,13 @@
       flex-direction: column;
       align-items: center;
     }
+
+    /* 820px */
+    @media (max-height: 820px) {
+      .container {
+        height: 100%;
+      }
+    }
   </style>
   <body>
     <div class="container">
@@ -97,12 +104,12 @@
         </div>
       </div>
       <div id="main-container" class="mb-auto">
-        <h3>이메일 인증</h3>
-        <span>아래 버튼을 클릭하여 인증을 완료하세요.</span>
-        <button type="button" class="btn btn-primary btn-lg col-5 mt-5 mb-3">
+        <h3>[M1]</h3>
+        <span>[M2]</span>
+        <a href="[URL]" class="btn btn-primary btn-lg col-5 mt-5 mb-3">
           인증하기
-        </button>
-        <span>또는 <a href="#!">이곳</a>을 클릭</span>
+        </a>
+        <span>또는 <a href="[URL]">이곳</a>을 클릭</span>
       </div>
       <div id="footer">
         <h4>CONTACT</h4>
@@ -111,17 +118,5 @@
         </address>
       </div>
     </div>
-    <script>
-      function setContainerHeight() {
-        var windowHeight = window.innerHeight;
-        var container = document.querySelector(".container");
-
-        container.style.height = windowHeight >= 820 ? "820px" : "100%";
-        console.log(container.style.height);
-      }
-
-      setContainerHeight();
-      window.addEventListener("resize", setContainerHeight);
-    </script>
   </body>
 </html>

@@ -45,22 +45,28 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     async def on_after_request_verify(
         self, user: User, token: str, request: Optional[Request] = None
     ) -> None:
-        await mailer.send_email(
+        with open("templates/email.html", "r", encoding="utf-8") as f:
+            html = f.read()
+        await mailer.send_email_html(
             user.email,
             "이메일 인증",
-            f"이메일 인증을 완료하려면 다음 링크를 클릭하세요: {https_prefix}://{MAIN_HOST}/account/verify?token={token}",
+            html.replace("[URL]",
+                f"{https_prefix}://{MAIN_HOST}/account/verify?token={token}").replace("[M1]", "이메일 인증").replace("[M2]", "아래 버튼을 클릭하여 인증을 완료하세요."),
+              
         )
-        print(f"Verification requested for user {user.id}. Verification token: {token}")
-
+        
     async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None
     ) -> None:
-        print(f"User {user.id} has forgot their password. Reset token: {token}")
-        await mailer.send_email(
+        with open("templates/email.html", "r", encoding="utf-8") as f:
+            html = f.read()
+        await mailer.send_email_html(
             user.email,
             "비밀번호 초기화",
-            f"비밀번호를 초기화하려면 다음 링크를 클릭하세요: {https_prefix}://{MAIN_HOST}/account/password-reset?token={token}",
+            html.replace("[URL]",
+                f"{https_prefix}://{MAIN_HOST}/account/reset-password?token={token}").replace("[M1]", "비밀번호 초기화").replace("[M2]", "아래 버튼을 클릭하여 비밀번호를 초기화하세요."),
         )
+        
 
     async def oauth_associate_callback(
         self: BaseUserManager[models.UOAP, models.ID],
