@@ -1,5 +1,5 @@
 
-<form action="/modify/profile" method="post" id="usernameEtc-editable-area" class="profile-area">
+<form action="/account/modify/profile" method="post" id="usernameEtc-editable-area" class="profile-area">
   {% if csrf_token %}
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
   {% endif %}
@@ -54,7 +54,8 @@
     </div>
   </div>
   <div class="d-flex gap-2 mt-auto">
-    <button class="col btn btn-secondary form-input">취소</button>
+    <button class="col btn btn-secondary form-input" type="button" onclick="location.href='/account'"
+    >취소</button>
     <button type="submit" class="col btn btn-primary form-input">저장</button>
   </div>
 </form>

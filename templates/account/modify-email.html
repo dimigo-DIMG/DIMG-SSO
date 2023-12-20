@@ -1,5 +1,5 @@
 <div id="email-editable-area" class="profile-area">
-  {% if True %}
+  {% if not result %}
   <!-- 이메일 입력 화면 -->
   {% include "account/modify-email_email.html" %}
   
@@ -29,6 +29,6 @@
       }
     }
     // Continue with navigating to the previous page
-    console.log("Go to previous page");
+    location.href = "/account";
   };
 </script>
