@@ -49,6 +49,7 @@
                 aria-labelledby="navbarDarkDropdownMenuLink"
               >
                 <li class="dropdown-menu-tit">필터</li>
+                <li><a class="dropdown-item active" href="#">전체</a></li>
                 <li><a class="dropdown-item" href="#">공식 서비스</a></li>
                 <li><a class="dropdown-item" href="#">비공식 서비스</a></li>
 
@@ -63,13 +64,9 @@
                 <li><a class="dropdown-item" href="#">이름 내림차순</a></li>
               </ul>
             </div>
-            <div id="offi-cnt" class="service-cnt">
-              공식
-              <span>1</span>
-            </div>
-            <div id="unoffi-cnt" class="service-cnt">
-              비공식
-              <span>1</span>
+            <div class="service-cnt">
+              전체
+              <span>2</span>
             </div>
           </div>
 
@@ -84,14 +81,14 @@
                 aria-label="..."
               />
             </div>
-            <div class="service-ico">
+            <a class="service-ico d-block" href="#!">
               <img
                 width="100px"
                 height="100px"
                 src="{{ url_for('static', path='/img/chunzhi23.png') }}"
                 alt="DIMG-PaaS"
               />
-            </div>
+            </a>
             <div class="service-info">
               <div class="service-info-head">
                 <span class="service-info-tit">DIMG-PaaS</span>
@@ -120,14 +117,14 @@
                 aria-label="..."
               />
             </div>
-            <div class="service-ico">
+            <a class="service-ico d-block" href="#!">
               <img
                 width="100px"
                 height="100px"
                 src="{{ url_for('static', path='/img/logo_asdf.png') }}"
                 alt="Fitness Club"
               />
-            </div>
+            </a>
             <div class="service-info">
               <div class="service-info-head">
                 <span class="service-info-tit">Fitness Club</span>

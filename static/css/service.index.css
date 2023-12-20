@@ -39,6 +39,8 @@
 
 /* 서비스 리스트 item */
 .service-ico {
+  margin-right: 10px;
+  border: 1px solid #888;
   border-radius: 5px;
   overflow: hidden;
 }
@@ -69,7 +71,7 @@
 }
 
 .is_official {
-  padding: 0 5px;
+  padding: 0 8px;
   border-radius: 10px;
   height: 20px;
   color: #FFF;
