@@ -8,7 +8,7 @@ function getDataset(label, bgColor, data) {
 
 function getParameterForChart(data, unit, para) {
   // data: List
-  // type: "day" | "month" | "year"
+  // unit: "day" | "month" | "year"
   // para: as below
   const {
     dataset_info_list,

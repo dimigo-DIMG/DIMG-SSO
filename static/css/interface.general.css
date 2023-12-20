@@ -54,11 +54,6 @@ body {
   line-height: normal;
 }
 
-.dropdown-menu {
-  left: unset !important;
-  right: 10px;
-}
-
 .form-input {
   padding: 8px 14px;
   line-height: 28px;
