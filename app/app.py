@@ -821,13 +821,8 @@ async def allow_permission(
 
 # /manage/dashboard
 @app.get("/manage/dashboard")
-async def manage_dashboard(request: Request):
+async def manage_dashboard(request: Request, user: User = Depends(current_user_admin)):
     return templates.TemplateResponse("admin/dashboard.html", {"request": request})
-
-# error page
-@app.get("/error")
-async def error_root(request: Request):
-    return templates.TemplateResponse("error.html", {"request": request})
 
 
 @app.get("/api/dashboard")
@@ -835,6 +830,26 @@ async def api_dashboard(
     db=Depends(get_async_session), user=Depends(current_user_admin)):
     statistics = await get_all_statistics(db)
     return statistics
+
+
+# /manage/dashboard
+@app.get("/manage/user")
+async def manage_user(request: Request, user: User = Depends(current_user_admin)):
+    return templates.TemplateResponse("admin/user.html", {"request": request})
+
+
+# service page
+@app.get("/service")
+async def service_root(request: Request):
+    return templates.TemplateResponse(
+        "service/index.html",
+        {"request": request, "location": "서비스"})
+
+
+# error page
+@app.get("/error")
+async def error_root(request: Request):
+    return templates.TemplateResponse("error.html", {"request": request})
 
 
 @app.exception_handler(StarletteHTTPException)

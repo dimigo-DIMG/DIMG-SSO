@@ -23,38 +23,43 @@
       </ul>
       {% if not user %}
       <!-- 로그인 상태가 아닐 경우 -->
-      <div class="">
+      <div>
         <a class="btn btn-primary px-3" href="/account/login">로그인</a>
         <a class="btn btn-secondary" href="/account/register">회원가입</a>
       </div>
       {% else %}
       <!-- 로그인 상태일 경우 -->
-      <a
-        class="nav-link dropdown-toggle"
-        href="#"
-        id="navbarDropdown"
-        role="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        {{ user.email }}
-      </a>
-      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <li>
-          <a class="dropdown-item" href="/account">프로필 및 설정</a>
-        </li>
-        {% if user.is_superuser %}
-        <li>
-          <a class="dropdown-item" href="/manage">관리자 페이지</a>
-        </li>
-        {% endif %}
-        <li>
-          <hr class="dropdown-divider" />
-        </li>
-        <li>
-          <a class="dropdown-item" href="/account/logout">로그아웃</a>
-        </li>
-      </ul>
+      <div class="dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          {{ user.email }}
+        </a>
+        <ul
+          class="dropdown-menu dropdown-menu-end"
+          aria-labelledby="navbarDropdown"
+        >
+          <li>
+            <a class="dropdown-item" href="/account">프로필 및 설정</a>
+          </li>
+          {% if user.is_superuser %}
+          <li>
+            <a class="dropdown-item" href="/manage">관리자 페이지</a>
+          </li>
+          {% endif %}
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+          <li>
+            <a class="dropdown-item" href="/account/logout">로그아웃</a>
+          </li>
+        </ul>
+      </div>
       {% endif %}
     </div>
   </div>

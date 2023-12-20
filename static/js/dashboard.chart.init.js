@@ -73,20 +73,17 @@ class CustomChart {
   updateChart(para) {
     const {
       label_list,
-      data_list,
+      dataset_list,
       stack_bool,
       title,
       x_label,
       y_label,
       type,
-      beginAtZero
+      beginAtZero,
     } = para;
 
     this.userChart.data.labels = label_list || [];
-
-    for (let i = 0; i < this.userChart.data.datasets.length; i++) {
-      this.userChart.data.datasets[i].data = data_list[i] || [];
-    }
+    this.userChart.data.datasets = dataset_list || [];
 
     this.userChart.options.scales.x.stacked = stack_bool || false;
     this.userChart.options.scales.y.stacked = stack_bool || false;
@@ -98,6 +95,8 @@ class CustomChart {
 
     this.userChart.options.scales.y.title.display = y_label ? true : false;
     this.userChart.options.scales.y.title.text = y_label ? y_label : "";
+
+    this.userChart.options.scales.y.beginAtZero = beginAtZero || false;
 
     this.userChart.config.type = type || "bar";
 
