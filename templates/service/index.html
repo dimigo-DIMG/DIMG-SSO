@@ -12,10 +12,19 @@
     />
     <link
       rel="stylesheet"
-      href="{{url_for('static', path='/css/service.index.css')}}"
+      href="{{url_for('static', path='/css/list.module.css')}}"
     />
-    <title>DIMGSSO - 서비스</title>
+    <title>서비스</title>
   </head>
+  <style>
+    .container {
+      padding-top: 40px;
+    }
+    
+    .item-tag {
+      background: #54AEB6;
+    }
+  </style>
   <body>
     <div id="container">
       {% include "jumbotron.html" %}
@@ -24,7 +33,7 @@
         <div class="container">
           <!-- 서비스 관리 상단 바 -->
           <div id="manage-service" class="container-item">
-            <div class="service-select">
+            <div class="item-select">
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -64,11 +73,11 @@
                 <li><a class="dropdown-item" href="#">이름 내림차순</a></li>
               </ul>
             </div>
-            <div class="service-cnt me-auto">
+            <div class="item-cnt me-auto">
               전체
               <span>2</span>
             </div>
-            <div class="service-search col-md-5">
+            <div class="item-search col-md-5">
               <i class="bi bi-search"></i>
               <input
                 type="text"
@@ -80,7 +89,7 @@
 
           <!-- 서비스 리스트 -->
           <div class="container-item">
-            <div class="service-select">
+            <div class="item-select">
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -89,7 +98,7 @@
                 aria-label="..."
               />
             </div>
-            <a class="service-ico d-block" href="#!">
+            <a class="item-ico" href="#!">
               <img
                 width="100px"
                 height="100px"
@@ -97,16 +106,16 @@
                 alt="DIMG-PaaS"
               />
             </a>
-            <div class="service-info">
-              <div class="service-info-head">
-                <span class="service-info-tit">DIMG-PaaS</span>
-                <span class="is_official">DIMG</span>
+            <div class="item-info">
+              <div class="item-info-head">
+                <span class="item-info-tit">DIMG-PaaS</span>
+                <span class="item-tag">DIMG</span>
               </div>
-              <div class="service-info-desc">
+              <div class="item-info-desc">
                 <span>천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루</span>
               </div>
             </div>
-            <div class="service-menu">
+            <div class="item-menu">
               <div class="service-joined mb-2">
                 <span class="d-block joined-label">가입일</span>
                 <span class="d-block">2023. 12. 20.</span>
@@ -116,7 +125,7 @@
           </div>
 
           <div class="container-item">
-            <div class="service-select">
+            <div class="item-select">
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -125,7 +134,7 @@
                 aria-label="..."
               />
             </div>
-            <a class="service-ico d-block" href="#!">
+            <a class="item-ico" href="#!">
               <img
                 width="100px"
                 height="100px"
@@ -133,11 +142,11 @@
                 alt="Fitness Club"
               />
             </a>
-            <div class="service-info">
-              <div class="service-info-head">
-                <span class="service-info-tit">Fitness Club</span>
+            <div class="item-info">
+              <div class="item-info-head">
+                <span class="item-info-tit">Fitness Club</span>
               </div>
-              <div class="service-info-desc">
+              <div class="item-info-desc">
                 <span
                   >천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루 천방지축
                   어리둥절 빙글빙글 돌아가는 짱구의 하루 천방지축 어리둥절
@@ -148,8 +157,8 @@
                 >
               </div>
             </div>
-            <div class="service-menu">
-              <div class="service-joined mb-2">
+            <div class="item-menu">
+              <div class="item-joined mb-2">
                 <span class="d-block joined-label">가입일</span>
                 <span class="d-block">2023. 12. 20.</span>
               </div>
