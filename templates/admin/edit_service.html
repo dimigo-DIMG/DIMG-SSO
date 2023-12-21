@@ -360,7 +360,7 @@
         confirm_button.disabled = true;
         $.ajax({
           type: "POST",
-          url: "/manage/services/{{ service.client_id }}/delete",
+          url: "/manage/service/{{ service.client_id }}/delete",
           data: {
             csrf_token: "{{ csrf_token }}",
           },
@@ -368,7 +368,7 @@
           success: function (response) {
             // unblock unload blocker
             window.removeEventListener("beforeunload", unload_blocker);
-            document.location.href = "/manage/services";
+            document.location.href = "/manage/service";
           },
           error: function (response) {
             console.log(response);
@@ -421,7 +421,7 @@
 
         $.ajax({
           type: "POST",
-          url: "/manage/services/{{ service.client_id }}/update",
+          url: "/manage/service/{{ service.client_id }}/update",
           enctype: "multipart/form-data",
           processData: false,
           contentType: false,
@@ -437,7 +437,7 @@
               cover.style.display = "none";
               // unblock unload blocker
               window.removeEventListener("beforeunload", unload_blocker);
-              document.location.href = "/manage/services";
+              document.location.href = "/manage/service";
             });
           },
           error: function (response) {

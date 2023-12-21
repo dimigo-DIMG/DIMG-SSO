@@ -197,7 +197,4 @@ async def init_user():
                             is_verified=True,
                         )
                     )
-                    await mailer.send_email(
-                        admin_email, "관리자 계정 생성", f"관리자 계정이 정상적으로 생성되었습니다."
-                    )
                     print("Admin user created")

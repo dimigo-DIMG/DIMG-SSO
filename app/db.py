@@ -43,6 +43,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     # last_token_sent = Column(Date, nullable=True)
     # count_token_sent = Column(Integer, nullable=True)
 
+    sign_up_date = Column(Date, nullable=True)
     expire = Column(Date, nullable=True)
 
     service_connections: Mapped[List["ServiceConnection"]] = relationship(

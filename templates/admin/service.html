@@ -47,7 +47,7 @@
 
             <div
               class="service-settings"
-              onclick="document.location.href='/manage/services/{{service.client_id}}'"
+              onclick="document.location.href='/manage/service/{{service.client_id}}'"
             >
               <i class="bi bi-gear ico-center mobile-center-no"></i>
             </div>
@@ -78,7 +78,7 @@
       // console.log(add_service);
       add_service.addEventListener(
         "click",
-        () => (location.href = "/manage/services/create")
+        () => (location.href = "/manage/service/create")
       );
     </script>
   </body>

@@ -1,24 +1,20 @@
 import datetime
 from fastapi import (
-    Body,
     Depends,
     FastAPI,
     HTTPException,
     Request,
     Response,
     status,
-    Form,
     UploadFile,
     File,
 )
 from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi_users import exceptions, schemas
 from fastapi_users.router import oauth as oauth_router
-from fastapi_users.authentication import JWTStrategy
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from typing import Dict, Optional, Tuple, Annotated
+from typing import Dict, Optional
 
 from sqlalchemy import select
 
@@ -28,9 +24,8 @@ from app.db import (
     User,
     create_db_and_tables,
     get_async_session,
-    get_user_db,
 )
-from app.schemas import UserCreate, UserRead, UserUpdate
+from app.schemas import  UserRead
 from app.users import (
     SECRET,
     auth_backend,
@@ -43,13 +38,14 @@ from app.users import (
     init_user,
 )
 
+from app.core import templates
+
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from app.backends.statistics import get_all_statistics, update_statistics, add_login_count, add_failed_login_count
+from app.backends.statistics import get_all_statistics, update_statistics
 
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 import random
 
@@ -67,13 +63,7 @@ app = FastAPI()
 
 # session middleware
 app.add_middleware(SessionMiddleware, secret_key=SECRET)
-
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
-
-current_user_optional = fastapi_users.current_user(optional=True)
-current_user_admin = fastapi_users.current_user(active=True, superuser=True)
-
 
 @app.get("/")
 async def root(request: Request, user: User = Depends(current_user_optional), db=Depends(get_async_session)):
@@ -96,315 +86,6 @@ async def terms(request: Request, user: User = Depends(current_user_optional)):
     )
 
 
-@app.get("/account/login")
-async def login(request: Request, user: User = Depends(current_user_optional)):
-    redirect_uri = request.query_params.get("next")
-    failed = request.session.get("failed")
-    if failed:
-        request.session.pop("failed")
-
-    reg_success = request.session.get("reg_success")
-    if reg_success:
-        request.session.pop("reg_success")
-
-    # random string
-    csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
-    request.session["csrf_token"] = csrf_token
-
-    if redirect_uri:
-        if not redirect_uri.startswith("/"):
-            redirect_uri = None
-        request.session["next"] = redirect_uri
-    else:
-        if request.session.get("next"):
-            request.session.pop("next")
-    if user:
-        return RedirectResponse(redirect_uri or "/")
-
-    return templates.TemplateResponse(
-        "auth/login.html",
-        {
-            "request": request,
-            "csrf_token": csrf_token,
-            "failed": failed,
-            "reg_success": reg_success,
-            "location": "로그인",
-        },
-    )
-
-
-@app.post("/account/login")
-async def login(
-    request: Request,
-    user_manager: UserManager = Depends(get_user_manager),
-    strategy: JWTStrategy = Depends(auth_backend.get_strategy),
-    db=Depends(get_async_session),
-):
-    # request form
-    form = await request.form()
-    # check csrf token
-    if form.get("csrf_token") != request.session.get("csrf_token"):
-        request.session["failed"] = 2
-        await add_failed_login_count(db)
-        return RedirectResponse("/account/login", status_code=303)
-
-    next_url = request.session.get("next")
-
-    if not form.get("email") or not form.get("password"):
-        request.session["failed"] = 1
-        await add_failed_login_count(db)
-        return RedirectResponse("/account/login", status_code=303)
-
-    try:
-        credentials = OAuth2PasswordRequestForm(
-            username=form.get("email"), password=form.get("password"), scope=""
-        )
-        user = await user_manager.authenticate(credentials)
-    except Exception as e:
-        request.session["failed"] = 1
-        await add_failed_login_count(db)
-        return RedirectResponse("/account/login", status_code=303)
-
-    if user is None or not user.is_active:
-        request.session["failed"] = 1
-        await add_failed_login_count(db)
-        return RedirectResponse("/account/login", status_code=303)
-
-    response = await auth_backend.login(strategy, user)
-    if next_url:
-        request.session.pop("next")
-        response.headers["location"] = next_url
-        response.status_code = 303
-    else:
-        response.headers["location"] = "/"
-        response.status_code = 303
-    await user_manager.on_after_login(user, request, response)
-    add_login_count(db)
-    return response
-
-
-@app.get("/account/logout")
-async def logout(
-    user_token: Tuple[User, str] = Depends(
-        fastapi_users.authenticator.current_user_token()
-    ),
-    strategy: JWTStrategy = Depends(auth_backend.get_strategy),
-):
-    user, token = user_token
-    response = await auth_backend.logout(strategy, user, token)
-    response.headers["location"] = "/"
-    response.status_code = 303
-    return response
-
-
-@app.get("/account/register")
-async def register(request: Request, user: User = Depends(current_user_optional)):
-    if user:
-        return RedirectResponse("/")
-    failed = request.session.get("failed")
-    if failed:
-        request.session.pop("failed")
-
-    csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
-    request.session["csrf_token"] = csrf_token
-    return templates.TemplateResponse(
-        "auth/signup.html",
-        {
-            "request": request,
-            "failed": failed,
-            "csrf_token": csrf_token,
-            "location": "회원가입",
-        },
-    )
-
-
-@app.post("/account/register")
-async def register(
-    request: Request,  # type: ignore
-    user_manager: UserManager = Depends(get_user_manager),
-):
-    print("registering...")
-    form = await request.form()
-
-    if form.get("csrf_token") != request.session.get("csrf_token"):
-        request.session["failed"] = 2
-        # redirect tp get
-        return RedirectResponse("/account/register", status_code=303)
-    request.session.pop("csrf_token")
-    try:
-        user_create = UserCreate(email=form.get("email"), password=form.get("password"))
-        user = await user_manager.create(user_create, safe=True, request=request)
-        await user_manager.request_verify(user)
-
-    except exceptions.UserAlreadyExists:
-        request.session["failed"] = 1
-        return RedirectResponse("/account/register", status_code=303)
-    except exceptions.InvalidPasswordException:
-        request.session["failed"] = 3
-        return RedirectResponse("/account/register", status_code=303)
-
-    request.session["reg_success"] = 1
-    # return RedirectResponse("/account/login", status_code=303)
-    res = schemas.model_validate(UserRead, user)
-    response = RedirectResponse("/account/login", status_code=303)
-
-    return response
-
-
-@app.get("account/verify")
-async def verify(
-    request: Request,
-    user: User = Depends(current_user_optional),
-    user_manager: UserManager = Depends(get_user_manager),
-):
-    if user:
-        return RedirectResponse("/")
-    token = request.query_params.get("token")
-    if not token:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid verification token",
-        )
-    try:
-        user = await user_manager.verify(token, request)
-    except (exceptions.InvalidVerifyToken, exceptions.UserNotExists):
-        request.session["failed"] = 110
-    except exceptions.UserAlreadyVerified:
-        request.session["failed"] = 100
-    return RedirectResponse("/account/login", status_code=303)
-
-
-@app.get("/account/forgot-password")
-async def password(request: Request, user: User = Depends(current_user_optional)):
-    if user:
-        return RedirectResponse("/")
-    failed = request.session.get("failed")
-    if failed:
-        request.session.pop("failed")
-    csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
-    request.session["csrf_token"] = csrf_token
-    return templates.TemplateResponse(
-        "auth/reset_pw.html",
-        {"request": request, "failed": failed, "csrf_token": csrf_token},
-    )
-
-@app.post("/account/forgot-password")
-async def password(
-    request: Request,  # type: ignore
-    user_manager: UserManager = Depends(get_user_manager),
-):
-    form = await request.form()
-
-    if form.get("csrf_token") != request.session.get("csrf_token"):
-        request.session["failed"] = 2
-        # redirect tp get
-        return RedirectResponse("/account/forgot-password", status_code=303)
-    request.session.pop("csrf_token")
-    try:
-        user = await user_manager.get_by_email(form.get("email"))
-        await user_manager.forgot_password(user)
-    except exceptions.UserNotExists:
-        request.session["failed"] = 1
-        return RedirectResponse("/account/forgot-password", status_code=303)
-    return RedirectResponse("/account/login", status_code=303)
-
-
-@app.get("/account/reset-password")
-async def reset_password(request: Request, user: User = Depends(current_user_optional)):
-    if user:
-        return RedirectResponse("/")
-
-    token = request.query_params.get("token")
-    csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
-    request.session["csrf_token"] = csrf_token
-    if not token:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid reset password token",
-        )
-    return templates.TemplateResponse(
-        "auth/reset_pw_next.html",
-        {"request": request, "token": token, "csrf_token": csrf_token},
-    )
-
-
-@app.post("/account/reset-password")
-async def reset_password(
-    request: Request,
-    user: User = Depends(current_user_optional),
-    user_manager: UserManager = Depends(get_user_manager),
-):
-    form = await request.form()
-    if form.get("csrf_token") != request.session.get("csrf_token"):
-        request.session["failed"] = 2
-        # redirect tp get
-        return RedirectResponse("/account/login", status_code=303)
-    request.session.pop("csrf_token")
-
-    password = form.get("password")
-    token = form.get("token")
-    if user:
-        return RedirectResponse("/")
-    token = request.query_params.get("token")
-    try:
-        await user_manager.reset_password(token, password, request)
-    except (
-        exceptions.InvalidResetPasswordToken,
-        exceptions.UserNotExists,
-        exceptions.UserInactive,
-    ):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid reset password token",
-        )
-    except exceptions.InvalidPasswordException as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid password",
-        )
-    return RedirectResponse("/account/login", status_code=303)
-
-
-@app.get("/account/oauth/l/{provider}")
-async def oauth_login(request: Request, provider: str):
-    callback_route = f"oauth:{provider}.{auth_backend.name}.callback"
-    redirect_uri = request.url_for(callback_route)
-
-    state_data: Dict[str, str] = {}
-    state = oauth_router.generate_state_token(state_data, SECRET)
-
-    if provider == "google":
-        url = await google_oauth_client.get_authorization_url(redirect_uri, state)
-    elif provider == "microsoft":
-        url = await microsoft_oauth_client.get_authorization_url(redirect_uri, state)
-    else:
-        raise Exception("Invalid provider")
-
-    # redirect to oauth provider
-    return RedirectResponse(url)
-
-
-@app.get("/account/oauth/c/{provider}")
-async def oauth_connect(
-    request: Request, provider: str, user: User = Depends(current_active_user)
-):
-    callback_route = f"oauth-associate:{provider}.callback"
-    redirect_uri = request.url_for(callback_route)
-
-    state_data: Dict[str, str] = {"sub": str(user.id)}
-    state = oauth_router.generate_state_token(state_data, SECRET)
-
-    if provider == "google":
-        url = await google_oauth_client.get_authorization_url(redirect_uri, state)
-    elif provider == "microsoft":
-        url = await microsoft_oauth_client.get_authorization_url(redirect_uri, state)
-    else:
-        raise Exception("Invalid provider")
-
-    # redirect to oauth provider
-    return RedirectResponse(url)
-
-
 @app.get("/manage")
 async def manage(request: Request, user: User = Depends(current_user_admin)):
     return templates.TemplateResponse(
@@ -412,7 +93,7 @@ async def manage(request: Request, user: User = Depends(current_user_admin)):
     )
 
 
-@app.get("/manage/services")
+@app.get("/manage/service")
 async def service_list(
     request: Request,
     user: User = Depends(current_user_admin),
@@ -425,7 +106,7 @@ async def service_list(
     )
 
 
-@app.get("/manage/services/create")
+@app.get("/manage/service/create")
 async def service_create(request: Request, user: User = Depends(current_user_admin)):
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
     request.session["csrf_token"] = csrf_token
@@ -436,7 +117,7 @@ async def service_create(request: Request, user: User = Depends(current_user_adm
     )
 
 
-@app.post("/manage/services/create")
+@app.post("/manage/service/create")
 async def service_create(
     request: Request,
     logo: Optional[UploadFile] = File(None),
@@ -501,10 +182,11 @@ async def service_create(
 
     print(responseJson)
     request.session.pop("csrf_token")
+    await update_statistics()
     return responseJson
 
 
-@app.get("/manage/services/{client_id}")
+@app.get("/manage/service/{client_id}")
 async def service_edit(
     request: Request,
     client_id: str,
@@ -526,7 +208,7 @@ async def service_edit(
     )
 
 
-@app.post("/manage/services/{client_id}/delete")
+@app.post("/manage/service/{client_id}/delete")
 async def service_delete(
     request: Request,
     client_id: str,
@@ -541,10 +223,11 @@ async def service_delete(
     request.session.pop("csrf_token")
 
     await delete_service(db, client_id)
+    await update_statistics()
     return Response(status_code=204)
 
 
-@app.post("/manage/services/{client_id}/update")
+@app.post("/manage/service/{client_id}/update")
 async def service_update(
     request: Request,
     client_id: str,
@@ -682,6 +365,12 @@ async def account_profile(request: Request, menu, user: User = Depends(current_u
     
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
     request.session["csrf_token"] = csrf_token
+
+    failed = None
+    if request.session.get("failed"):
+        failed = request.session["failed"]
+        request.session.pop("failed")
+
     
     return templates.TemplateResponse(
         "account/index.html",
@@ -693,6 +382,7 @@ async def account_profile(request: Request, menu, user: User = Depends(current_u
             "location": "설정",
             "menu": menu,
             "csrf_token": csrf_token,
+            "failed": failed,
         },
     )
 
@@ -775,6 +465,7 @@ async def account_email(request: Request, user: User = Depends(current_active_us
     #check if email exists
     try:
         await user_manager.get_by_email(new_email)
+        print ("email exists")
         return templates.TemplateResponse(
             "account/index.html",
             {
@@ -784,7 +475,7 @@ async def account_email(request: Request, user: User = Depends(current_active_us
                 "menu": 2,
             },
         )
-    finally:
+    except exceptions.UserNotExists:
         await user_manager.user_db.update(user, changed_info)
         await user_manager.request_verify(user)
         return templates.TemplateResponse(
@@ -835,6 +526,9 @@ async def account_password(request: Request, user: User = Depends(current_active
         if not await user_manager.authenticate(credentials):
             raise Exception("Invalid password")
     except Exception as e:
+        request.session["failed"] = 1
+        return RedirectResponse("/account/modify/3", status_code=303)
+        '''
         return templates.TemplateResponse(
             "account/index.html",
             {
@@ -844,6 +538,7 @@ async def account_password(request: Request, user: User = Depends(current_active
                 "menu": 3,
             },
         )
+        '''
     
     if new_pw != new_pw2:
         return templates.TemplateResponse(
