@@ -1031,10 +1031,15 @@ async def api_dashboard(
     return statistics
 
 
-# /manage/dashboard
+# /manage/user
 @app.get("/manage/user")
-async def manage_user(request: Request, user: User = Depends(current_user_admin)):
+async def manage_user_root(request: Request, user: User = Depends(current_user_admin)):
     return templates.TemplateResponse("admin/user.html", {"request": request})
+
+
+@app.get("/manage/user/{user_id}")
+async def manage_user_detail(request: Request, user: User = Depends(current_user_admin)):
+    return templates.TemplateResponse("admin/user_detail.html", {"request": request})
 
 
 # service page
