@@ -39,6 +39,7 @@ async def login(request: Request, user: User = Depends(current_user_optional)):
     return templates.TemplateResponse(
         "auth/login.html",
         {
+            "user": user,
             "request": request,
             "csrf_token": csrf_token,
             "failed": failed,

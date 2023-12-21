@@ -25,7 +25,7 @@ async def password(request: Request, user: User = Depends(current_user_optional)
     request.session["csrf_token"] = csrf_token
     return templates.TemplateResponse(
         "auth/reset_pw.html",
-        {"request": request, "failed": failed, "csrf_token": csrf_token},
+        {"request": request, "failed": failed, "csrf_token": csrf_token, user: user},
     )
 
 

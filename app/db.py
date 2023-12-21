@@ -90,7 +90,7 @@ class Service(Base):
             return f"/static/test.png"
 
     service_connections: Mapped[List["ServiceConnection"]] = relationship(
-        "ServiceConnection", lazy="joined"
+        "ServiceConnection"
     )
 
     access_tokens: Mapped[List["AccessToken"]] = relationship("AccessToken")
@@ -125,7 +125,7 @@ class ServiceConnection(Base):
         back_populates="service_connections",
         cascade="all, delete-orphan",
         single_parent=True,
-        
+
     )
 
 
