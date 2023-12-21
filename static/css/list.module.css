@@ -128,12 +128,6 @@
   line-height: normal;
 }
 
-@media (min-width: 480px) {
-  #main-container {
-    width: 480px;
-  }
-}
-
 @media (max-width: 768px) {
   /* Mobile Styles */
   .item-ico {

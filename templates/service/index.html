@@ -2,22 +2,10 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/general/styles.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/interface.general.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/root.general.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/list.module.css')}}"
-    />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/general/styles.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/interface.general.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/root.general.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/list.module.css')}}" />
     <title>서비스</title>
   </head>
   <style>
@@ -198,16 +186,12 @@
           .then((data) => {
             console.log(data);
             const container = document.getElementById("services-container");
+            
+            // Converting all data into DOM
+            // const containerItem = getAllData(data);
 
-            for (let i = 0; i < data.length; i++) {
-              const aService = data[i];
-              
-              // Converting all data into DOM
-              const containerItem = getAllData();
-
-              // Appending the main container item to the container
-              container.appendChild(containerItem);
-            }
+            // Appending the main container item to the container
+            // container.appendChild(containerItem);
           })
           .catch((err) => {
             console.error("Fetch error:", err);
