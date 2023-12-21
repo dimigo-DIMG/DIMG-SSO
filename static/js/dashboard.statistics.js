@@ -110,5 +110,3 @@ function initialStatData(stat) {
     yearData.guest_count = yearData.guest_count / yearData.count;
   });
 }
-
-console.log(statistics)
