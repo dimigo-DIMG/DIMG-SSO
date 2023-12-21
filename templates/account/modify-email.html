@@ -1,13 +1,11 @@
-<div id="email-editable-area" class="profile-area">
-  {% if not result %}
-  <!-- 이메일 입력 화면 -->
-  {% include "account/modify-email_email.html" %}
-  
-  {% else %}
-  <!-- 결과 화면 출력 화면 -->
-  {% include "account/modify-email_result.html" %}
-  {% endif %}
-</div>
+{% if not result %}
+<!-- 이메일 입력 화면 -->
+{% include "account/modify-email_email.html" %}
+
+{% else %}
+<!-- 결과 화면 출력 화면 -->
+{% include "account/modify-email_result.html" %}
+{% endif %}
 <script type="text/javascript">
   const chkFormChanged = (node) => {
     let is_changed = false;

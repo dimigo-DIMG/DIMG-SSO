@@ -2,14 +2,8 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/interface.general.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/root.general.css')}}"
-    />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/interface.general.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/root.general.css')}}" />
     <title>DIMGSSO - 오류</title>
   </head>
   <style>
@@ -18,16 +12,22 @@
       align-items: center;
     }
 
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .section {
       padding: 30px 40px;
       border-radius: 10px;
+      width: 720px;
       background-color: #fff;
     }
 
     #page-info {
       margin-bottom: 20px;
       padding-bottom: 10px;
-      width: 720px;
     }
 
     #page-name {
@@ -45,15 +45,17 @@
     <div id="container">
       {% include "jumbotron.html" %}
       <div id="main-container">
-        <div class="section">
-          <div id="page-info">
-            <div id="page-name">ERROR {{code}}</div>
-            <div id="page-desc">{{error}}</div>
-          </div>
-          <div class="d-grid gap-2 d-md-block pt-3">
-            <button class="btn btn-secondary col-2" type="button">
-              돌아가기
-            </button>
+        <div class="container">
+          <div class="section">
+            <div id="page-info">
+              <div id="page-name">ERROR {{code}}</div>
+              <div id="page-desc">{{error}}</div>
+            </div>
+            <div class="pt-3">
+              <button class="btn btn-secondary" type="button">
+                돌아가기
+              </button>
+            </div>
           </div>
         </div>
       </div>

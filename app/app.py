@@ -708,7 +708,7 @@ async def account_profile(request: Request, user: User = Depends(current_active_
     new_nick = form.get("nickname")
     new_birth = form.get("birthday")
     new_gender = form.get("gender")
-
+    print(new_nick, new_birth, new_gender)
     
     update_dict = {}
     if new_nick:
@@ -732,7 +732,8 @@ async def account_email(request: Request, user: User = Depends(current_active_us
             {
                 "request": request,
                 "user": user,
-                "result": 3,
+                "result": 2,
+                "location": "설정",
                 "menu": 2,
             },
         )
@@ -747,7 +748,8 @@ async def account_email(request: Request, user: User = Depends(current_active_us
             {
                 "request": request,
                 "user": user,
-                "result": 4,
+                "error": "all",
+                "location": "설정",
                 "menu": 2,
             },
         )
@@ -764,14 +766,15 @@ async def account_email(request: Request, user: User = Depends(current_active_us
             {
                 "request": request,
                 "user": user,
-                "result": 2,
+                "error": "password",
+                "location": "설정",
                 "menu": 2,
             },
         )
     changed_info = {
         "email": new_email,
         "is_verified": False
-                    }
+    }
     #check if email exists
     try:
         await user_manager.get_by_email(new_email)
@@ -780,7 +783,8 @@ async def account_email(request: Request, user: User = Depends(current_active_us
             {
                 "request": request,
                 "user": user,
-                "result": 2,
+                "error": "email",
+                "location": "설정",
                 "menu": 2,
             },
         )
@@ -793,6 +797,7 @@ async def account_email(request: Request, user: User = Depends(current_active_us
                 "request": request,
                 "user": user,
                 "result": 1,
+                "location": "설정",
                 "menu": 2,
             },
         )
@@ -809,6 +814,7 @@ async def account_password(request: Request, user: User = Depends(current_active
                 "request": request,
                 "user": user,
                 "result": 3,
+                "location": "설정",
                 "menu": 3,
             },
         )
@@ -824,7 +830,8 @@ async def account_password(request: Request, user: User = Depends(current_active
             {
                 "request": request,
                 "user": user,
-                "result": 4,
+                "error": "all",
+                "location": "설정",
                 "menu": 3,
             },
         )
@@ -840,7 +847,8 @@ async def account_password(request: Request, user: User = Depends(current_active
             {
                 "request": request,
                 "user": user,
-                "result": 2,
+                "error": "password",
+                "location": "설정",
                 "menu": 3,
             },
         )
@@ -851,7 +859,8 @@ async def account_password(request: Request, user: User = Depends(current_active
             {
                 "request": request,
                 "user": user,
-                "result": 5,
+                "error": "different",
+                "location": "설정",
                 "menu": 3,
             },
         )
@@ -867,6 +876,7 @@ async def account_password(request: Request, user: User = Depends(current_active
                 "request": request,
                 "user": user,
                 "result": 1,
+                "location": "설정",
                 "menu": 3,
             },
         )
@@ -877,6 +887,7 @@ async def account_password(request: Request, user: User = Depends(current_active
                 "request": request,
                 "user": user,
                 "result": 3,
+                "location": "설정",
                 "menu": 3,
             },
         )
@@ -1034,9 +1045,9 @@ async def service_root(request: Request):
         {"request": request, "location": "서비스"})
 
 
-# error page
-@app.get("/error")
-async def error_root(request: Request):
+# service page
+@app.get("/service")
+async def service_root(request: Request):
     return templates.TemplateResponse("error.html", {"request": request})
 
 
