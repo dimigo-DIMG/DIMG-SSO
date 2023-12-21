@@ -13,6 +13,7 @@ function checkAndAddMonthDictionary(year, month) {
   if (!existingMonth) {
     statistics.month.push({
       date: `${year}-${month}`,
+      count: 0,
       enrolled_user_count: 0,
       graduated_user_count: 0,
       guest_count: 0,
@@ -28,6 +29,7 @@ function checkAndAddYearDictionary(year) {
   if (!existingYear) {
     statistics.year.push({
       date: year,
+      count: 0,
       enrolled_user_count: 0,
       graduated_user_count: 0,
       guest_count: 0,
@@ -62,24 +64,51 @@ function initialStatData(stat) {
     const monthIndex = statistics.month.findIndex(
       (item) => item.date === `${year}-${month}`
     );
+    // Update count and total for each statistic
+    statistics.month[monthIndex].count += 1;
+
     statistics.month[monthIndex].enrolled_user_count +=
       data.enrolled_user_count;
     statistics.month[monthIndex].graduated_user_count +=
       data.graduated_user_count;
     statistics.month[monthIndex].guest_count +=
-      data.user_count - (data.enrolled_user_count + data.graduated_user_count);
-    statistics.month[monthIndex].login_count += data.login_count;
-    statistics.month[monthIndex].failed_login_count += data.failed_login_count;
-
+      data.user_count - (data.enrolled_user_count + data.graduated_user_count),
+    statistics.month[monthIndex].login_count +=
+      data.login_count;
+    statistics.month[monthIndex].failed_login_count +=
+      data.failed_login_count;
+    
     // by year
     checkAndAddYearDictionary(year);
     const yearIndex = statistics.year.findIndex((item) => item.date === year);
-    statistics.year[yearIndex].enrolled_user_count += data.enrolled_user_count;
+    // Update count and total for each statistic
+    statistics.year[yearIndex].count += 1;
+
+    statistics.year[yearIndex].enrolled_user_count +=
+      data.enrolled_user_count;
     statistics.year[yearIndex].graduated_user_count +=
       data.graduated_user_count;
     statistics.year[yearIndex].guest_count +=
-      data.user_count - (data.enrolled_user_count + data.graduated_user_count);
-    statistics.year[yearIndex].login_count += data.login_count;
-    statistics.year[yearIndex].failed_login_count += data.failed_login_count;
+      data.user_count - (data.enrolled_user_count + data.graduated_user_count),
+    statistics.year[yearIndex].login_count +=
+      data.login_count;
+    statistics.year[yearIndex].failed_login_count +=
+      data.failed_login_count;
+
+  });
+
+  // Calculate mean for each statistic
+  statistics.month.forEach((monthData) => {
+    monthData.enrolled_user_count = monthData.enrolled_user_count / monthData.count;
+    monthData.graduated_user_count = monthData.graduated_user_count / monthData.count;
+    monthData.guest_count = monthData.guest_count / monthData.count;
+  });
+
+  statistics.year.forEach((yearData) => {
+    yearData.enrolled_user_count = yearData.enrolled_user_count / yearData.count;
+    yearData.graduated_user_count = yearData.graduated_user_count / yearData.count;
+    yearData.guest_count = yearData.guest_count / yearData.count;
   });
 }
+
+console.log(statistics)
