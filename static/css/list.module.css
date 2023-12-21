@@ -5,8 +5,8 @@
 }
 
 /* Individual */
-.container {
-  padding-top: 40px;
+#main-container {
+  margin-top: 30px;
 }
 
 .container-item {
@@ -33,66 +33,71 @@
     var(--bs-dropdown-item-padding-x);
 }
 
-.service-select {
+.item-select {
   padding: 5px;
 }
 
-.service-cnt {
+.item-cnt {
   white-space: nowrap;
 }
 
-.service-cnt > span {
+.item-cnt > span {
   color: #0d6efd;
   font-size: 16px;
   font-weight: 400;
   line-height: normal;
 }
 
-.service-search {
+.item-search {
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
   display: flex;
   align-items: center;
 }
 
-.service-search > i {
+.item-search > i {
   padding: .375rem .75rem;
 }
 
 /* 서비스 리스트 item */
-.service-ico {
+.item-ico {
   margin-right: 10px;
   border: 1px solid #888;
   border-radius: 5px;
   overflow: hidden;
 }
 
-.service-info {
+.item-info {
   flex: 1;
   overflow: hidden;
 }
 
-.service-info-head {
+.item-info-head {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 5px;
 }
 
-.service-info-tit {
+.item-info-tit {
   color: #000;
   font-size: 28px;
   font-weight: 500;
   line-height: normal;
 }
 
-.service-info-desc {
+.item-info-desc {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.is_official {
+.item-info-desc address {
+  margin: 0;
+  color: #888;
+}
+
+.item-tag {
   padding: 0 8px;
   border-radius: 10px;
   height: 20px;
@@ -102,13 +107,20 @@
   font-weight: 500;
   line-height: normal;
   letter-spacing: -1.6px;
-  background: #54AEB6;
 }
 
-.service-menu {
+.item-tag.enrol {background-color: #c683d7;}
+.item-tag.enrol::after {content: "재학";}
+.item-tag.grad {background-color: #ed9ed6;}
+.item-tag.grad::after {content: "졸업";}
+.item-tag.guest {background-color: #ffc7c7;}
+.item-tag.guest::after {content: "일반";}
+.item-tag.official {background-color: #54AEB6;}
+.item-tag.official::after {content: "DIMG";}
+
+.item-menu {
   padding: 0 15px;
   border-left: 1px solid #eee;
-  width: 140px;
   display: flex;
   flex-direction: column;
 }
@@ -120,9 +132,22 @@
   line-height: normal;
 }
 
-@media (max-width: 767.98px) {
+@media (min-width: 480px) {
+  #main-container {
+    width: 480px;
+  }
+}
+
+@media (max-width: 768px) {
   /* Mobile Styles */
-  .service-ico {
+  .item-ico {
     display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  /* Desktop and Tablet View */
+  .item-ico {
+    display: block;
   }
 }

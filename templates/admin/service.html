@@ -2,9 +2,10 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
+    <link rel="stylesheet" href="{{url_for('static', path='/css/general/styles.css')}}" />
     <link
       rel="stylesheet"
-      href="{{url_for('static', path='/css/dev.service.general.css')}}"
+      href="{{url_for('static', path='/css/dev.general.css')}}"
     />
     <link
       rel="stylesheet"
@@ -14,7 +15,7 @@
       rel="stylesheet"
       href="{{url_for('static', path='/css/dev.service.index.css')}}"
     />
-    <title>DIMGSSO - 관리 · 서비스</title>
+    <title>관리 · 서비스</title>
   </head>
   <body>
     <!-- Sidebar -->

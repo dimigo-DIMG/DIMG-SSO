@@ -2,6 +2,7 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
+    <link rel="stylesheet" href="{{url_for('static', path='/css/general/styles.css')}}" />
     <link
       rel="stylesheet"
       href="{{url_for('static', path='/css/interface.general.css')}}"
@@ -15,8 +16,8 @@
   <style>
     .container {
       margin-top: 32px;
-      align-items: center;
       display: flex;
+      align-items: center;
       justify-content: center;
       flex-grow: 1;
     }

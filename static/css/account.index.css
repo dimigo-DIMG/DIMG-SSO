@@ -17,6 +17,13 @@
   line-height: normal;
 }
 
+.division-title-text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
 /* username > 제목 영역 > 원형 아이콘 영역 */
 
 #user-icon-box {
@@ -26,7 +33,7 @@
 
 #img-user-icon {
   border-radius: 50%;
-  width: 80px;
+  font-size: 50px;
 }
 
 #change-user-icon {
@@ -67,6 +74,7 @@
 }
 
 .user-etc-box {
+  margin-right: 10px;
   color: #888;
   font-size: 16px;
   font-weight: 400;
@@ -143,7 +151,7 @@
 }
 
 .form-input-conditions li.pass::before {
-  content: "check";
+  content: "\f26e";
   font-family: bootstrap-icons !important;
   font-style: normal;
   font-weight: normal !important;
@@ -159,7 +167,7 @@
 }
 
 .form-input-conditions li.restrict::before {
-  content: "x";
+  content: "\f62a";
   font-family: bootstrap-icons !important;
   font-style: normal;
   font-weight: normal !important;

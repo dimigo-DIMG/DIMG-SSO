@@ -1,28 +1,158 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  {% include "header.html" %}
-  <link
-    rel="stylesheet"
-    href="{{url_for('static', path='/css/dev.service.general.css')}}"
-  />
-  <link
-    rel="stylesheet"
-    href="{{url_for('static', path='/css/dev.media.css')}}"
-  />
-  <title>DIMGSSO - 관리 · 유저 관리</title>
-</head>
-<body>
-  <!-- Sidebar -->
-  {% include "admin/sidebar.html" %}
+  <head>
+    {% include "header.html" %}
+    <link rel="stylesheet" href="{{url_for('static', path='/css/general/styles.css')}}" />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/dev.general.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/dev.media.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/list.module.css')}}"
+    />
+    <title>관리 · 유저 관리</title>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    {% include "admin/sidebar.html" %}
 
-  <!-- Content -->
-  <div id="container">
-    <div id="page-info">
-      <div id="page-name">유저 관리</div>
-      <!-- <div id="page-desc">DIMG-SSO 이용자 계정을 관리합니다.</div> -->
+    <!-- Content -->
+    <div id="container">
+      <div id="page-info">
+        <div id="page-name">유저 관리</div>
+        <div id="page-desc">DIMG-SSO 이용자 계정을 관리합니다.</div>
+      </div>
+      <div id="main-container">
+        <!-- 서비스 관리 상단 바 -->
+        <div id="manage-user" class="container-item">
+          <div class="item-select">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="checkboxSelectAll"
+              value=""
+              aria-label="..."
+            />
+          </div>
+          <div class="dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDarkDropdownMenuLink"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              필터
+            </a>
+            <ul
+              class="dropdown-menu"
+              aria-labelledby="navbarDarkDropdownMenuLink"
+            >
+              <li class="dropdown-menu-tit">필터</li>
+              <li><a class="dropdown-item active" href="#">전체</a></li>
+              <li><a class="dropdown-item" href="#">재학생</a></li>
+              <li><a class="dropdown-item" href="#">졸업생</a></li>
+              <li><a class="dropdown-item" href="#">일반</a></li>
+
+              <div class="dropdown-divider"></div>
+
+              <li class="dropdown-menu-tit">정렬</li>
+              <li><a class="dropdown-item" href="#">가입일 오름차순</a></li>
+              <li>
+                <a class="dropdown-item active" href="#">가입일 내림차순</a>
+              </li>
+              <li><a class="dropdown-item" href="#">이름 오름차순</a></li>
+              <li><a class="dropdown-item" href="#">이름 내림차순</a></li>
+            </ul>
+          </div>
+          <div class="item-cnt me-auto">
+            전체
+            <span>2</span>
+          </div>
+          <div class="item-search">
+            <i class="bi bi-search"></i>
+            <input
+              type="text"
+              class="form-control no-border"
+              placeholder="검색"
+            />
+          </div>
+        </div>
+
+        <!-- 유저 리스트 -->
+        <div class="container-item">
+          <div class="item-select">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="checkboxSelectAll"
+              value=""
+              aria-label="..."
+            />
+          </div>
+          <div class="item-info">
+            <div class="item-info-head">
+              <span class="item-info-tit">chunzhi23</span>
+              <span class="item-tag enrol"></span>
+            </div>
+            <div class="item-info-desc">
+              <address>ssomang@dimg.rerac.dev</address>
+            </div>
+          </div>
+          <div class="item-menu align-items-end">
+            <div class="service-joined mb-2">
+              <span class="joined-label">가입일</span>
+              <span>2023. 12. 20.</span>
+            </div>
+            <button type="button" class="btn btn-danger col-md-10">삭제</button>
+          </div>
+        </div>
+
+        <div class="container-item">
+          <div class="item-select">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="checkboxSelectAll"
+              value=""
+              aria-label="..."
+            />
+          </div>
+          <div class="item-info">
+            <div class="item-info-head">
+              <span class="item-info-tit">wenna21</span>
+              <span class="item-tag grad"></span>
+            </div>
+            <div class="item-info-desc">
+              <address>ssomang@dimg.rerac.dev</address>
+            </div>
+          </div>
+          <div class="item-menu align-items-end">
+            <div class="service-joined mb-2">
+              <span class="joined-label">가입일</span>
+              <span>2023. 12. 20.</span>
+            </div>
+            <button type="button" class="btn btn-danger col-md-10">삭제</button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  {% include "footer.html" %}
-</body>
+    {% include "footer.html" %}
+    <script type="text/javascript">
+      (function (){
+        const userInfo = document.getElementsByClassName("item-info");
+        for (let i = 0; i < userInfo.length; i++){
+          userInfo[i].addEventListener("click", () => {
+            location.href = "#!";
+          });
+        }
+      })();
+    </script>
+  </body>
 </html>
