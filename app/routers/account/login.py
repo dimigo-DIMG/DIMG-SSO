@@ -4,17 +4,12 @@ from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.core import current_user_optional, templates
-from app.users import (
-    UserManager,
-    get_user_manager,
-    auth_backend,
-    User,
-    JWTStrategy
-)
+from app.users import UserManager, get_user_manager, auth_backend, User, JWTStrategy
 from app.db import get_async_session
 from app.backends.statistics import add_failed_login_count, add_login_count
 
 login_router = APIRouter(prefix="/login", tags=["account"])
+
 
 @login_router.get("/")
 async def login(request: Request, user: User = Depends(current_user_optional)):

@@ -1,14 +1,10 @@
 from typing import Tuple
 from fastapi import APIRouter, Depends
-from fastapi_users import fastapi_users
 
-from app.users import (
-    auth_backend,
-    User,
-    JWTStrategy
-)
+from app.users import fastapi_users, auth_backend, User, JWTStrategy
 
 logout_router = APIRouter(prefix="/logout", tags=["account"])
+
 
 @logout_router.get("/")
 async def logout(

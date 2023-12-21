@@ -13,6 +13,7 @@ import random
 
 reset_password_router = APIRouter(prefix="/reset-password", tags=["account"])
 
+
 @reset_password_router.get("/")
 async def reset_password(request: Request, user: User = Depends(current_user_optional)):
     if user:

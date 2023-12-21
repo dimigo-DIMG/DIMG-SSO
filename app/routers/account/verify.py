@@ -11,7 +11,8 @@ from app.users import (
 
 verify_router = APIRouter(prefix="/verify", tags=["account"])
 
-@verify_router.get("/account/verify")
+
+@verify_router.get("/")
 async def verify(
     request: Request,
     user: User = Depends(current_user_optional),

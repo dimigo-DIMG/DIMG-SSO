@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
 from fastapi_users import exceptions
@@ -14,7 +13,8 @@ import random
 
 forgot_password_router = APIRouter(prefix="/forgot-password", tags=["account"])
 
-@forgot_password_router.get("/account/forgot-password")
+
+@forgot_password_router.get("/")
 async def password(request: Request, user: User = Depends(current_user_optional)):
     if user:
         return RedirectResponse("/")
@@ -28,7 +28,8 @@ async def password(request: Request, user: User = Depends(current_user_optional)
         {"request": request, "failed": failed, "csrf_token": csrf_token},
     )
 
-@forgot_password_router.post("/account/forgot-password")
+
+@forgot_password_router.post("/")
 async def password(
     request: Request,  # type: ignore
     user_manager: UserManager = Depends(get_user_manager),

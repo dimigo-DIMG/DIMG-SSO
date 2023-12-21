@@ -1,5 +1,5 @@
 from os import environ
-from typing import AsyncGenerator, List, TypeVar
+from typing import AsyncGenerator, List
 import uuid
 from fastapi_users_db_sqlalchemy.generics import GUID
 from sqlalchemy.orm import Mapped, declared_attr, mapped_column
@@ -47,7 +47,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     expire = Column(Date, nullable=True)
 
     service_connections: Mapped[List["ServiceConnection"]] = relationship(
-        "ServiceConnection"
+        "ServiceConnection", lazy="joined"
     )
     access_tokens: Mapped[List["AccessToken"]] = relationship("AccessToken")
 
@@ -90,7 +90,7 @@ class Service(Base):
             return f"/static/test.png"
 
     service_connections: Mapped[List["ServiceConnection"]] = relationship(
-        "ServiceConnection"
+        "ServiceConnection", lazy="joined"
     )
 
     access_tokens: Mapped[List["AccessToken"]] = relationship("AccessToken")
@@ -125,6 +125,7 @@ class ServiceConnection(Base):
         back_populates="service_connections",
         cascade="all, delete-orphan",
         single_parent=True,
+        
     )
 
 
@@ -159,6 +160,7 @@ class AccessToken(Base):
         cascade="all, delete-orphan",
         single_parent=True,
     )
+
 
 class Statistic(Base):
     __tablename__ = "statistics"

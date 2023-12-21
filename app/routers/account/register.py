@@ -4,15 +4,12 @@ from fastapi_users import exceptions, schemas
 import random
 
 from app.core import current_user_optional, templates
-from app.users import (
-    UserManager,
-    get_user_manager,
-    User
-)
+from app.users import UserManager, get_user_manager, User
 from app.schemas import UserCreate, UserRead
 from app.backends.statistics import update_statistics
 
 register_router = APIRouter(prefix="/register", tags=["account"])
+
 
 @register_router.get("/")
 async def register(request: Request, user: User = Depends(current_user_optional)):
@@ -35,7 +32,7 @@ async def register(request: Request, user: User = Depends(current_user_optional)
     )
 
 
-@register_router.post("/account/register")
+@register_router.post("/")
 async def register(
     request: Request,  # type: ignore
     user_manager: UserManager = Depends(get_user_manager),

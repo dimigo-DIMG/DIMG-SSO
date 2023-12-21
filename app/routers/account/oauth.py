@@ -1,18 +1,21 @@
 from typing import Dict
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
+from fastapi_users.router import oauth as oauth_router
 
-from app.core import current_active_user
+from app.schemas import UserRead
 from app.users import (
     auth_backend,
     User,
     SECRET,
-    oauth_router,
+    fastapi_users,
     google_oauth_client,
     microsoft_oauth_client,
+    current_active_user
 )
 
-oauth_router = APIRouter(prefix="/oauth", tags=["account"])
+
+oauth_router = APIRouter(prefix="/oauth", tags=["oauth"])
 
 @oauth_router.get("/l/{provider}")
 async def oauth_login(request: Request, provider: str):
@@ -52,3 +55,25 @@ async def oauth_connect(
 
     # redirect to oauth provider
     return RedirectResponse(url)
+
+
+oauth_router.include_router(
+    fastapi_users.get_oauth_router(google_oauth_client, auth_backend, SECRET),
+    prefix="/google/login",
+    tags=["auth"],
+)
+oauth_router.include_router(
+    fastapi_users.get_oauth_associate_router(google_oauth_client, UserRead, SECRET),
+    prefix="/google/connect",
+    tags=["auth"],
+)
+oauth_router.include_router(
+    fastapi_users.get_oauth_router(microsoft_oauth_client, auth_backend, SECRET),
+    prefix="/microsoft/login",
+    tags=["auth"],
+)
+oauth_router.include_router(
+    fastapi_users.get_oauth_associate_router(microsoft_oauth_client, UserRead, SECRET),
+    prefix="/microsoft/connect",
+    tags=["auth"],
+)

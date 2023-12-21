@@ -1,10 +1,9 @@
 import datetime
 import os
 import uuid
-from typing import Any, Coroutine, Optional
+from typing import Optional
 
-from fastapi import Depends, Form, Request, Response, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import Depends, Request, HTTPException
 from fastapi_users import BaseUserManager, FastAPIUsers, UUIDIDMixin
 from fastapi_users.authentication import (
     AuthenticationBackend,
@@ -50,11 +49,13 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         await mailer.send_email_html(
             user.email,
             "이메일 인증",
-            html.replace("[URL]",
-                f"{https_prefix}://{MAIN_HOST}/account/verify?token={token}").replace("[M1]", "이메일 인증").replace("[M2]", "아래 버튼을 클릭하여 인증을 완료하세요."),
-              
+            html.replace(
+                "[URL]", f"{https_prefix}://{MAIN_HOST}/account/verify?token={token}"
+            )
+            .replace("[M1]", "이메일 인증")
+            .replace("[M2]", "아래 버튼을 클릭하여 인증을 완료하세요."),
         )
-        
+
     async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None
     ) -> None:
@@ -63,10 +64,13 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         await mailer.send_email_html(
             user.email,
             "비밀번호 초기화",
-            html.replace("[URL]",
-                f"{https_prefix}://{MAIN_HOST}/account/reset-password?token={token}").replace("[M1]", "비밀번호 초기화").replace("[M2]", "아래 버튼을 클릭하여 비밀번호를 초기화하세요."),
+            html.replace(
+                "[URL]",
+                f"{https_prefix}://{MAIN_HOST}/account/reset-password?token={token}",
+            )
+            .replace("[M1]", "비밀번호 초기화")
+            .replace("[M2]", "아래 버튼을 클릭하여 비밀번호를 초기화하세요."),
         )
-        
 
     async def oauth_associate_callback(
         self: BaseUserManager[models.UOAP, models.ID],
