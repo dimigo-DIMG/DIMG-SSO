@@ -85,6 +85,8 @@ async def account_profile(
         update_dict["birthday"] = datetime.datetime.strptime(
             new_birth, "%Y-%m-%d"
         ).date()
+    else:
+        update_dict["birthday"] = None
     if new_gender:
         update_dict["gender"] = new_gender if new_gender != "no" else None
 

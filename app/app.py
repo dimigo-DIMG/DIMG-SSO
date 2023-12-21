@@ -22,7 +22,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(routers.root_router)
 
-'''
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request, exc):
     return templates.TemplateResponse(
@@ -50,7 +49,6 @@ async def http_exception_handler(request, exc):
         {"request": request, "error": "서버 내부 오류가 발생했어요. 관리자에게 문의해주세요.", "code": 500},
     )
 
-'''
 @app.on_event("startup")
 async def on_startup():
     # Not needed if you setup a migration system like Alembic
