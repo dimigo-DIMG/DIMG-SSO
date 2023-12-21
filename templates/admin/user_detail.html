@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  {% include "header.html" %}
+  <title>관리 · 유저 관리 · chunzhi23</title>
+  <link
+    rel="stylesheet" 
+    href="{{url_for('static', path='/css/general/styles.css')}}"
+  />
+  <link
+    rel="stylesheet"
+    href="{{url_for('static', path='/css/dev.general.css')}}"
+  />
+  <link
+    rel="stylesheet"
+    href="{{url_for('static', path='/css/dev.media.css')}}"
+  />
+  <link
+    rel="stylesheet"
+    href="{{url_for('static', path='/css/list.module.css')}}"
+  />
+</head>
+<style>
+  #page-desc {
+    margin-left: 35px;
+    color: #888;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  #main-container {
+    margin-top: 30px;
+    margin-left: 35px;
+  }
+
+  #user-info {line-height: 28px;}
+
+  .section-item {
+    margin-top: 30px;
+  }
+
+  .header-text {
+    color: #000;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .division-line {
+    margin: 10px 0;
+    border-bottom: 1px solid #888;
+  }
+
+  @media (min-width: 480px) {
+    #main-container {
+      width: 480px;
+    }
+  }
+</style>
+<body>
+  <!-- Sidebar -->
+  {% include "admin/sidebar.html" %}
+
+  <!-- Content -->
+  <div id="container">
+    <div id="page-info">
+      <div id="page-name">
+        <i class="bi bi-caret-left"></i>chunzhi23
+      </div>
+      <div id="page-desc">ssomang@dimg.rerac.dev</div>
+    </div>
+    <div id="main-container">
+      <!-- 유저 정보 섬 -->
+      <div id="user-info" class="container-item">
+        <ul>
+          <li>가입일: 2023. 12. 20.</li>
+          <li>성별: 남성<i class="bi bi-gender-male"></i></li>
+          <li>생일: 2005. 7. 15.</li>
+        </ul>
+      </div>
+
+      <div id="exercising-service" class="section-item">
+        <div class="header-text">이용 중인 서비스</div>
+        <div class="division-line"></div>
+      </div>
+
+      <!-- 서비스 관리 상단 바 -->
+      <div id="manage-user" class="container-item">
+        <div class="item-select">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="checkboxSelectAll"
+            value=""
+            aria-label="..."
+          />
+        </div>
+        <div class="dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDarkDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            필터
+          </a>
+          <ul
+            class="dropdown-menu"
+            aria-labelledby="navbarDarkDropdownMenuLink"
+          >
+            <li class="dropdown-menu-tit">필터</li>
+            <li><a class="dropdown-item active" href="#">전체</a></li>
+            <li><a class="dropdown-item" href="#">공식 서비스</a></li>
+            <li><a class="dropdown-item" href="#">비공식 서비스</a></li>
+
+            <div class="dropdown-divider"></div>
+
+            <li class="dropdown-menu-tit">정렬</li>
+            <li><a class="dropdown-item" href="#">가입일 오름차순</a></li>
+            <li>
+              <a class="dropdown-item active" href="#">가입일 내림차순</a>
+            </li>
+            <li><a class="dropdown-item" href="#">이름 오름차순</a></li>
+            <li><a class="dropdown-item" href="#">이름 내림차순</a></li>
+          </ul>
+        </div>
+        <div class="item-cnt me-auto">
+          전체
+          <span>2</span>
+        </div>
+        <div class="item-search">
+          <i class="bi bi-search"></i>
+          <input
+            type="text"
+            class="form-control no-border"
+            placeholder="검색"
+          />
+        </div>
+      </div>
+
+      <!-- 유저 리스트 -->
+      <div class="container-item">
+        <div class="item-select">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="checkboxSelectAll"
+            value=""
+            aria-label="..."
+          />
+        </div>
+        <a class="item-ico" href="#!">
+          <img
+            width="100px"
+            height="100px"
+            src="{{ url_for('static', path='/img/chunzhi23.png') }}"
+            alt="DIMG-PaaS"
+          />
+        </a>
+        <div class="item-info">
+          <div class="item-info-head">
+            <span class="item-info-tit">DIMG-PaaS</span>
+            <span class="item-tag official"></span>
+          </div>
+          <div class="item-info-desc">
+            <span class="d-block">가입일: 2023. 12. 20.</span>
+            <span>천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "footer.html" %}
+</body>
+</html>

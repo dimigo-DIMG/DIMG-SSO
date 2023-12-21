@@ -2,11 +2,12 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
+    <link rel="stylesheet" href="{{url_for('static', path='/css/general/styles.css')}}" />
     <link
       rel="stylesheet"
       href="{{url_for('static', path='/css/dev.index.css')}}"
     />
-    <title>DIMGSSO - 관리</title>
+    <title>관리</title>
   </head>
   <body>
     <div id="container">
@@ -24,7 +25,7 @@
         </a>
 
         <!-- 서비스 추가 버튼 -->
-        <a class="section-btn" href="/manage/services">
+        <a class="section-btn" href="/manage/service">
           <div class="big-circle">
             <i class="bi bi-bag-dash"></i>
           </div>

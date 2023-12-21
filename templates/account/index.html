@@ -2,23 +2,11 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/interface.general.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/account.general.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/account.index.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/account.media.css')}}"
-    />
-    <title>DIMGSSO - 설정</title>
+    <link rel="stylesheet" href="{{url_for('static', path='/css/general/styles.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/interface.general.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/account.general.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/account.index.css')}}" />
+    <title>설정</title>
   </head>
   <body>
     <div id="container">
@@ -28,27 +16,22 @@
         {% include "navbar.html" %}
         <div class="container">
           <div id="user-profile-section" class="container-section">
-            {% include "account/section-profile.html" %}  
+            {% include "account/section-profile.html" %}
           </div>
           <div id="modify-section" class="container-section">
             {% if menu==0 %}
             <!-- Default -->
-            <div id="default-editable-area" class="profile-area ">
+            <div id="default-editable-area" class="profile-area">
               <span class="logo-txt-main">DIMG</span>
             </div>
 
             {% elif menu==1 %}
             <!-- username & etc.  -->
-            {% include "account/modify-user.html" %}
-            
-            {% elif menu==2 %}
+            {% include "account/modify-user.html" %} {% elif menu==2 %}
             <!-- email  -->
-            {% include "account/modify-email.html" %} 
-            
-            {% elif menu==3 %}
+            {% include "account/modify-email.html" %} {% elif menu==3 %}
             <!-- password -->
-            {% include "account/modify-pw.html" %} 
-            {% endif %}
+            {% include "account/modify-pw.html" %} {% endif %}
           </div>
         </div>
       </div>
@@ -57,9 +40,23 @@
     <script type="text/javascript">
       const menu_val = "{{ menu }}";
       if (menu_val == 0) {
-        document.getElementById("user-profile-section").classList.add("focused");
+        document
+          .getElementById("user-profile-section")
+          .classList.add("focused");
       } else {
         document.getElementById("modify-section").classList.add("focused");
+      }
+
+      // condition 모두 만족했는지 확인하는 함수
+      function checkNoRestricted(node) {
+        const conditions = node.querySelectorAll("ul li");
+        for (let i = 0; i < conditions.length; i++) {
+          const con = conditions[i];
+          if (con.className === "restrict") {
+            return false;
+          }
+        }
+        return true;
       }
     </script>
   </body>

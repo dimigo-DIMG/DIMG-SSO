@@ -2,9 +2,10 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
+    <link rel="stylesheet" href="{{url_for('static', path='/css/general/styles.css')}}" />
     <link
       rel="stylesheet"
-      href="{{url_for('static', path='/css/dev.service.general.css')}}"
+      href="{{url_for('static', path='/css/dev.general.css')}}"
     />
     <link
       rel="stylesheet"
@@ -14,7 +15,7 @@
       rel="stylesheet"
       href="{{url_for('static', path='/css/dev.service.index.css')}}"
     />
-    <title>DIMGSSO - 관리 · 서비스</title>
+    <title>관리 · 서비스</title>
   </head>
   <body>
     <!-- Sidebar -->
@@ -47,7 +48,7 @@
 
             <div
               class="service-settings"
-              onclick="document.location.href='/manage/services/{{service.client_id}}'"
+              onclick="document.location.href='/manage/service/{{service.client_id}}'"
             >
               <i class="bi bi-gear ico-center mobile-center-no"></i>
             </div>
@@ -78,7 +79,7 @@
       // console.log(add_service);
       add_service.addEventListener(
         "click",
-        () => (location.href = "/manage/services/create")
+        () => (location.href = "/manage/service/create")
       );
     </script>
   </body>
