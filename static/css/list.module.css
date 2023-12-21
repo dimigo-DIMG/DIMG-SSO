@@ -5,6 +5,10 @@
 }
 
 /* Individual */
+#main-container {
+  margin-top: 30px;
+}
+
 .container-item {
   margin-bottom: 10px;
   padding: 10px;
@@ -88,6 +92,11 @@
   text-overflow: ellipsis;
 }
 
+.item-info-desc address {
+  margin: 0;
+  color: #888;
+}
+
 .item-tag {
   padding: 0 8px;
   border-radius: 10px;
@@ -99,6 +108,15 @@
   line-height: normal;
   letter-spacing: -1.6px;
 }
+
+.item-tag.enrol {background-color: #c683d7;}
+.item-tag.enrol::after {content: "재학";}
+.item-tag.grad {background-color: #ed9ed6;}
+.item-tag.grad::after {content: "졸업";}
+.item-tag.guest {background-color: #ffc7c7;}
+.item-tag.guest::after {content: "일반";}
+.item-tag.official {background-color: #54AEB6;}
+.item-tag.official::after {content: "DIMG";}
 
 .item-menu {
   padding: 0 15px;
@@ -112,6 +130,12 @@
   font-size: 16px;
   font-weight: 400;
   line-height: normal;
+}
+
+@media (min-width: 480px) {
+  #main-container {
+    width: 480px;
+  }
 }
 
 @media (max-width: 768px) {
