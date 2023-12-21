@@ -2,7 +2,10 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
-    <link rel="stylesheet" href="{{url_for('static', path='/css/general/styles.css')}}" />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/general/styles.css')}}"
+    />
     <link
       rel="stylesheet"
       href="{{url_for('static', path='/css/interface.general.css')}}"
@@ -19,11 +22,7 @@
   </head>
   <style>
     .container {
-      padding-top: 40px;
-    }
-    
-    .item-tag {
-      background: #54AEB6;
+      padding-top: 10px;
     }
   </style>
   <body>
@@ -31,7 +30,7 @@
       {% include "jumbotron.html" %}
       <div id="main-container">
         {% include "navbar.html" %}
-        <div class="container">
+        <div id="services-container" class="container">
           <!-- 서비스 관리 상단 바 -->
           <div id="manage-service" class="container-item">
             <div class="item-select">
@@ -74,7 +73,7 @@
                 <li><a class="dropdown-item" href="#">이름 내림차순</a></li>
               </ul>
             </div>
-            <div class="item-cnt me-auto">
+            <div id="cnt-item-filtered" class="item-cnt me-auto">
               전체
               <span>2</span>
             </div>
@@ -89,86 +88,131 @@
           </div>
 
           <!-- 서비스 리스트 -->
-          <div class="container-item">
-            <div class="item-select">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="checkboxSelectAll"
-                value=""
-                aria-label="..."
-              />
-            </div>
-            <a class="item-ico" href="#!">
-              <img
-                width="100px"
-                height="100px"
-                src="{{ url_for('static', path='/img/chunzhi23.png') }}"
-                alt="DIMG-PaaS"
-              />
-            </a>
-            <div class="item-info">
-              <div class="item-info-head">
-                <span class="item-info-tit">DIMG-PaaS</span>
-                <span class="item-tag official"></span>
-              </div>
-              <div class="item-info-desc">
-                <span>천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루</span>
-              </div>
-            </div>
-            <div class="item-menu">
-              <div class="service-joined mb-2">
-                <span class="d-block joined-label">가입일</span>
-                <span class="d-block">2023. 12. 20.</span>
-              </div>
-              <button type="button" class="btn btn-danger">탈퇴</button>
-            </div>
-          </div>
-
-          <div class="container-item">
-            <div class="item-select">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="checkboxSelectAll"
-                value=""
-                aria-label="..."
-              />
-            </div>
-            <a class="item-ico" href="#!">
-              <img
-                width="100px"
-                height="100px"
-                src="{{ url_for('static', path='/img/logo_asdf.png') }}"
-                alt="Fitness Club"
-              />
-            </a>
-            <div class="item-info">
-              <div class="item-info-head">
-                <span class="item-info-tit">Fitness Club</span>
-              </div>
-              <div class="item-info-desc">
-                <span
-                  >천방지축 어리둥절 빙글빙글 돌아가는 짱구의 하루 천방지축
-                  어리둥절 빙글빙글 돌아가는 짱구의 하루 천방지축 어리둥절
-                  빙글빙글 돌아가는 짱구의 하루 천방지축 어리둥절 빙글빙글
-                  돌아가는 짱구의 하루 천방지축 어리둥절 빙글빙글 돌아가는
-                  짱구의 하루 천방지축 어리둥절 빙글빙글 돌아가는 짱구의
-                  하루</span
-                >
-              </div>
-            </div>
-            <div class="item-menu">
-              <div class="item-joined mb-2">
-                <span class="d-block joined-label">가입일</span>
-                <span class="d-block">2023. 12. 20.</span>
-              </div>
-              <button type="button" class="btn btn-danger">탈퇴</button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
     {% include "footer.html" %}
+    <script type="text/javascript">
+      function getAllData(data) {
+        // Main container item node creation
+        const containerItem = document.createElement("div");
+        containerItem.classList.add("container-item");
+
+        // Checkbox node creation
+        const itemSelect = document.createElement("div");
+        itemSelect.classList.add("item-select");
+
+        const checkboxInput = document.createElement("input");
+        checkboxInput.classList.add("form-check-input");
+        checkboxInput.type = "checkbox";
+
+        itemSelect.appendChild(checkboxInput);
+
+        // Service icon image node creation
+        const itemIco = document.createElement("a");
+        itemIco.classList.add("item-ico");
+        itemIco.href = data["main_page"];
+
+        const imgIco = document.createElement("img");
+        imgIco.width = 100;
+        imgIco.height = 100;
+        imgIco.alt = data["name"];
+
+        const pathRegex = /\/icons\/(.+)/;
+        const icoPath = data["icon"].match(pathRegex);
+        imgIco.src = `{{ url_for('static', path='icons/${icoPath[1]}') }}`;
+
+        itemIco.appendChild(imgIco);
+
+        // Service information node creation
+        const itemInfo = document.createElement("div");
+        itemInfo.classList.add("item-info");
+
+        const itemInfoHead = document.createElement("div");
+        itemInfoHead.classList.add("item-info-head");
+
+        const itemInfoTit = document.createElement("span");
+        itemInfoTit.classList.add("item-info-tit");
+        itemInfoTit.textContent = data["name"];
+
+        const itemTag = document.createElement("span");
+        itemTag.classList.add("item-tag");
+        if (data["is_official"]) {
+          itemTag.classList.add("official");
+        }
+
+        itemInfoHead.append(itemInfoTit, itemTag);
+
+        const itemInfoDesc = document.createElement("div");
+        itemInfoDesc.classList.add("item-info-desc");
+
+        const descSpan = document.createElement("span");
+        descSpan.textContent = data["description"];
+        
+        itemInfoDesc.appendChild(descSpan);
+
+        itemInfo.append(itemInfoHead, itemInfoDesc);
+
+        // etc. menu node creation
+        const itemMenu = document.createElement("div");
+        itemMenu.classList.add("item-menu");
+
+        const serviceJoined = document.createElement("div");
+        serviceJoined.classList.add("service-joined", "mb-2");
+
+        const joinedLabel = document.createElement("span");
+        joinedLabel.classList.add("d-block", "joined-label");
+        joinedLabel.textContent = "가입일";
+
+        const joinedDate = document.createElement("span");
+        joinedDate.classList.add("d-block");
+        joinedDate.textContent = data["join_date"]; // Assuming you have a "join_date" property in your data
+
+        serviceJoined.append(joinedLabel, joinedDate);
+
+        const leaveButton = document.createElement("button");
+        leaveButton.type = "button";
+        leaveButton.classList.add("btn", "btn-danger");
+        leaveButton.textContent = "탈퇴";
+
+        itemMenu.appendChild(serviceJoined);
+        itemMenu.appendChild(leaveButton);
+
+        // Appending nodes to the main container item
+        containerItem.appendChild(itemSelect);
+        containerItem.appendChild(itemIco);
+        containerItem.appendChild(itemInfo);
+        containerItem.appendChild(itemMenu);
+
+        return containerItem;
+      }
+
+      (function (){
+        fetch("/api/services")
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error('Network response was not OK');
+            }
+            return res.json();
+          })
+          .then((data) => {
+            console.log(data);
+            const container = document.getElementById("services-container");
+
+            for (let i = 0; i < data.length; i++) {
+              const aService = data[i];
+              
+              // Converting all data into DOM
+              const containerItem = getAllData();
+
+              // Appending the main container item to the container
+              container.appendChild(containerItem);
+            }
+          })
+          .catch((err) => {
+            console.error("Fetch error:", err);
+          });
+      })();
+    </script>
   </body>
 </html>
