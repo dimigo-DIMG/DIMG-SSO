@@ -100,6 +100,7 @@
         </div>
 
         <!-- 유저 리스트 -->
+        <div id="users-container"></div>
         <div class="container-item">
           <div class="item-select">
             <input
@@ -158,6 +159,24 @@
       </div>
     </div>
     {% include "footer.html" %}
+    <script id="list2DOM" type="text/javascript" src="{{ url_for('static', path='/js/list.module.generate.js') }}" jinja-location="{{ url_for('static', path='/') }}"></script>
+    <script type="text/javascript">
+      (function (){
+        const data = [
+          {
+            "client_id": "blabla",
+            "name": "chunzhi23",
+            "description": "ssomang@dimg.rerac.dev",
+            "tag": "재학",
+            "unregister_page": "https://www.naver.com",
+            "main_page": "/manage/user/chunzhi23",
+            "join_date": "2023. 12. 22.",
+          },
+        ];
+
+        const container = document.getElementById("users-container");
+      })();
+    </script>
     <script type="text/javascript">
       (function (){
         const userInfo = document.getElementsByClassName("item-info");

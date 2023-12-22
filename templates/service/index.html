@@ -134,9 +134,28 @@
       </div>
     </div>
     {% include "footer.html" %}
-    <script id="list2DOM" type="text/javascript" src="{{ url_for('static', path='/js/list.module.generate.js') }}" jinja-location="{{ url_for('static', path='/') }}"></script>
+    <script
+      id="list2DOM"
+      type="text/javascript"
+      src="{{ url_for('static', path='/js/list.module.generate.js') }}"
+      jinja-location="{{ url_for('static', path='/') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='/js/list.module.arrange.js') }}"
+    ></script>
     <script type="text/javascript">
       (function () {
+        const container = document.getElementById("services-container");
+
+        // Additional code for filter, sort, and search
+        const filterSortDropdown =
+          document.getElementById("filterSortDropdown");
+        const filterOptions = document.querySelectorAll(".filter-option");
+        const sortOptions = document.querySelectorAll(".sort-option");
+        const searchInput = document.getElementById("search-input");
+        const checkboxSelectAll = document.getElementById("checkboxSelectAll");
+
         fetch("/api/services")
           .then((res) => {
             if (!res.ok) {
@@ -145,78 +164,21 @@
             return res.json();
           })
           .then((data) => {
-            // console.log(data);
-            const container = document.getElementById("services-container");
-
-            function applyFilterSortSearch(
-              data,
-              filterOption,
-              sortOption,
-              searchTerm
-            ) {
-              // Filter data based on the filter option
-              const filteredData = data.filter((item) => {
-                if (filterOption === "all") {
-                  return true;
-                } else if (filterOption === "official") {
-                  return item.is_official;
-                } else if (filterOption === "unofficial") {
-                  return !item.is_official;
-                }
-              });
-
-              // Sort data based on the sort option
-              const sortedData = filteredData.sort((a, b) => {
-                if (sortOption === "join_date_asc") {
-                  return new Date(a.join_date) - new Date(b.join_date);
-                } else if (sortOption === "join_date_desc") {
-                  return new Date(b.join_date) - new Date(a.join_date);
-                } else if (sortOption === "name_asc") {
-                  return a.name.localeCompare(b.name);
-                } else if (sortOption === "name_desc") {
-                  return b.name.localeCompare(a.name);
-                } else {
-                  return 0; // No sorting
-                }
-              });
-
-              // Search data based on the search term
-              const searchedData = sortedData.filter((item) => {
-                const searchStr = searchTerm.toLowerCase();
-                return (
-                  item.name.toLowerCase().includes(searchStr) ||
-                  item.description.toLowerCase().includes(searchStr)
-                );
-              });
-
-              return searchedData;
-            }
-
-            // Additional code for filter, sort, and search
-            const filterSortDropdown = document.getElementById("filterSortDropdown");
-            const filterOptions = document.querySelectorAll(".filter-option");
-            const sortOptions = document.querySelectorAll(".sort-option");
-            const searchInput = document.getElementById("search-input");
-
-            const checkboxSelectAll = document.getElementById("checkboxSelectAll");
-            checkboxSelectAll.addEventListener("change", toggleSelectAll);
-
-            filterOptions.forEach(option => option.addEventListener("click", updateFilterList));
-            sortOptions.forEach(option => option.addEventListener("click", updateSortList));
+            console.log(data);
+            
+            filterOptions.forEach((option) =>
+              option.addEventListener("click", updateFilterList));
+            sortOptions.forEach((option) =>
+              option.addEventListener("click", updateSortList)
+            );
             searchInput.addEventListener("input", updateList);
-
-            // Add the toggleSelectAll function here
-            function toggleSelectAll() {
-              const checkboxes = document.querySelectorAll(".generated-checkbox");
-
-              checkboxes.forEach(checkbox => {
-                checkbox.checked = checkboxSelectAll.checked;
-              });
-            }
+            checkboxSelectAll.addEventListener("change", toggleSelectAll);
 
             function updateFilterList() {
               // Remove "active" class from all filter options
-              filterOptions.forEach(option => option.classList.remove("active"));
+              filterOptions.forEach((option) =>
+                option.classList.remove("active")
+              );
 
               // Add "active" class to the clicked filter option
               this.classList.add("active");
@@ -227,12 +189,18 @@
               // Update the content of the filtered item count
               updateFilteredItemCount();
 
+              // Trigger the updateList function to reflect the changes
               updateList();
             }
 
             function updateFilteredItemCount() {
+              // Now, the updateFilteredItemCount function has access to the data parameter
               const filterOption = document.querySelector(".filter-option.active").dataset.option;
+
+              // Filter data based on the filter option
               const filteredData = applyFilterSortSearch(data, filterOption, "", "");
+
+              // Update the content of the filtered item count
               const filteredItemCount = filteredData.length;
 
               const cntItemFiltered = document.getElementById("cnt-item-filtered");
@@ -252,14 +220,16 @@
             }
 
             function getFilterText(filterOption) {
-              if (filterOption === 'official') {
-                return '공식';
-              } else if (filterOption === 'unofficial') {
-                return '비공식';
-              } else if (filterOption === 'all') {
-                return '전체';
+              if (filterOption === "official") {
+                return "공식";
+              } else if (filterOption === "unofficial") {
+                return "비공식";
+              } else if (filterOption === "all") {
+                return "전체";
               } else {
-                return filterOption.charAt(0).toUpperCase() + filterOption.slice(1);
+                return (
+                  filterOption.charAt(0).toUpperCase() + filterOption.slice(1)
+                );
               }
             }
 
@@ -296,7 +266,12 @@
               // Append the updated items to the container
               for (let i = 0; i < filteredSortedSearchData.length; i++) {
                 const containerItem = getList2DOM(
-                  filteredSortedSearchData[i], i
+                  filteredSortedSearchData[i],
+                  i,
+                  {
+                    img: true,
+                    menu: true,
+                  }
                 );
                 container.appendChild(containerItem);
               }

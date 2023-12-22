@@ -1,4 +1,11 @@
-function getList2DOM(data, index) {
+function getList2DOM(data, index, apply) {
+  // data: List<Dict>
+  // index: Number
+  // apply: {
+  //   img: Boolean
+  //   menu: Boolean
+  // }
+
   const scriptElement = document.getElementById("list2DOM");
   const jinjaLocation = scriptElement.getAttribute('jinja-location');
   // Main container item node creation
