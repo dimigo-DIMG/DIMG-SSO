@@ -1,3 +1,4 @@
+
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
 
@@ -11,6 +12,7 @@ from app.backends.services import (
     get_service_connection,
 )
 from app.backends.statistics import get_all_statistics
+from sqlalchemy.future import select
 
 import datetime
 
@@ -40,13 +42,13 @@ async def get_token(
     # check if serviceconnection exists
     service_connection = await get_service_connection(db, user.id, client_id)
     if not service_connection:
-        # redirect to permission page with state
+        # redirect to connect page with state
         request.session["state"] = state
-        return RedirectResponse(f"/service/permission/{client_id}", status_code=303)
+        return RedirectResponse(f"/service/connect/{client_id}", status_code=303)
 
     if service_connection.unregistered:
         # redirect to api/sso/token/get
-        return RedirectResponse(f"/service/permission/{client_id}", status_code=303)
+        return RedirectResponse(f"/service/connect/{client_id}", status_code=303)
 
     # check if token exists
     generated_token = await generate_access_token(
@@ -100,3 +102,37 @@ async def api_service_list(
         )
     return services_json
 
+@api_router.get("/manager/users")
+async def api_manager_users(
+    db=Depends(get_async_session), user=Depends(current_user_admin)
+):
+    '''
+    {
+        "email": "string",
+        "nickname": "string",
+        "tag": "enrol" | "gred" | "guest",
+        "join_date": "string"
+    }
+    '''
+
+    users = await db.execute(select(User))
+    users_json = []
+    users: list[User] = users.unique().scalars().all()
+
+
+    for user in users:
+        tag = "guest"
+        if user.is_dimigo:
+            tag = "enrol"
+            if user.is_dimigo_updated < datetime.date.today() - datetime.timedelta(days=365):
+                tag = "grad"
+        users_json.append(
+            {
+                "email": user.email,
+                "nickname": user.nickname,
+                "tag": tag,
+                "join_date": user.sign_up_date.strftime("%Y. %m. %d") if user.sign_up_date else "알 수 없음",
+            }
+        )
+    
+    return users_json
