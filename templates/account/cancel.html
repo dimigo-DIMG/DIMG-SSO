@@ -1,0 +1,82 @@
+<form method="post" id="cancel-editable-area" class="profile-area">
+  {% if csrf_token %}
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+  {% endif %}
+  <div class="modify-info">
+    <div class="modify-info-title">
+      <i
+        class="bi bi-caret-left modify-go-previous"
+        onclick="chkFormChanged()"
+      ></i>
+      서비스 탈퇴
+    </div>
+    <div class="modify-info-desc">
+      <div>서비스에서 탈퇴하고 계정을 영구적으로 삭제합니다.</div>
+      <div style="color: #dc3545">*는 필수사항입니다.</div>
+    </div>
+  </div>
+  <div class="modify-form mt-4 mb-4">
+    <div class="mb-3">
+      <label for="user_formInputUsername" class="form-label">
+        계속하시려면 입력하세요<span class="input-necessary">*</span>
+      </label>
+      <input
+        type="text"
+        class="form-control form-input"
+        id="user_formInputUsername"
+        name="nickname"
+        autocomplete="false"
+        placeholder="계정 이름 '{{ user.nickname or user.email.split('@')[0] or '' }}' 입력"
+        minlength="4"
+        maxlength="16"
+      />
+    </div>
+  </div>
+  <div class="d-flex gap-2 mt-auto">
+    <button type="submit" class="col btn btn-danger form-input">탈퇴</button>
+    <button
+      class="col btn btn-secondary form-input"
+      type="button"
+      onclick="location.href='/account'"
+    >
+      취소
+    </button>
+  </div>
+</form>
+<script type="text/javascript">
+  function chkFormChanged() {
+    let is_changed = false;
+
+    const username_form = document.getElementById(
+      "user_formInputUsername"
+    ).value;
+    if (username_form) is_changed = true;
+
+    if (is_changed) {
+      const confirmation = confirm(
+        "이 페이지를 나가시겠습니까? 변경 사항이 저장되지 않을 수 있습니다."
+      );
+
+      if (!confirmation) {
+        // User chose to stay on the page
+        return;
+      }
+    }
+    // Continue with navigating to the previous page
+    location.href = "/account";
+  }
+
+  (function () {
+    const usernameForm = document.getElementById("user_formInputUsername");
+    const thisForm = document.getElementById("cancel-editable-area");
+    thisForm.querySelector("button[type='submit']").addEventListener("click", (e) => {
+      e.preventDefault();
+
+      if (usernameForm.value === "{{ user.nickname or user.email.split('@')[0] or '' }}") {
+        thisForm.submit();
+      } else {
+        alert("올바른 계정 이름을 입력해주세요.");
+      }
+    })
+  })();
+</script>
