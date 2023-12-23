@@ -49,6 +49,11 @@ function applyFilterSortSearch(
 
 // Module for filter, sort, and search
 const FilterSortModule = (function () {
+  const userEmailFromURL = window.location.pathname
+    .split("/")
+    .filter(Boolean)
+    .pop();
+
   const scriptElement = document.getElementById("listArrange");
   const apiSrc = scriptElement.getAttribute("api-src");
 
@@ -73,12 +78,20 @@ const FilterSortModule = (function () {
           // Show loading cover and text
           loadingCover.style.display = "block";
 
-          const response = await fetch(apiSrc);
+          let apiSrcRes = apiSrc;
+          const match = apiSrc.match(/\{([^}]+)\}/);
+          if (match){
+            const parameterName = match[1];
+            if (parameterName === "email"){
+              apiSrcRes = apiSrc.replace("{email}", userEmailFromURL);
+            }
+          }
+
+          const response = await fetch(apiSrcRes);
           if (!response.ok) {
             throw new Error("Network response was not OK");
           }
           const data = await response.json();
-          // console.log(data);
 
           // Hide loading cover
           loadingCover.style.display = "none";
