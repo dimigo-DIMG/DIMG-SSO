@@ -39,8 +39,8 @@ function applyFilterSortSearch(
     const searchTermLowerCase = searchTerm.toLowerCase();
     filteredData = filteredData.filter(
       (item) =>
-        item.name.toLowerCase().includes(searchTermLowerCase) ||
-        item.description.toLowerCase().includes(searchTermLowerCase)
+        (item.name && item.name.toLowerCase().includes(searchTermLowerCase)) ||
+        (item.description && item.description.toLowerCase().includes(searchTermLowerCase))
     );
   }
 

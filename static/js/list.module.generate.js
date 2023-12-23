@@ -51,6 +51,7 @@ function getList2DOM(data, index) {
       "click",
       () => (location.href = `/manage/user/${data["email"]}`)
     );
+    itemInfo.style.cursor = "pointer";
   }
 
   const itemInfoHead = document.createElement("div");
