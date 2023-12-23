@@ -43,10 +43,11 @@ function applyFilterSortSearch(
 
 // Module for filter, sort, and search
 const FilterSortModule = (function () {
-  const container = document.getElementById("service-container");
+  const scriptElement = document.getElementById("listArrange");
+  const apiSrc = scriptElement.getAttribute("api-src");
+
+  const container = document.getElementById("item-container");
   const loadingCover = document.getElementById("loading-cover");
-  const filterSortDropdown =
-    document.getElementById("filterSortDropdown");
   const filterOptions = document.querySelectorAll(".filter-option");
   const sortOptions = document.querySelectorAll(".sort-option");
   const searchInput = document.getElementById("search-input");
@@ -61,11 +62,12 @@ const FilterSortModule = (function () {
       loadingCover.style.display = "block";
       container.innerHTML = "";
 
-      const response = await fetch("/api/services");
+      const response = await fetch(apiSrc);
       if (!response.ok) {
         throw new Error("Network response was not OK");
       }
       const data = await response.json();
+      console.log(data);
 
       // Hide loading cover
       loadingCover.style.display = "none";
@@ -81,6 +83,7 @@ const FilterSortModule = (function () {
 
   async function applyFilterSortSearchAndRender() {
     const data = fetchedData || (await fetchData());
+
     const filterOption = document.querySelector(".filter-option.active")
       .dataset.option;
     const sortOption = document.querySelector(".sort-option.active")

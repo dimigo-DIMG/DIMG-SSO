@@ -132,7 +132,7 @@
           <div id="loading-cover">Loading...</div>
 
           <!-- 서비스 리스트 -->
-          <div id="service-container"></div>
+          <div id="item-container"></div>
         </div>
       </div>
     </div>
@@ -144,8 +144,10 @@
       jinja-location="{{ url_for('static', path='/') }}"
     ></script>
     <script
+      id="listArrange"
       type="text/javascript"
       src="{{ url_for('static', path='/js/list.module.arrange.js') }}"
+      api-src="/api/services"
     ></script>
   </body>
 </html>

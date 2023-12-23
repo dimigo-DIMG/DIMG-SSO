@@ -57,32 +57,82 @@
             <a
               class="nav-link dropdown-toggle"
               href="#"
-              id="navbarDarkDropdownMenuLink"
+              id="filterSortDropdown"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
+              >필터</a
             >
-              필터
-            </a>
-            <ul
-              class="dropdown-menu"
-              aria-labelledby="navbarDarkDropdownMenuLink"
-            >
+            <ul class="dropdown-menu" aria-labelledby="filterSortDropdown">
               <li class="dropdown-menu-tit">필터</li>
-              <li><a class="dropdown-item active" href="#">전체</a></li>
-              <li><a class="dropdown-item" href="#">재학생</a></li>
-              <li><a class="dropdown-item" href="#">졸업생</a></li>
-              <li><a class="dropdown-item" href="#">일반</a></li>
+              <li>
+                <a
+                  class="dropdown-item filter-option active"
+                  data-option="all"
+                  href="#"
+                  >전체</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item filter-option"
+                  data-option="enrolled"
+                  href="#"
+                  >재학생</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item filter-option"
+                  data-option="graduated"
+                  href="#"
+                  >졸업생</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item filter-option"
+                  data-option="guest"
+                  href="#"
+                  >일반</a
+                >
+              </li>
 
               <div class="dropdown-divider"></div>
 
               <li class="dropdown-menu-tit">정렬</li>
-              <li><a class="dropdown-item" href="#">가입일 오름차순</a></li>
               <li>
-                <a class="dropdown-item active" href="#">가입일 내림차순</a>
+                <a
+                  class="dropdown-item sort-option"
+                  data-option="join_date_asc"
+                  href="#"
+                  >가입일 오름차순</a
+                >
               </li>
-              <li><a class="dropdown-item" href="#">이름 오름차순</a></li>
-              <li><a class="dropdown-item" href="#">이름 내림차순</a></li>
+              <li>
+                <a
+                  class="dropdown-item sort-option active"
+                  data-option="join_date_desc"
+                  href="#"
+                  >가입일 내림차순</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item sort-option"
+                  data-option="name_asc"
+                  href="#"
+                  >이름 오름차순</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item sort-option"
+                  data-option="name_desc"
+                  href="#"
+                  >이름 내림차순</a
+                >
+              </li>
             </ul>
           </div>
           <div class="item-cnt me-auto">
@@ -93,94 +143,37 @@
             <i class="bi bi-search"></i>
             <input
               type="text"
+              id="search-input"
               class="form-control no-border"
               placeholder="검색"
             />
           </div>
         </div>
 
-        <!-- 유저 리스트 -->
-        <div id="users-container"></div>
-        <div class="container-item">
-          <div class="item-select">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="checkboxSelectAll"
-              value=""
-              aria-label="..."
-            />
-          </div>
-          <div class="item-info">
-            <div class="item-info-head">
-              <span class="item-info-tit">chunzhi23</span>
-              <span class="item-tag enrol"></span>
-            </div>
-            <div class="item-info-desc">
-              <address>ssomang@dimg.rerac.dev</address>
-            </div>
-          </div>
-          <div class="item-menu align-items-end">
-            <div class="service-joined mb-2">
-              <span class="joined-label">가입일</span>
-              <span>2023. 12. 20.</span>
-            </div>
-            <button type="button" class="btn btn-danger col-md-10">삭제</button>
-          </div>
-        </div>
+        <!-- Add a loading cover and loading text to your HTML -->
+        <div id="loading-cover">Loading...</div>
 
-        <div class="container-item">
-          <div class="item-select">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="checkboxSelectAll"
-              value=""
-              aria-label="..."
-            />
-          </div>
-          <div class="item-info">
-            <div class="item-info-head">
-              <span class="item-info-tit">wenna21</span>
-              <span class="item-tag grad"></span>
-            </div>
-            <div class="item-info-desc">
-              <address>ssomang@dimg.rerac.dev</address>
-            </div>
-          </div>
-          <div class="item-menu align-items-end">
-            <div class="service-joined mb-2">
-              <span class="joined-label">가입일</span>
-              <span>2023. 12. 20.</span>
-            </div>
-            <button type="button" class="btn btn-danger col-md-10">삭제</button>
-          </div>
-        </div>
+        <!-- 유저 리스트 -->
+        <div id="item-container"></div>
       </div>
     </div>
     {% include "footer.html" %}
-    <script id="list2DOM" type="text/javascript" src="{{ url_for('static', path='/js/list.module.generate.js') }}" jinja-location="{{ url_for('static', path='/') }}"></script>
+    <script
+      id="list2DOM"
+      type="text/javascript"
+      src="{{ url_for('static', path='/js/list.module.generate.js') }}"
+      jinja-location="{{ url_for('static', path='/') }}"
+      ></script>
+      <script
+      id="listArrange"
+      type="text/javascript"
+      src="{{ url_for('static', path='/js/list.module.arrange.js') }}"
+      api-src="/api/services"
+    ></script>
     <script type="text/javascript">
-      (function (){
-        const data = [
-          {
-            "client_id": "blabla",
-            "name": "chunzhi23",
-            "description": "ssomang@dimg.rerac.dev",
-            "tag": "재학",
-            "unregister_page": "https://www.naver.com",
-            "main_page": "/manage/user/chunzhi23",
-            "join_date": "2023. 12. 22.",
-          },
-        ];
-
-        const container = document.getElementById("users-container");
-      })();
-    </script>
-    <script type="text/javascript">
-      (function (){
+      (function () {
         const userInfo = document.getElementsByClassName("item-info");
-        for (let i = 0; i < userInfo.length; i++){
+        for (let i = 0; i < userInfo.length; i++) {
           userInfo[i].addEventListener("click", () => {
             location.href = "#!";
           });

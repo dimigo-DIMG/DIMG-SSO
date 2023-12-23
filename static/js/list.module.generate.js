@@ -3,8 +3,8 @@ function getList2DOM(data, index) {
   // index: Number
 
   const scriptElement = document.getElementById("list2DOM");
-  const jinjaLocation = scriptElement.getAttribute('jinja-location');
-  
+  const jinjaLocation = scriptElement.getAttribute("jinja-location");
+
   // Main container item node creation
   const containerItem = document.createElement("div");
   containerItem.classList.add("container-item");
@@ -21,24 +21,33 @@ function getList2DOM(data, index) {
   itemSelect.appendChild(checkboxInput);
 
   // Service icon image node creation
-  const itemIco = document.createElement("a");
-  itemIco.classList.add("item-ico");
-  itemIco.href = data["main_page"];
+  let itemIco;
+  if (data["icon"]) {
+    itemIco = document.createElement("a");
+    itemIco.classList.add("item-ico");
+    itemIco.href = data["main_page"];
 
-  const imgIco = document.createElement("img");
-  imgIco.width = 100;
-  imgIco.height = 100;
-  imgIco.alt = data["name"];
+    const imgIco = document.createElement("img");
+    imgIco.width = 100;
+    imgIco.height = 100;
+    imgIco.alt = data["name"];
 
-  const pathRegex = /\/icons\/(.+)/;
-  const icoPath = data["icon"].match(pathRegex);
-  imgIco.src = `${jinjaLocation}icons/${icoPath[1]}`;
+    const pathRegex = /\/icons\/(.+)/;
+    const icoPath = data["icon"].match(pathRegex);
+    imgIco.src = `${jinjaLocation}icons/${icoPath[1]}`;
 
-  itemIco.appendChild(imgIco);
+    itemIco.appendChild(imgIco);
+  }
 
   // Service information node creation
   const itemInfo = document.createElement("div");
   itemInfo.classList.add("item-info");
+  if (data["email"]) {
+    itemInfo.addEventListener(
+      "click",
+      () => (location.href = `/manage/user/${data["email"]}`)
+    );
+  }
 
   const itemInfoHead = document.createElement("div");
   itemInfoHead.classList.add("item-info-head");
@@ -51,6 +60,12 @@ function getList2DOM(data, index) {
   itemTag.classList.add("item-tag");
   if (data["is_official"]) {
     itemTag.classList.add("official");
+  } else if (data["tag"] === "enrol"){
+    itemTag.classList.add("enrol");
+  } else if (data["tag"] === "grad"){
+    itemTag.classList.add("grad");
+  } else if (data["tag"] === "guest"){
+    itemTag.classList.add("guest");
   }
 
   itemInfoHead.append(itemInfoTit, itemTag);
@@ -58,8 +73,14 @@ function getList2DOM(data, index) {
   const itemInfoDesc = document.createElement("div");
   itemInfoDesc.classList.add("item-info-desc");
 
-  const descSpan = document.createElement("span");
-  descSpan.textContent = data["description"];
+  let descSpan;
+  if (data["description"]){
+    descSpan = document.createElement("span");
+    descSpan.textContent = data["description"];
+  } else if (data["email"]){
+    descSpan = document.createElement("address");
+    descSpan.textContent = data["email"];
+  }
 
   itemInfoDesc.appendChild(descSpan);
 
@@ -67,24 +88,23 @@ function getList2DOM(data, index) {
 
   // etc. menu node creation
   const itemMenu = document.createElement("div");
-  itemMenu.classList.add("item-menu");
+  itemMenu.classList.add("item-menu", "align-items-end");
 
   const serviceJoined = document.createElement("div");
   serviceJoined.classList.add("service-joined", "mb-2");
 
   const joinedLabel = document.createElement("span");
-  joinedLabel.classList.add("d-block", "joined-label");
+  joinedLabel.classList.add("joined-label");
   joinedLabel.textContent = "가입일";
 
   const joinedDate = document.createElement("span");
-  joinedDate.classList.add("d-block");
   joinedDate.textContent = data["join_date"]; // Assuming you have a "join_date" property in your data
 
   serviceJoined.append(joinedLabel, joinedDate);
 
   const leaveButton = document.createElement("button");
   leaveButton.type = "button";
-  leaveButton.classList.add("btn", "btn-danger");
+  leaveButton.classList.add("btn", "btn-danger", "col-md-6");
   leaveButton.textContent = "탈퇴";
 
   itemMenu.appendChild(serviceJoined);
@@ -92,7 +112,7 @@ function getList2DOM(data, index) {
 
   // Appending nodes to the main container item
   containerItem.appendChild(itemSelect);
-  containerItem.appendChild(itemIco);
+  itemIco ? containerItem.appendChild(itemIco) : null;
   containerItem.appendChild(itemInfo);
   containerItem.appendChild(itemMenu);
 
