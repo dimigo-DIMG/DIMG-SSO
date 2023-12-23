@@ -79,9 +79,9 @@ function initialStatOverall(stat) {
   let unoffi_servi_change = 0;
 
   if (stat.length !== 1) {
-    const offi_servi_cnt_yest = stat[stat.length - 1]["official_service_count"];
+    const offi_servi_cnt_yest = stat[stat.length - 2]["official_service_count"];
     const unoffi_servi_cnt_yest =
-      stat[stat.length - 1]["unofficial_service_count"];
+      stat[stat.length - 2]["unofficial_service_count"];
     const servi_cnt_yest = offi_servi_cnt_yest + unoffi_servi_cnt_yest;
 
     servi_change = servi_cnt - servi_cnt_yest;

@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, Request
+import random
+from fastapi import APIRouter, Depends, HTTPException, Request
 
-from app.core import templates
+from app.core import templates, current_user_optional
 from app.users import User, current_active_user
 
 from app.routers.account import (
@@ -36,6 +37,40 @@ async def account_root(request: Request, user: User = Depends(current_active_use
             "microsoft_mail": microsoft_mail,
             "location": "설정",
             "menu": 0,
+        },
+    )
+
+@account_router.get("/cancel")
+async def account_root(
+    request: Request, user: User = Depends(current_user_optional)
+):
+    google_mail = None
+    microsoft_mail = None
+    for oauth_account in user.oauth_accounts:
+        if oauth_account.provider == "google":
+            google_mail = oauth_account.account_email
+        elif oauth_account.provider == "microsoft":
+            microsoft_mail = oauth_account.account_email
+
+    csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
+    request.session["csrf_token"] = csrf_token
+
+    error = None
+    if request.session.get("error"):
+        error = request.session["error"]
+        request.session.pop("error")
+
+    return templates.TemplateResponse(
+        "account/index.html",
+        {
+            "request": request,
+            "user": user,
+            "google_mail": google_mail,
+            "microsoft_mail": microsoft_mail,
+            "location": "설정",
+            "menu": "cancel",
+            "csrf_token": csrf_token,
+            "error": error,
         },
     )
 
