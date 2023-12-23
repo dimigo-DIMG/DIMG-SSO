@@ -102,37 +102,77 @@
           <a
             class="nav-link dropdown-toggle"
             href="#"
-            id="navbarDarkDropdownMenuLink"
+            id="filterSortDropdown"
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
+            >필터</a
           >
-            필터
-          </a>
-          <ul
-            class="dropdown-menu"
-            aria-labelledby="navbarDarkDropdownMenuLink"
-          >
+          <ul class="dropdown-menu" aria-labelledby="filterSortDropdown">
             <li class="dropdown-menu-tit">필터</li>
-            <li><a class="dropdown-item active" href="#">전체</a></li>
-            <li><a class="dropdown-item" href="#">공식 서비스</a></li>
-            <li><a class="dropdown-item" href="#">비공식 서비스</a></li>
+            <li>
+              <a
+                class="dropdown-item filter-option active"
+                data-option="all"
+                href="#"
+                >전체</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item filter-option"
+                data-option="official"
+                href="#"
+                >공식 서비스</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item filter-option"
+                data-option="unofficial"
+                href="#"
+                >비공식 서비스</a
+              >
+            </li>
 
             <div class="dropdown-divider"></div>
 
             <li class="dropdown-menu-tit">정렬</li>
-            <li><a class="dropdown-item" href="#">가입일 오름차순</a></li>
             <li>
-              <a class="dropdown-item active" href="#">가입일 내림차순</a>
+              <a
+                class="dropdown-item sort-option"
+                data-option="join_date_asc"
+                href="#"
+                >가입일 오름차순</a
+              >
             </li>
-            <li><a class="dropdown-item" href="#">이름 오름차순</a></li>
-            <li><a class="dropdown-item" href="#">이름 내림차순</a></li>
+            <li>
+              <a
+                class="dropdown-item sort-option active"
+                data-option="join_date_desc"
+                href="#"
+                >가입일 내림차순</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item sort-option"
+                data-option="name_asc"
+                href="#"
+                >이름 오름차순</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item sort-option"
+                data-option="name_desc"
+                href="#"
+                >이름 내림차순</a
+              >
+            </li>
           </ul>
         </div>
-        <div class="item-cnt me-auto">
-          전체
-          <span>2</span>
-        </div>
+        <div id="cnt-item-filtered" class="item-cnt me-auto"></div>
         <div class="item-search">
           <i class="bi bi-search"></i>
           <input

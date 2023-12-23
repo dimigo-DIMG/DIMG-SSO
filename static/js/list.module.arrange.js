@@ -51,16 +51,19 @@ const FilterSortModule = (function () {
   const filterOptions = document.querySelectorAll(".filter-option");
   const sortOptions = document.querySelectorAll(".sort-option");
   const searchInput = document.getElementById("search-input");
-  const selectAllCheckbox = document.getElementById("checkboxSelectAll"); // Update the ID here
+  const selectAllCheckbox = document.getElementById("checkboxSelectAll");
+  const filteredCount = document.getElementById("cnt-item-filtered");
   let fetchedData = null;
 
   async function fetchData() {
     try {
       selectAllCheckbox.checked = false;
 
+      // Clear existing items
+      container.innerHTML = "";
+
       // Show loading cover and text
       loadingCover.style.display = "block";
-      container.innerHTML = "";
 
       const response = await fetch(apiSrc);
       if (!response.ok) {
@@ -97,8 +100,8 @@ const FilterSortModule = (function () {
       searchTerm
     );
 
-    // Clear existing items
-    container.innerHTML = "";
+    // Update the filtered nodes
+    appendFilteredNodes(filterOption, filteredSortedSearchData.length);
 
     // Append the updated items to the container
     for (let i = 0; i < filteredSortedSearchData.length; i++) {
@@ -115,6 +118,43 @@ const FilterSortModule = (function () {
   function updateCheckboxes(checked) {
     const checkboxes = document.querySelectorAll(".form-check-input");
     checkboxes.forEach((checkbox) => (checkbox.checked = checked));
+  }
+
+  function appendFilteredNodes(filterOption, count) {
+    // Clear existing content
+    filteredCount.innerHTML = "";
+
+    // Append nodes based on filterOption
+    if (filterOption === "all") {
+      // Append "전체" text node
+      const allTextNode = document.createTextNode("전체");
+      filteredCount.appendChild(allTextNode);
+    } else if (filterOption === "official") {
+      // Append nodes for "official" filter
+      const allTextNode = document.createTextNode("공식");
+      filteredCount.appendChild(allTextNode);
+    } else if (filterOption === "unofficial") {
+      // Append nodes for "unofficial" filter
+      const allTextNode = document.createTextNode("비공식");
+      filteredCount.appendChild(allTextNode);
+    } else if (filterOption === "enrolled") {
+      // Append nodes for "enrolled" filter
+      const allTextNode = document.createTextNode("재학생");
+      filteredCount.appendChild(allTextNode);
+    } else if (filterOption === "graduated") {
+      // Append nodes for "graduated" filter
+      const allTextNode = document.createTextNode("졸업생");
+      filteredCount.appendChild(allTextNode);
+    } else if (filterOption === "guest") {
+      // Append nodes for "guest" filter
+      const allTextNode = document.createTextNode("일반");
+      filteredCount.appendChild(allTextNode);
+    }
+
+    // Append span tag with the count
+    const countSpan = document.createElement("span");
+    countSpan.textContent = count;
+    filteredCount.append(" ", countSpan);
   }
 
   function init() {
