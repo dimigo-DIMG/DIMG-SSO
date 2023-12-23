@@ -128,8 +128,11 @@
             </div>
           </div>
 
+          <!-- Add a loading cover and loading text to your HTML -->
+          <div id="loading-cover">Loading...</div>
+
           <!-- 서비스 리스트 -->
-          <div id="services-container"></div>
+          <div id="service-container"></div>
         </div>
       </div>
     </div>
@@ -139,6 +142,10 @@
       type="text/javascript"
       src="{{ url_for('static', path='/js/list.module.generate.js') }}"
       jinja-location="{{ url_for('static', path='/') }}"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', path='/js/list.module.arrange.js') }}"
     ></script>
   </body>
 </html>

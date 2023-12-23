@@ -5,6 +5,10 @@
 }
 
 /* Individual */
+#loading-cover {
+  text-align: center;
+}
+
 .container-item {
   margin-bottom: 10px;
   padding: 10px;
