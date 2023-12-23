@@ -159,13 +159,13 @@
       id="list2DOM"
       type="text/javascript"
       src="{{ url_for('static', path='/js/list.module.generate.js') }}"
-      jinja-location="{{ url_for('static', path='/') }}"
-      ></script>
-      <script
+      menu-message="ban"
+    ></script>
+    <script
       id="listArrange"
       type="text/javascript"
       src="{{ url_for('static', path='/js/list.module.arrange.js') }}"
-      api-src="/api/services"
+      api-src="/api/manage/users"
     ></script>
     <script type="text/javascript">
       (function () {
