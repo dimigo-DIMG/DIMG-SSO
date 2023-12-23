@@ -11,6 +11,12 @@ function applyFilterSortSearch(
     filteredData = filteredData.filter((item) => item.is_official);
   } else if (filterOption === "unofficial") {
     filteredData = filteredData.filter((item) => !item.is_official);
+  } else if (filterOption === "enrolled") {
+    filteredData = filteredData.filter((item) => item.tag === "enrol");
+  } else if (filterOption === "graduated") {
+    filteredData = filteredData.filter((item) => item.tag === "grad");
+  } else if (filterOption === "guest") {
+    filteredData = filteredData.filter((item) => item.tag === "guest");
   }
 
   // Sort based on sortOption
@@ -53,39 +59,44 @@ const FilterSortModule = (function () {
   const searchInput = document.getElementById("search-input");
   const selectAllCheckbox = document.getElementById("checkboxSelectAll");
   const filteredCount = document.getElementById("cnt-item-filtered");
-  let fetchedData = null;
+  let fetchedDataPromise = null;
 
   async function fetchData() {
-    try {
-      selectAllCheckbox.checked = false;
+    if (!fetchedDataPromise) {
+      fetchedDataPromise = new Promise(async (resolve, reject) => {
+        try {
+          selectAllCheckbox.checked = false;
 
-      // Clear existing items
-      container.innerHTML = "";
+          // Clear existing items
+          container.innerHTML = "";
 
-      // Show loading cover and text
-      loadingCover.style.display = "block";
+          // Show loading cover and text
+          loadingCover.style.display = "block";
 
-      const response = await fetch(apiSrc);
-      if (!response.ok) {
-        throw new Error("Network response was not OK");
-      }
-      const data = await response.json();
-      console.log(data);
+          const response = await fetch(apiSrc);
+          if (!response.ok) {
+            throw new Error("Network response was not OK");
+          }
+          const data = await response.json();
+          // console.log(data);
 
-      // Hide loading cover
-      loadingCover.style.display = "none";
+          // Hide loading cover
+          loadingCover.style.display = "none";
 
-      return Array.isArray(data) ? data : [];
-    } catch (error) {
-      console.error("Fetch error:", error);
-      // Hide loading cover
-      loadingCover.style.display = "none";
-      return [];
+          resolve(Array.isArray(data) ? data : []);
+        } catch (error) {
+          console.error("Fetch error:", error);
+          // Hide loading cover
+          loadingCover.style.display = "none";
+          reject(error);
+        }
+      });
     }
+    return fetchedDataPromise;
   }
 
   async function applyFilterSortSearchAndRender() {
-    const data = fetchedData || (await fetchData());
+    const data = await fetchData();
 
     const filterOption = document.querySelector(".filter-option.active")
       .dataset.option;
@@ -102,6 +113,9 @@ const FilterSortModule = (function () {
 
     // Update the filtered nodes
     appendFilteredNodes(filterOption, filteredSortedSearchData.length);
+
+    // Clear existing items
+    container.innerHTML = "";
 
     // Append the updated items to the container
     for (let i = 0; i < filteredSortedSearchData.length; i++) {

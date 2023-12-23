@@ -3,7 +3,11 @@ function getList2DOM(data, index) {
   // index: Number
 
   const scriptElement = document.getElementById("list2DOM");
-  const jinjaLocation = scriptElement.getAttribute("jinja-location");
+  const jinjaLocation = scriptElement.getAttribute("jinja-location") || "";
+  const noMenu = scriptElement.getAttribute("no-menu") ? true : false;
+  const menuMessage = getMenuMsg2Kor(
+    scriptElement.getAttribute("menu-message") || ""
+  );
 
   // Main container item node creation
   const containerItem = document.createElement("div");
@@ -60,11 +64,11 @@ function getList2DOM(data, index) {
   itemTag.classList.add("item-tag");
   if (data["is_official"]) {
     itemTag.classList.add("official");
-  } else if (data["tag"] === "enrol"){
+  } else if (data["tag"] === "enrol") {
     itemTag.classList.add("enrol");
-  } else if (data["tag"] === "grad"){
+  } else if (data["tag"] === "grad") {
     itemTag.classList.add("grad");
-  } else if (data["tag"] === "guest"){
+  } else if (data["tag"] === "guest") {
     itemTag.classList.add("guest");
   }
 
@@ -73,48 +77,73 @@ function getList2DOM(data, index) {
   const itemInfoDesc = document.createElement("div");
   itemInfoDesc.classList.add("item-info-desc");
 
+  let joinedLabel;
+  if (noMenu) {
+    joinedLabel = document.createElement("span");
+    joinedLabel.classList.add("d-block");
+    joinedLabel.textContent = `가입일: ${data["join_date"]}`;
+  }
+
   let descSpan;
-  if (data["description"]){
+  if (data["description"]) {
     descSpan = document.createElement("span");
     descSpan.textContent = data["description"];
-  } else if (data["email"]){
+  } else if (data["email"]) {
     descSpan = document.createElement("address");
     descSpan.textContent = data["email"];
   }
 
-  itemInfoDesc.appendChild(descSpan);
+  itemInfoDesc.append(joinedLabel || "", descSpan);
 
   itemInfo.append(itemInfoHead, itemInfoDesc);
 
-  // etc. menu node creation
-  const itemMenu = document.createElement("div");
-  itemMenu.classList.add("item-menu", "align-items-end");
+  let itemMenu;
+  if (!noMenu) {
+    // etc. menu node creation
+    itemMenu = document.createElement("div");
+    itemMenu.classList.add("item-menu", "align-items-end");
 
-  const serviceJoined = document.createElement("div");
-  serviceJoined.classList.add("service-joined", "mb-2");
+    const serviceJoined = document.createElement("div");
+    serviceJoined.classList.add("service-joined", "mb-2");
 
-  const joinedLabel = document.createElement("span");
-  joinedLabel.classList.add("joined-label");
-  joinedLabel.textContent = "가입일";
+    const joinedLabel = document.createElement("span");
+    joinedLabel.classList.add("joined-label");
+    joinedLabel.textContent = "가입일";
 
-  const joinedDate = document.createElement("span");
-  joinedDate.textContent = data["join_date"]; // Assuming you have a "join_date" property in your data
+    const joinedDate = document.createElement("span");
+    joinedDate.textContent = data["join_date"]; // Assuming you have a "join_date" property in your data
 
-  serviceJoined.append(joinedLabel, joinedDate);
+    serviceJoined.append(joinedLabel, joinedDate);
 
-  const leaveButton = document.createElement("button");
-  leaveButton.type = "button";
-  leaveButton.classList.add("btn", "btn-danger", "col-md-6");
-  leaveButton.textContent = "탈퇴";
+    const leaveButton = document.createElement("button");
+    leaveButton.type = "button";
+    leaveButton.classList.add("btn", "btn-danger", "col-md-6");
+    leaveButton.textContent = menuMessage;
 
-  itemMenu.appendChild(serviceJoined);
-  itemMenu.appendChild(leaveButton);
+    itemMenu.appendChild(serviceJoined);
+    itemMenu.appendChild(leaveButton);
+  }
 
   // Appending nodes to the main container item
   containerItem.appendChild(itemSelect);
   itemIco ? containerItem.appendChild(itemIco) : null;
   containerItem.appendChild(itemInfo);
-  containerItem.appendChild(itemMenu);
+  itemMenu ? containerItem.appendChild(itemMenu) : null;
 
   return containerItem;
+}
+
+function getMenuMsg2Kor(msg) {
+  let ret = "";
+  switch (msg) {
+    case "getout":
+      ret = "탈퇴";
+      break;
+    case "ban":
+      ret = "강퇴";
+      break;
+    default: ret = "";
+      break;
+  }
+  return ret;
 }
