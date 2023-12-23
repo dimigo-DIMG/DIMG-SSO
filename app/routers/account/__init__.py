@@ -12,7 +12,8 @@ from app.routers.account import (
     reset_password,
     verify,
     oauth,
-    modify
+    modify,
+    cancel
 )
 
 account_router = APIRouter(prefix="/account", tags=["account"])
@@ -40,40 +41,6 @@ async def account_root(request: Request, user: User = Depends(current_active_use
         },
     )
 
-@account_router.get("/cancel")
-async def account_root(
-    request: Request, user: User = Depends(current_user_optional)
-):
-    google_mail = None
-    microsoft_mail = None
-    for oauth_account in user.oauth_accounts:
-        if oauth_account.provider == "google":
-            google_mail = oauth_account.account_email
-        elif oauth_account.provider == "microsoft":
-            microsoft_mail = oauth_account.account_email
-
-    csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
-    request.session["csrf_token"] = csrf_token
-
-    error = None
-    if request.session.get("error"):
-        error = request.session["error"]
-        request.session.pop("error")
-
-    return templates.TemplateResponse(
-        "account/index.html",
-        {
-            "request": request,
-            "user": user,
-            "google_mail": google_mail,
-            "microsoft_mail": microsoft_mail,
-            "location": "설정",
-            "menu": "cancel",
-            "csrf_token": csrf_token,
-            "error": error,
-        },
-    )
-
 account_router.include_router(login.login_router)
 account_router.include_router(logout.logout_router)
 account_router.include_router(register.register_router)
@@ -82,3 +49,4 @@ account_router.include_router(reset_password.reset_password_router)
 account_router.include_router(verify.verify_router)
 account_router.include_router(oauth.oauth_router)
 account_router.include_router(modify.modify_router)
+account_router.include_router(cancel.cancel_router)
