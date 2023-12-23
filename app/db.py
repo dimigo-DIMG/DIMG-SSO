@@ -49,7 +49,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     service_connections: Mapped[List["ServiceConnection"]] = relationship(
         "ServiceConnection", lazy="joined"
     )
-    access_tokens: Mapped[List["AccessToken"]] = relationship("AccessToken")
+    access_tokens: Mapped[List["AccessToken"]] = relationship("AccessToken", lazy="joined")
 
 
 class Service(Base):
