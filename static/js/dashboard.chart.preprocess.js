@@ -46,11 +46,11 @@ function getParameterForChart(data, unit, para) {
       }
     }
 
-    /* dataset_list */
+    /* stat_list */
     for (let j = 0; j < dataset_info_list.length; j++) {
       stat_list[j] = stat_list[j] || [];
-
-      const item = data[i][dataset_info_list[j]["data_key"]] | 0;
+      
+      const item = data[i][dataset_info_list[j]["data_key"]] || 0;
       stat_list[j].push(item);
     }
   }
