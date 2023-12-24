@@ -95,7 +95,7 @@ async def service_create(
     await update_statistics()
     return responseJson
 
-@service_router.get("/")
+@service_router.get("")
 async def service_list(
     request: Request,
     user: User = Depends(current_user_admin),

@@ -18,7 +18,7 @@ from app.routers.account import (
 account_router = APIRouter(prefix="/account", tags=["account"])
 
 # user settings page
-@account_router.get("/")
+@account_router.get("")
 async def account_root(request: Request, user: User = Depends(current_active_user)):
     google_mail = None
     microsoft_mail = None
