@@ -141,7 +141,7 @@ function getMenuMsg2Kor(msg) {
       ret = "탈퇴";
       break;
     case "ban":
-      ret = "강퇴";
+      ret = "삭제";
       break;
     default: ret = "";
       break;

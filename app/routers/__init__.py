@@ -14,7 +14,6 @@ from app.routers import (
 )
 
 
-
 root_router = APIRouter(tags=["root"])
 
 @root_router.get("/")

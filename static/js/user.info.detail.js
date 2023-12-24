@@ -30,13 +30,14 @@ const UserInitInfoModule = (function () {
       fetchedDataPromise = new Promise(async (resolve, reject) => {
         try {
           const response = await fetch(
-            `/api/manage/user/${userEmailFromURL}`
+            `/api/manage/users/${userEmailFromURL}`
           );
           if (!response.ok) {
             throw new Error("Network response was not OK");
           }
           const data = await response.json();
-          // console.log(data);
+
+          resolve(data);
         } catch (error) {
           console.error("Fetch error:", error);
           // Hide loading cover
@@ -49,17 +50,9 @@ const UserInitInfoModule = (function () {
   }
 
   async function init() {
-    // const data = await fetchData();
-    const data = {
-      name: "chunzhi23",
-      email: "ssomang@dimg.rerac.dev",
-      tag: "enrol",
-      join_date: "2023. 12. 23.",
-      // gender: "male",
-      // birth_date: "2005. 7. 15.",
-    };
+    const data = await fetchData();
 
-    const windowTitle = document.title = `관리 · 유저 관리 · ${data["name"]}`;
+    document.title = `관리 · 유저 관리 · ${data["name"]}`;
 
     const ulTag = document.createElement("ul");
     const liJoinedDate = document.createElement("li");

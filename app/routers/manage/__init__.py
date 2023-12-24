@@ -9,7 +9,7 @@ from app.routers.manage import (
 
 manage_router = APIRouter(prefix="/manage", tags=["manage"])
 
-@manage_router.get("/")
+@manage_router.get("")
 async def manage(request: Request, user: User = Depends(current_user_admin)):
     return templates.TemplateResponse(
         "admin/index.html", {"request": request, "user": user}
