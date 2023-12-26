@@ -64,8 +64,6 @@ async def login(
         await add_failed_login_count(db)
         return RedirectResponse("/account/login", status_code=303)
 
-    next_url = request.session.get("next")
-
     if not form.get("email") or not form.get("password"):
         request.session["failed"] = 1
         await add_failed_login_count(db)
@@ -87,13 +85,6 @@ async def login(
         return RedirectResponse("/account/login", status_code=303)
 
     response = await auth_backend.login(strategy, user)
-    if next_url:
-        request.session.pop("next")
-        response.headers["location"] = next_url
-        response.status_code = 303
-    else:
-        response.headers["location"] = "/"
-        response.status_code = 303
+
     await user_manager.on_after_login(user, request, response)
-    await add_login_count(db)
     return response

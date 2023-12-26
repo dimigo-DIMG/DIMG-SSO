@@ -3,7 +3,7 @@ import os
 import uuid
 from typing import Optional
 
-from fastapi import Depends, Request, HTTPException
+from fastapi import Depends, Request, HTTPException, Response
 from fastapi_users import BaseUserManager, FastAPIUsers, UUIDIDMixin
 from fastapi_users.authentication import (
     AuthenticationBackend,
@@ -13,6 +13,7 @@ from fastapi_users.authentication import (
 from fastapi_users.db import SQLAlchemyUserDatabase
 from httpx_oauth.clients.google import GoogleOAuth2
 from httpx_oauth.clients.microsoft import MicrosoftGraphOAuth2
+from app.backends.statistics import add_login_count
 
 import app.mailer as mailer
 
@@ -40,6 +41,20 @@ microsoft_oauth_client = MicrosoftGraphOAuth2(
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     reset_password_token_secret = SECRET
     verification_token_secret = SECRET
+
+    async def on_after_login(self, user: User, request: Request | None = None, response: Response | None = None, db= Depends(get_async_session)) -> None:
+        await add_login_count(db)
+        
+        next_url = request.session.get("next")
+        if next_url:
+            request.session.pop("next")
+            response.headers["location"] = next_url
+            response.status_code = 303
+        else:
+            response.headers["location"] = "/"
+            response.status_code = 303
+        return await super().on_after_login(user, request, response)
+    
 
     async def on_after_request_verify(
         self, user: User, token: str, request: Optional[Request] = None
