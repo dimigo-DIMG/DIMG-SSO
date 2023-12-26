@@ -24,9 +24,9 @@ async def account_root(request: Request, user: User = Depends(current_active_use
     google_mail = None
     microsoft_mail = None
     for oauth_account in user.oauth_accounts:
-        if oauth_account.provider == "google":
+        if oauth_account.oauth_name == "google":
             google_mail = oauth_account.account_email
-        elif oauth_account.provider == "microsoft":
+        elif oauth_account.oauth_name == "microsoft":
             microsoft_mail = oauth_account.account_email
 
     return templates.TemplateResponse(
