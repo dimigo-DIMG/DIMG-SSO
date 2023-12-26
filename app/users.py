@@ -156,7 +156,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
                     user, existing_oauth_account, oauth_account_dict
                 )
 
-        raise HTTPException(status_code=77, detail="This is not Error")
+        raise HTTPException(status_code=418, detail="This is not Error")
 
 
 async def get_user_manager(user_db: SQLAlchemyUserDatabase = Depends(get_user_db)):
