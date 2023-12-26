@@ -53,6 +53,7 @@ async def http_exception_handler(request, exc):
 @app.exception_handler(418)
 async def http_exception_handler(request, exc):
     # custom error code - not an error (redirect to home)
+    print("418")
     return RedirectResponse("/", status_code=303)
 
 @app.on_event("startup")
