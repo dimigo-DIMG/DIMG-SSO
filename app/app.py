@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.users import fastapi_users
@@ -48,6 +49,11 @@ async def http_exception_handler(request, exc):
         "error.html",
         {"request": request, "error": "서버 내부 오류가 발생했어요. 관리자에게 문의해주세요.", "code": 500},
     )
+
+@app.exception_handler(77)
+async def http_exception_handler(request, exc):
+    # 77 is custom error code - not an error (redirect to home)
+    return RedirectResponse("/", status_code=303)
 
 @app.on_event("startup")
 async def on_startup():
