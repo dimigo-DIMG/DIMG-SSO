@@ -50,9 +50,9 @@ async def http_exception_handler(request, exc):
         {"request": request, "error": "서버 내부 오류가 발생했어요. 관리자에게 문의해주세요.", "code": 500},
     )
 
-@app.exception_handler(77)
+@app.exception_handler(418)
 async def http_exception_handler(request, exc):
-    # 77 is custom error code - not an error (redirect to home)
+    # custom error code - not an error (redirect to home)
     return RedirectResponse("/", status_code=303)
 
 @app.on_event("startup")
