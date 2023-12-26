@@ -44,7 +44,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
 
     async def on_after_login(self, user: User, request: Request | None = None, response: Response | None = None) -> None:
         get_async_session_ctx = contextlib.asynccontextmanager(get_async_session)
-        async with get_async_session_ctx as db:
+        async with get_async_session_ctx() as db:
             await add_login_count(db)
         
         next_url = request.session.get("next")
