@@ -40,7 +40,13 @@
 <!-- email  -->
 <div id="email-area" class="profile-area mb-4">
   <div class="title-division">
-    <span class="division-title-text">이메일</span>
+    <span class="division-title-text"
+      >이메일 {% if is_verified %}
+      <div class="conn-status verified"></div>
+      {% else %}
+      <div class="conn-status unauthorized"></div>
+      {% endif %}</span
+    >
   </div>
   <div class="content-division">
     <span class="content-txt">{{user.email}}</span>
