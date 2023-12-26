@@ -126,19 +126,20 @@ function getList2DOM(data, index) {
       leaveButton.addEventListener("click", () => {
         const confirmMsg = `정말로 ${menuMessage}하시겠습니까?`;
         if (confirm(confirmMsg)) {
-          const formData = {
-            "csrf_token": CSRFToken,
-            "email": data["email"],
-          }
 
-          fetch(`/${data["email"]}/delete`, {
+          const SendData = new FormData();
+          SendData.append("csrf_token", CSRFToken);
+          SendData.append("email", data["email"]);
+
+          fetch(`/manage/user/${data["email"]}/delete`, {
             method: "POST",
-            headers: {'Content-Type': 'application/json'}, 
-            body: JSON.stringify(formData),
+            // x-www-form-urlencoded
+            body: SendData
           })
             .then((response) => response.json())
             .then((data) => {
-              if (data["result"] === "success") {
+              console.log(data);
+              if (data["status"] === "ok") {
                 location.reload();
               } else {
                 alert("오류가 발생했습니다. 다시 시도해주세요.");

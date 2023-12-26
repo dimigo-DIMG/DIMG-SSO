@@ -21,9 +21,9 @@ async def account_root(
     google_mail = None
     microsoft_mail = None
     for oauth_account in user.oauth_accounts:
-        if oauth_account.provider == "google":
+        if oauth_account.oauth_name == "google":
             google_mail = oauth_account.account_email
-        elif oauth_account.provider == "microsoft":
+        elif oauth_account.oauth_name == "microsoft":
             microsoft_mail = oauth_account.account_email
 
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])

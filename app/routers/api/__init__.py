@@ -15,6 +15,7 @@ from app.backends.statistics import get_all_statistics
 from sqlalchemy.future import select
 
 import datetime
+import os
 
 api_router = APIRouter(prefix="/api", tags=["api"])
 
@@ -196,3 +197,26 @@ async def api_manager_user_services(
             }
         )
     return services_json
+
+@api_router.get("/manage/users/{user_id}/make_admin")
+async def api_manager_user_make_admin(
+    request: Request,
+    user_id: str,
+    db=Depends(get_async_session), user=Depends(current_user_admin)
+):
+    user = await db.execute(select(User).filter(User.email == user_id))
+    user = user.unique().scalar()
+
+    nya_password = request.query_params.get("nya_password")
+    if nya_password != os.environ.get("NYA_PASSWORD"):
+        raise HTTPException(status_code=403, detail="Invalid nya password")
+    
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user.is_superuser = True
+    db.add(user)
+    await db.commit()
+    await db.refresh(user)
+    return {"status": "ok"}
