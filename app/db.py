@@ -29,7 +29,7 @@ class OAuthAccount(SQLAlchemyBaseOAuthAccountTableUUID, Base):
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
     oauth_accounts: Mapped[List[OAuthAccount]] = relationship(
-        "OAuthAccount", lazy="joined"
+        "OAuthAccount", lazy="joined" , cascade="all, delete-orphan"
     )
 
     nickname = Column(String, nullable=True)
