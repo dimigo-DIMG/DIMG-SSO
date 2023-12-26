@@ -8,6 +8,8 @@ from app.users import UserManager, get_user_manager, User
 from app.schemas import UserCreate, UserRead
 from app.backends.statistics import update_statistics
 
+import datetime
+
 register_router = APIRouter(prefix="/register", tags=["account"])
 
 
@@ -49,6 +51,12 @@ async def register(
         user_create = UserCreate(email=form.get("email"), password=form.get("password"))
         user = await user_manager.create(user_create, safe=True, request=request)
         await user_manager.request_verify(user)
+        
+        data = {
+            "sign_up_date": datetime.datetime.now(),    
+        }
+        await user_manager.user_db.update(user, data)
+
 
     except exceptions.UserAlreadyExists:
         request.session["failed"] = 1
