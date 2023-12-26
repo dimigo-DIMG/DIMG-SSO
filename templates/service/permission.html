@@ -102,35 +102,35 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="section input-spacing">
-          <div id="page-info">
-            <div id="page-name">계정 연결 허가</div>
-            <div id="page-desc">
-              {{service.name}}({{service.client_id[0:5]}}...) 서비스를
-              이용하려면 다음 권한이 필요해요.
+          <div class="section input-spacing">
+            <div id="page-info">
+              <div id="page-name">계정 연결 허가</div>
+              <div id="page-desc">
+                {{service.name}}({{service.client_id[0:5]}}...) 서비스를
+                이용하려면 다음 권한이 필요해요.
+              </div>
+            
+            <div id="page-content">
+              <ul>
+                <li>계정 정보를 봅니다.</li>
+                <li>디미고인 재학생 인증 정보를 봅니다.</li>
+              </ul>
             </div>
-          
-          <div id="page-content">
-            <ul>
-              <li>계정 정보를 봅니다.</li>
-              <li>디미고인 재학생 인증 정보를 봅니다.</li>
-            </ul>
+  
+            <form
+              class="d-grid gap-2 d-md-block pt-3"
+              action="/service/permission/{{service.client_id}}/allow"
+              method="post"
+            >
+              <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
+              <button class="btn btn-secondary col-2" type="button" id="reject">
+                취소
+              </button>
+              <button class="btn btn-primary col-2" type="submit" id="accept">
+                연결
+              </button>
+            </form>
           </div>
-
-          <form
-            class="d-grid gap-2 d-md-block pt-3"
-            action="/service/permission/{{service.client_id}}/allow"
-            method="post"
-          >
-            <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
-            <button class="btn btn-secondary col-2" type="button" id="reject">
-              취소
-            </button>
-            <button class="btn btn-primary col-2" type="submit" id="accept">
-              연결
-            </button>
-          </form>
         </div>
       </div>
     </div>
