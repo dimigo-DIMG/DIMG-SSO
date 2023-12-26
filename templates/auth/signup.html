@@ -2,7 +2,10 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
-    <link rel="stylesheet" href="{{url_for('static', path='/css/general/styles.css')}}" />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/general/styles.css')}}"
+    />
     <link
       rel="stylesheet"
       href="{{url_for('static', path='/css/interface.general.css')}}"
@@ -14,10 +17,17 @@
     <title>회원가입</title>
   </head>
   <style>
+    ul,
+    li {
+      padding: 0;
+      list-style: none;
+    }
+
     .container {
       margin-top: 32px;
       align-items: center;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       flex-grow: 1;
     }
@@ -32,7 +42,7 @@
       <div id="main-container">
         {% include "navbar.html" %}
         <div class="container">
-          <div id="form-signup">
+          <div>
             {% if failed == 1 %}
             <div class="alert alert-danger" role="alert">
               유저가 이미 존재합니다.
@@ -47,7 +57,7 @@
             </div>
             {% endif %}
             <h1>회원가입</h1>
-            <form class="mt-4" method="post">
+            <form id="form-signup" class="mt-4" method="post">
               {% if csrf_token %}
               <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
               {% endif %}
@@ -73,6 +83,8 @@
                   name="password"
                   class="form-control form-input"
                   id="formInputPassword"
+                  minlength="8"
+                  maxlength="16"
                 />
               </div>
 
@@ -86,7 +98,16 @@
                   name="password"
                   class="form-control form-input"
                   id="formReEnterPW"
+                  minlength="8"
+                  maxlength="16"
                 />
+              </div>
+              <div id="password-conditions" class="form-input-conditions">
+                <ul>
+                  <li>8~16글자</li>
+                  <li>특수문자 포함</li>
+                  <li>숫자 포함</li>
+                </ul>
               </div>
 
               <!-- Agree terms and conditions -->
@@ -143,5 +164,55 @@
       // submit form
       document.querySelector("form").submit();
     });
+  </script>
+  <script type="text/javascript">
+    (function () {
+      // 새 비밀번호 입력 조건
+      const thisForm = document.getElementById("form-signup");
+      const inputNewPW = document.getElementById("formInputPassword");
+      const conditionsNode = document.getElementById("password-conditions");
+
+      function updatePasswordCondition() {
+        const inputValue = inputNewPW.value;
+        const valueLength = inputValue.length;
+
+        const restrictLength = conditionsNode.querySelector(
+          "ul li:nth-of-type(1)"
+        );
+        const has_specialChar = conditionsNode.querySelector(
+          "ul li:nth-of-type(2)"
+        );
+        const has_number = conditionsNode.querySelector("ul li:nth-of-type(3)");
+
+        // 8글자 이상, 16글자 이하
+        if (valueLength >= 8 && valueLength <= 16) {
+          restrictLength.className = "pass";
+        } else {
+          restrictLength.className = "restrict";
+        }
+
+        // 특수문자 포함
+        const specialRegex = /[!@#$%^&*?_]/;
+        if (specialRegex.test(inputValue)) {
+          has_specialChar.className = "pass";
+        } else {
+          has_specialChar.className = "restrict";
+        }
+
+        // 숫자 포함
+        const numberRegex = /[0-9]/;
+        if (numberRegex.test(inputValue)) {
+          has_number.className = "pass";
+        } else {
+          has_number.className = "restrict";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        updatePasswordCondition();
+      });
+
+      inputNewPW.addEventListener("input", updatePasswordCondition);
+    })();
   </script>
 </html>
