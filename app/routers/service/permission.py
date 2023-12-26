@@ -15,10 +15,10 @@ from app.backends.services import (
 import datetime
 import random
 
-connect_router = APIRouter(prefix="/connect", tags=["service"])
+permission_router = APIRouter(prefix="/permission", tags=["service"])
 
 
-@connect_router.get("/{client_id}")
+@permission_router.get("/{client_id}")
 async def show_connect(
     request: Request,
     client_id: str,
@@ -31,7 +31,7 @@ async def show_connect(
     csrf_token = "".join([random.choice("0123456789abcdef") for _ in range(32)])
     request.session["csrf_token"] = csrf_token
     return templates.TemplateResponse(
-        "service/connect.html",
+        "service/permission.html",
         {
             "request": request,
             "user": user,
@@ -41,8 +41,8 @@ async def show_connect(
     )
 
 
-@connect_router.post("/{client_id}/allow")
-async def allow_connect(
+@permission_router.post("/{client_id}/allow")
+async def allow_permission(
     request: Request,
     client_id: str,
     user: User = Depends(current_active_user),

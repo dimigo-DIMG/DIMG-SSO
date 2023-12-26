@@ -44,11 +44,11 @@ async def get_token(
     if not service_connection:
         # redirect to connect page with state
         request.session["state"] = state
-        return RedirectResponse(f"/service/connect/{client_id}", status_code=303)
+        return RedirectResponse(f"/service/permission/{client_id}", status_code=303)
 
     if service_connection.unregistered:
         # redirect to api/sso/token/get
-        return RedirectResponse(f"/service/connect/{client_id}", status_code=303)
+        return RedirectResponse(f"/service/permission/{client_id}", status_code=303)
 
     # check if token exists
     generated_token = await generate_access_token(

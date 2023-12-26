@@ -1,7 +1,7 @@
 from typing import Dict
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
-from fastapi_users.router import oauth as oauth_router
+from fastapi_users.router import oauth_backend
 
 from app.schemas import UserRead
 from app.users import (
@@ -23,7 +23,7 @@ async def oauth_login(request: Request, provider: str):
     redirect_uri = request.url_for(callback_route)
 
     state_data: Dict[str, str] = {}
-    state = oauth_router.generate_state_token(state_data, SECRET)
+    state = oauth_backend.generate_state_token(state_data, SECRET)
 
     if provider == "google":
         url = await google_oauth_client.get_authorization_url(redirect_uri, state)
@@ -44,7 +44,7 @@ async def oauth_connect(
     redirect_uri = request.url_for(callback_route)
 
     state_data: Dict[str, str] = {"sub": str(user.id)}
-    state = oauth_router.generate_state_token(state_data, SECRET)
+    state = oauth_backend.generate_state_token(state_data, SECRET)
 
     if provider == "google":
         url = await google_oauth_client.get_authorization_url(redirect_uri, state)

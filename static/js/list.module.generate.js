@@ -8,6 +8,7 @@ function getList2DOM(data, index) {
   const menuMessage = getMenuMsg2Kor(
     scriptElement.getAttribute("menu-message") || ""
   );
+  const CSRFToken = scriptElement.getAttribute("csrf-token") || "";
 
   // Main container item node creation
   const containerItem = document.createElement("div");
@@ -120,6 +121,37 @@ function getList2DOM(data, index) {
     leaveButton.type = "button";
     leaveButton.classList.add("btn", "btn-danger", "col-md-6");
     leaveButton.textContent = menuMessage;
+    if (data["email"]) {
+      leaveButton.addEventListener("click", () => {
+        const confirmMsg = `정말로 ${menuMessage}하시겠습니까?`;
+        if (confirm(confirmMsg)) {
+          formdata = new FormData();
+          formdata.append("csrf_token", CSRFToken);
+          formdata.append("email", data["email"]);
+
+          fetch("/manage/leave", {
+            method: "POST",
+            body: formdata,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data["result"] === "success") {
+                location.reload();
+              } else {
+                alert("오류가 발생했습니다. 다시 시도해주세요.");
+              }
+            });
+          
+        }
+      });
+    }
+    else {
+      //location.href = `${data["unregister_page"]}`;
+      // new tab
+      leaveButton.addEventListener("click", () => {
+        window.open(data["unregister_page"], '_blank');
+      });
+    }
 
     itemMenu.appendChild(serviceJoined);
     itemMenu.appendChild(leaveButton);
