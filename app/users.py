@@ -116,7 +116,8 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         if not flag:
             await self.user_db.add_oauth_account(user, oauth_account_dict)
 
-        return user
+        raise HTTPException(status_code=418, detail="This is not Error")
+        #return user
 
     async def oauth_callback(
         self: "BaseUserManager[models.UOAP, models.ID]",
@@ -156,7 +157,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
                     user, existing_oauth_account, oauth_account_dict
                 )
 
-        raise HTTPException(status_code=418, detail="This is not Error")
+        return user
 
 
 async def get_user_manager(user_db: SQLAlchemyUserDatabase = Depends(get_user_db)):
