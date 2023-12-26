@@ -29,9 +29,17 @@ function applyFilterSortSearch(
       (a, b) => new Date(b.join_date) - new Date(a.join_date)
     );
   } else if (sortOption === "name_asc") {
-    filteredData.sort((a, b) => a.name.localeCompare(b.name));
+    filteredData.sort((a, b) => {
+      const aName = a.name || "";
+      const bName = b.name || "";
+      return aName.localeCompare(bName);
+    });
   } else if (sortOption === "name_desc") {
-    filteredData.sort((a, b) => b.name.localeCompare(a.name));
+    filteredData.sort((a, b) => {
+      const aName = a.name || "";
+      const bName = b.name || "";
+      return bName.localeCompare(aName);
+    });
   }
 
   // Search based on searchTerm
@@ -40,7 +48,8 @@ function applyFilterSortSearch(
     filteredData = filteredData.filter(
       (item) =>
         (item.name && item.name.toLowerCase().includes(searchTermLowerCase)) ||
-        (item.description && item.description.toLowerCase().includes(searchTermLowerCase))
+        (item.description && item.description.toLowerCase().includes(searchTermLowerCase)) ||
+        (item.email && item.email.toLowerCase().includes(searchTermLowerCase))
     );
   }
 
