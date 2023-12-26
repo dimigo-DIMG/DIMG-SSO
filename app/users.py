@@ -42,8 +42,10 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     reset_password_token_secret = SECRET
     verification_token_secret = SECRET
 
-    async def on_after_login(self, user: User, request: Request | None = None, response: Response | None = None, db= Depends(get_async_session)) -> None:
-        await add_login_count(db)
+    async def on_after_login(self, user: User, request: Request | None = None, response: Response | None = None) -> None:
+        get_async_session_ctx = get_async_session()
+        async with get_async_session_ctx as db:
+            await add_login_count(db)
         
         next_url = request.session.get("next")
         if next_url:
