@@ -41,7 +41,7 @@ function initialStatDetail() {
       },
     ],
     stack_bool: false,
-    title: "일별 로그인 시도 횟수 현황",
+    title: "로그인 시도 횟수 현황",
     x_label: "시간(일)",
     y_label: "시도 횟수(번)",
     type: "bar",
