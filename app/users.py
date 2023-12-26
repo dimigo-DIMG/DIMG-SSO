@@ -43,7 +43,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     verification_token_secret = SECRET
 
     async def on_after_login(self, user: User, request: Request | None = None, response: Response | None = None) -> None:
-        get_async_session_ctx = get_async_session()
+        get_async_session_ctx = contextlib.asynccontextmanager(get_async_session)
         async with get_async_session_ctx as db:
             await add_login_count(db)
         
