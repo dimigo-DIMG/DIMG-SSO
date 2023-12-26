@@ -103,7 +103,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             raise HTTPException(
                 status_code=403, detail="Only dimigo users can use this service"
             )
-
+        flag = False
         for existing_oauth_account in user.oauth_accounts:
             if existing_oauth_account.account_email.endswith(
                 account_email.split("@")[1]
