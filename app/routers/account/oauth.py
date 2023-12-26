@@ -1,7 +1,7 @@
 from typing import Dict
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
-from fastapi_users.router import oauth_backend
+from fastapi_users.router import oauth as oauth_backend
 
 from app.schemas import UserRead
 from app.users import (
