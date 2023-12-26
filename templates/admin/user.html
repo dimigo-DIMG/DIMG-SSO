@@ -160,6 +160,7 @@
       type="text/javascript"
       src="{{ url_for('static', path='/js/list.module.generate.js') }}"
       menu-message="ban"
+      csrf-token="{{ csrf_token }}"
     ></script>
     <script
       id="listArrange"

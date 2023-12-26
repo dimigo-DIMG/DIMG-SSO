@@ -122,16 +122,19 @@ function getList2DOM(data, index) {
     leaveButton.classList.add("btn", "btn-danger", "col-md-6");
     leaveButton.textContent = menuMessage;
     if (data["email"]) {
+      // /manage/user
       leaveButton.addEventListener("click", () => {
         const confirmMsg = `정말로 ${menuMessage}하시겠습니까?`;
         if (confirm(confirmMsg)) {
-          formdata = new FormData();
-          formdata.append("csrf_token", CSRFToken);
-          formdata.append("email", data["email"]);
+          const formData = {
+            "csrf_token": CSRFToken,
+            "email": data["email"],
+          }
 
-          fetch("/manage/leave", {
+          fetch(`/${data["email"]}/delete`, {
             method: "POST",
-            body: formdata,
+            headers: {'Content-Type': 'application/json'}, 
+            body: JSON.stringify(formData),
           })
             .then((response) => response.json())
             .then((data) => {
@@ -141,15 +144,13 @@ function getList2DOM(data, index) {
                 alert("오류가 발생했습니다. 다시 시도해주세요.");
               }
             });
-          
         }
       });
-    }
-    else {
+    } else {
       //location.href = `${data["unregister_page"]}`;
       // new tab
       leaveButton.addEventListener("click", () => {
-        window.open(data["unregister_page"], '_blank');
+        window.open(data["unregister_page"], "_blank");
       });
     }
 
@@ -175,7 +176,8 @@ function getMenuMsg2Kor(msg) {
     case "ban":
       ret = "삭제";
       break;
-    default: ret = "";
+    default:
+      ret = "";
       break;
   }
   return ret;
