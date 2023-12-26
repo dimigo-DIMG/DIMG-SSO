@@ -14,7 +14,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.sessions import SessionMiddleware
 
 
-app = FastAPI()
+app = FastAPI(docs_url=None, redoc_url=None)
 
 # session middleware
 app.add_middleware(SessionMiddleware, secret_key=SECRET)

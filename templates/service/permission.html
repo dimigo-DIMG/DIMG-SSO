@@ -3,19 +3,18 @@
   <head>
     {% include "header.html" %}
     <link rel="stylesheet" href="{{url_for('static', path='/css/general/styles.css')}}" />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/interface.general.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', path='/css/root.general.css')}}"
-    />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/interface.general.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/root.general.css')}}" />
     <title>DIMGSSO 서비스 연결</title>
   </head>
   <style>
     #main-container {
       justify-content: center;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
       align-items: center;
     }
 
@@ -43,7 +42,6 @@
 
     .section {
       border-radius: 10px;
-      width: 720px;
       background-color: #fff;
       overflow: hidden;
     }
@@ -64,38 +62,59 @@
       max-height: 720px;
       overflow-y: auto;
     }
+
+    #page-content li {
+      margin-left: 20px;
+      list-style: disc;
+    }
+
+    @media (max-width: 768px) {
+      /* Mobile View */
+      .section {
+        width: 100%;
+      }
+    }
+
+    @media (min-width: 768px) {
+      /* Desktop and Tablet View */
+      .section {
+        flex: 0 0 auto;
+        width: 70%;
+      }
+    }
   </style>
   <body>
     <div id="container">
       {% include "jumbotron.html" %}
       <div id="main-container">
-        <div class="section d-flex mb-3">
-          <img
-            height="100px"
-            width="100px"
-            src="{{ service.icon }}"
-            alt="서비스 로고"
-          />
-          <div class="service-spacing">
-            <div id="service-name">{{service.name}}</div>
-            <div id="service-desc">
-              {{service.description}} 
+        <div class="container">
+          <div class="section d-flex mb-3">
+            <img
+              height="100px"
+              width="100px"
+              src="{{ service.icon }}"
+              alt="서비스 로고"
+            />
+            <div class="service-spacing">
+              <div id="service-name">{{service.name}}</div>
+              <div id="service-desc">
+                {{service.description}} 
+              </div>
             </div>
           </div>
         </div>
         <div class="section input-spacing">
           <div id="page-info">
-            <div id="page-name">계정 권한 허가</div>
+            <div id="page-name">계정 연결 허가</div>
             <div id="page-desc">
               {{service.name}}({{service.client_id[0:5]}}...) 서비스를
               이용하려면 다음 권한이 필요해요.
             </div>
-          </div>
+          
           <div id="page-content">
             <ul>
               <li>계정 정보를 봅니다.</li>
               <li>디미고인 재학생 인증 정보를 봅니다.</li>
-              <li>가입된 다른 서비스의 목록을 봅니다.</li>
             </ul>
           </div>
 
@@ -106,10 +125,10 @@
           >
             <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
             <button class="btn btn-secondary col-2" type="button" id="reject">
-              거부
+              취소
             </button>
             <button class="btn btn-primary col-2" type="submit" id="accept">
-              허가
+              연결
             </button>
           </form>
         </div>

@@ -6,7 +6,7 @@ from app.core import templates, current_user_admin
 
 user_router = APIRouter(prefix="/user", tags=["manage"])
 
-@user_router.get("/")
+@user_router.get("")
 async def manage_user_root(request: Request, user: User = Depends(current_user_admin)):
     return templates.TemplateResponse("admin/user.html", {"request": request})
 

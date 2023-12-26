@@ -19,7 +19,7 @@ permission_router = APIRouter(prefix="/permission", tags=["service"])
 
 
 @permission_router.get("/{client_id}")
-async def show_permission(
+async def show_connect(
     request: Request,
     client_id: str,
     user: User = Depends(current_active_user),
@@ -95,4 +95,4 @@ async def allow_permission(
     await db.commit()
 
     # redirect to api/sso/token/get
-    return RedirectResponse(f"/api/sso/token/get?client_id={client_id}")
+    return RedirectResponse(f"/api/sso/token/get?client_id={client_id}", status_code=303)

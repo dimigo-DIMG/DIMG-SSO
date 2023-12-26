@@ -31,21 +31,27 @@
             <!-- email  -->
             {% include "account/modify-email.html" %} {% elif menu==3 %}
             <!-- password -->
-            {% include "account/modify-pw.html" %} {% endif %}
+            {% include "account/modify-pw.html" %} {% elif menu=="cancel" %} 
+            <!-- account cancellation -->
+            {% include "account/cancel.html" %} {% endif %}
           </div>
         </div>
       </div>
     </div>
     {% include "footer.html" %}
     <script type="text/javascript">
-      const menu_val = "{{ menu }}";
-      if (menu_val == 0) {
-        document
-          .getElementById("user-profile-section")
-          .classList.add("focused");
-      } else {
-        document.getElementById("modify-section").classList.add("focused");
-      }
+      (function () {
+        const menu_val = "{{ menu }}";
+        if (menu_val == 0) {
+          document
+            .getElementById("user-profile-section")
+            .classList.add("focused");
+        } else {
+          document.getElementById("modify-section").classList.add("focused");
+        }
+        // 서비스 탈퇴 div를 눌렀을 경우
+        document.getElementById("service-getout-area")
+      })();
 
       // condition 모두 만족했는지 확인하는 함수
       function checkNoRestricted(node) {

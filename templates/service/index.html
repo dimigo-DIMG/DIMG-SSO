@@ -2,10 +2,22 @@
 <html lang="ko">
   <head>
     {% include "header.html" %}
-    <link rel="stylesheet" href="{{url_for('static', path='/css/general/styles.css')}}" />
-    <link rel="stylesheet" href="{{url_for('static', path='/css/interface.general.css')}}" />
-    <link rel="stylesheet" href="{{url_for('static', path='/css/root.general.css')}}" />
-    <link rel="stylesheet" href="{{url_for('static', path='/css/list.module.css')}}" />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/general/styles.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/interface.general.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/root.general.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', path='/css/list.module.css')}}"
+    />
     <title>서비스</title>
   </head>
   <style>
@@ -18,7 +30,7 @@
       {% include "jumbotron.html" %}
       <div id="main-container">
         {% include "navbar.html" %}
-        <div id="services-container" class="container">
+        <div class="container">
           <!-- 서비스 관리 상단 바 -->
           <div id="manage-service" class="container-item">
             <div class="item-select">
@@ -34,169 +46,109 @@
               <a
                 class="nav-link dropdown-toggle"
                 href="#"
-                id="navbarDarkDropdownMenuLink"
+                id="filterSortDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
+                >필터</a
               >
-                필터
-              </a>
-              <ul
-                class="dropdown-menu"
-                aria-labelledby="navbarDarkDropdownMenuLink"
-              >
+              <ul class="dropdown-menu" aria-labelledby="filterSortDropdown">
                 <li class="dropdown-menu-tit">필터</li>
-                <li><a class="dropdown-item active" href="#">전체</a></li>
-                <li><a class="dropdown-item" href="#">공식 서비스</a></li>
-                <li><a class="dropdown-item" href="#">비공식 서비스</a></li>
+                <li>
+                  <a
+                    class="dropdown-item filter-option active"
+                    data-option="all"
+                    href="#"
+                    >전체</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item filter-option"
+                    data-option="official"
+                    href="#"
+                    >공식 서비스</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item filter-option"
+                    data-option="unofficial"
+                    href="#"
+                    >비공식 서비스</a
+                  >
+                </li>
 
                 <div class="dropdown-divider"></div>
 
                 <li class="dropdown-menu-tit">정렬</li>
-                <li><a class="dropdown-item" href="#">가입일 오름차순</a></li>
                 <li>
-                  <a class="dropdown-item active" href="#">가입일 내림차순</a>
+                  <a
+                    class="dropdown-item sort-option"
+                    data-option="join_date_asc"
+                    href="#"
+                    >가입일 오름차순</a
+                  >
                 </li>
-                <li><a class="dropdown-item" href="#">이름 오름차순</a></li>
-                <li><a class="dropdown-item" href="#">이름 내림차순</a></li>
+                <li>
+                  <a
+                    class="dropdown-item sort-option active"
+                    data-option="join_date_desc"
+                    href="#"
+                    >가입일 내림차순</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item sort-option"
+                    data-option="name_asc"
+                    href="#"
+                    >이름 오름차순</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item sort-option"
+                    data-option="name_desc"
+                    href="#"
+                    >이름 내림차순</a
+                  >
+                </li>
               </ul>
             </div>
-            <div id="cnt-item-filtered" class="item-cnt me-auto">
-              전체
-              <span>2</span>
-            </div>
+            <div id="cnt-item-filtered" class="item-cnt me-auto"></div>
             <div class="item-search col-md-5">
               <i class="bi bi-search"></i>
               <input
-                type="text"
+                id="search-input"
                 class="form-control no-border"
+                type="text"
                 placeholder="검색"
               />
             </div>
           </div>
 
+          <!-- Add a loading cover and loading text to your HTML -->
+          <div id="loading-cover">Loading...</div>
+
           <!-- 서비스 리스트 -->
+          <div id="item-container"></div>
         </div>
       </div>
     </div>
     {% include "footer.html" %}
-    <script type="text/javascript">
-      function getAllData(data) {
-        // Main container item node creation
-        const containerItem = document.createElement("div");
-        containerItem.classList.add("container-item");
-
-        // Checkbox node creation
-        const itemSelect = document.createElement("div");
-        itemSelect.classList.add("item-select");
-
-        const checkboxInput = document.createElement("input");
-        checkboxInput.classList.add("form-check-input");
-        checkboxInput.type = "checkbox";
-
-        itemSelect.appendChild(checkboxInput);
-
-        // Service icon image node creation
-        const itemIco = document.createElement("a");
-        itemIco.classList.add("item-ico");
-        itemIco.href = data["main_page"];
-
-        const imgIco = document.createElement("img");
-        imgIco.width = 100;
-        imgIco.height = 100;
-        imgIco.alt = data["name"];
-
-        const pathRegex = /\/icons\/(.+)/;
-        const icoPath = data["icon"].match(pathRegex);
-        imgIco.src = `{{ url_for('static', path='icons/${icoPath[1]}') }}`;
-
-        itemIco.appendChild(imgIco);
-
-        // Service information node creation
-        const itemInfo = document.createElement("div");
-        itemInfo.classList.add("item-info");
-
-        const itemInfoHead = document.createElement("div");
-        itemInfoHead.classList.add("item-info-head");
-
-        const itemInfoTit = document.createElement("span");
-        itemInfoTit.classList.add("item-info-tit");
-        itemInfoTit.textContent = data["name"];
-
-        const itemTag = document.createElement("span");
-        itemTag.classList.add("item-tag");
-        if (data["is_official"]) {
-          itemTag.classList.add("official");
-        }
-
-        itemInfoHead.append(itemInfoTit, itemTag);
-
-        const itemInfoDesc = document.createElement("div");
-        itemInfoDesc.classList.add("item-info-desc");
-
-        const descSpan = document.createElement("span");
-        descSpan.textContent = data["description"];
-        
-        itemInfoDesc.appendChild(descSpan);
-
-        itemInfo.append(itemInfoHead, itemInfoDesc);
-
-        // etc. menu node creation
-        const itemMenu = document.createElement("div");
-        itemMenu.classList.add("item-menu");
-
-        const serviceJoined = document.createElement("div");
-        serviceJoined.classList.add("service-joined", "mb-2");
-
-        const joinedLabel = document.createElement("span");
-        joinedLabel.classList.add("d-block", "joined-label");
-        joinedLabel.textContent = "가입일";
-
-        const joinedDate = document.createElement("span");
-        joinedDate.classList.add("d-block");
-        joinedDate.textContent = data["join_date"]; // Assuming you have a "join_date" property in your data
-
-        serviceJoined.append(joinedLabel, joinedDate);
-
-        const leaveButton = document.createElement("button");
-        leaveButton.type = "button";
-        leaveButton.classList.add("btn", "btn-danger");
-        leaveButton.textContent = "탈퇴";
-
-        itemMenu.appendChild(serviceJoined);
-        itemMenu.appendChild(leaveButton);
-
-        // Appending nodes to the main container item
-        containerItem.appendChild(itemSelect);
-        containerItem.appendChild(itemIco);
-        containerItem.appendChild(itemInfo);
-        containerItem.appendChild(itemMenu);
-
-        return containerItem;
-      }
-
-      (function (){
-        fetch("/api/services")
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error('Network response was not OK');
-            }
-            return res.json();
-          })
-          .then((data) => {
-            console.log(data);
-            const container = document.getElementById("services-container");
-            
-            // Converting all data into DOM
-            // const containerItem = getAllData(data);
-
-            // Appending the main container item to the container
-            // container.appendChild(containerItem);
-          })
-          .catch((err) => {
-            console.error("Fetch error:", err);
-          });
-      })();
-    </script>
+    <script
+      id="list2DOM"
+      type="text/javascript"
+      src="{{ url_for('static', path='/js/list.module.generate.js') }}"
+      jinja-location="{{ url_for('static', path='/') }}"
+      menu-message="getout"
+    ></script>
+    <script
+      id="listArrange"
+      type="text/javascript"
+      src="{{ url_for('static', path='/js/list.module.arrange.js') }}"
+      api-src="/api/services"
+    ></script>
   </body>
 </html>

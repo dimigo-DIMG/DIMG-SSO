@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, Request
+import random
+from fastapi import APIRouter, Depends, HTTPException, Request
 
-from app.core import templates
+from app.core import templates, current_user_optional
 from app.users import User, current_active_user
 
 from app.routers.account import (
@@ -11,13 +12,14 @@ from app.routers.account import (
     reset_password,
     verify,
     oauth,
-    modify
+    modify,
+    cancel
 )
 
 account_router = APIRouter(prefix="/account", tags=["account"])
 
 # user settings page
-@account_router.get("/")
+@account_router.get("")
 async def account_root(request: Request, user: User = Depends(current_active_user)):
     google_mail = None
     microsoft_mail = None
@@ -47,3 +49,4 @@ account_router.include_router(reset_password.reset_password_router)
 account_router.include_router(verify.verify_router)
 account_router.include_router(oauth.oauth_router)
 account_router.include_router(modify.modify_router)
+account_router.include_router(cancel.cancel_router)
